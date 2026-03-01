@@ -19,18 +19,21 @@ This is a **full-stack Next.js app** with API routes, not a static site. Firebas
 Cloud Run is the best option for Next.js full-stack apps:
 
 ### 1. Authenticate with Google Cloud
+
 ```powershell
 gcloud auth login
 gcloud config set project schemesetu-ai
 ```
 
 ### 2. Build & Push Docker Image
+
 ```powershell
 docker build -t gcr.io/schemesetu-ai/schemesetu-ai:latest .
 docker push gcr.io/schemesetu-ai/schemesetu-ai:latest
 ```
 
 ### 3. Deploy to Cloud Run
+
 ```powershell
 gcloud run deploy schemesetu-ai `
   --image gcr.io/schemesetu-ai/schemesetu-ai:latest `
@@ -49,6 +52,7 @@ gcloud run deploy schemesetu-ai `
 ## Alternative: Firebase Hosting Only (Static Export)
 
 If you want to use only Firebase Hosting, you would need to:
+
 1. Remove all API routes
 2. Export the app as static HTML
 3. This won't work for your app (has backend API routes)
@@ -74,18 +78,22 @@ Set these in the gcloud command or update them in Cloud Run Console:
 ## Troubleshooting
 
 ### Error: "Page Not Found" on Firebase Hosting
+
 - You deployed to Firebase Hosting which only serves static files
 - Solution: Use Cloud Run instead (follow Quick Deploy steps above)
 
 ### Error: Image not found in Container Registry
+
 - Docker image wasn't pushed to Google Container Registry
 - Run: `docker push gcr.io/schemesetu-ai/schemesetu-ai:latest`
 
 ### Error: Permission denied during deploy
+
 - You need billing enabled in Google Cloud
 - Check: https://console.cloud.google.com/billing
 
 ### Error: Port already in use
+
 - Cloud Run automatically uses port 8080
 - The Dockerfile and server.js already use PORT env variable
 
@@ -119,16 +127,16 @@ gcloud container images delete gcr.io/schemesetu-ai/schemesetu-ai:latest
 
 ## Comparison: Cloud Run vs Firebase Hosting
 
-| Feature | Cloud Run | Firebase Hosting |
-|---------|-----------|------------------|
-| Full-stack apps | ✅ | ❌ |
-| API routes | ✅ | ❌ |
-| Server-side rendering | ✅ | ❌ |
-| Static sites | ✅ | ✅ |
-| Setup time | 5 min | 2 min |
-| Cold starts | ~2-5s | <1s |
-| Cost | Pay per request | Pay per file |
-| **Recommended for this project** | ✅✅✅ | ❌ |
+| Feature                          | Cloud Run       | Firebase Hosting |
+| -------------------------------- | --------------- | ---------------- |
+| Full-stack apps                  | ✅              | ❌               |
+| API routes                       | ✅              | ❌               |
+| Server-side rendering            | ✅              | ❌               |
+| Static sites                     | ✅              | ✅               |
+| Setup time                       | 5 min           | 2 min            |
+| Cold starts                      | ~2-5s           | <1s              |
+| Cost                             | Pay per request | Pay per file     |
+| **Recommended for this project** | ✅✅✅          | ❌               |
 
 ---
 
@@ -137,4 +145,3 @@ gcloud container images delete gcr.io/schemesetu-ai/schemesetu-ai:latest
 - [Google Cloud Run Docs](https://cloud.google.com/run/docs)
 - [Next.js Deployment Guide](https://nextjs.org/docs/deployment)
 - [Docker for Next.js](https://nextjs.org/docs/deployment/docker)
-
