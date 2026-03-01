@@ -1,0 +1,147 @@
+﻿What is AB-PMJAY?
+Full Name: Ayushman Bharat – Pradhan Mantri Jan Arogya Yojana
+Launched: 2018
+Purpose: Provide cashless and paperless health insurance cover of Rs 5,00,000 per family per year for secondary and tertiary hospitalization. It targets the bottom 40% of the Indian population.
+Scale: Targets over 10.74 crore poor and vulnerable families covering approximately 50 crore individuals.
+Managed by: National Health Authority (NHA)
+Website: pmjay.gov.in
+
+Benefit
+Rs 5,00,000 per family per year for cashless hospitalization at any empanelled public or private hospital across India. No restriction on family size. No restriction on beneficiary age. The Rs 5,00,000 is a family floater — all family members share this limit.
+All pre-existing illnesses and chronic conditions are covered from day one. No waiting period.
+Newborn infants are automatically eligible and can be added to the family roster after submitting documentation.
+The scheme covers over 1,929 medical procedures and health benefit packages.
+What is covered:
+
+Pre-operative medical examinations, specialist consultations, diagnostic imaging, and lab tests.
+Surgeon fees, anesthetist fees, medical practitioner fees, surgery costs, and nursing charges.
+Prescription drugs, medical consumables, disposable surgical appliances, implants, and prosthetic devices.
+General ward bed charges, ICU and non-intensive care charges, and patient food and dietary services.
+Pre-hospitalization expenses for up to 3 days before admission.
+Post-hospitalization follow-up care for up to 15 days after discharge.
+Unforeseen complications arising during the primary treatment.
+
+What is NOT covered:
+
+OPD (Outpatient Department) care — routine doctor consultations, standalone diagnostic tests, and ongoing medications managed at home are not covered.
+Cosmetic and aesthetic surgeries — rhinoplasty, liposuction, anti-aging, neck lifts, tattoo removal.
+Fertility treatments — IVF and surrogacy.
+Routine dental care — root canals, cavity fillings, dental implants, periodontal treatment. Exception: dental procedures caused by severe trauma, cysts, or tumors requiring hospital admission and surgery are covered.
+Hospital admissions only for observation or evaluation without active treatment.
+Organ transplants (subject to specific partial coverage rules).
+Treatment for self-inflicted injuries.
+Substance abuse rehabilitation.
+Non-essential prophylactic vaccinations.
+Circumcision for infants under two years.
+Maintenance in a persistent vegetative state.
+
+
+Special Expansion — Senior Citizens Aged 70 and Above (Ayushman Vay Vandana)
+Effective late 2024, ALL senior citizens aged 70 years and above are eligible for AB-PMJAY regardless of their income, SECC status, or socio-economic background. This is universal — no means test.
+Senior citizens in families already covered under standard AB-PMJAY get an additional exclusive Rs 5,00,000 top-up cover. This top-up is exclusively for the senior citizen and is not shared with younger family members.
+Senior citizens already covered under CGHS (Central Government Health Scheme), ECHS (Ex-Servicemen Contributory Health Scheme), or Ayushman CAPF scheme can either continue their existing scheme or migrate to AB-PMJAY — their choice.
+Senior citizens with private commercial health insurance or ESI can still use AB-PMJAY concurrently.
+Eligible senior citizens are issued a separate Ayushman Vay Vandana Card.
+
+Who is Eligible (Standard SECC-Based Coverage)
+Eligibility is not based on a simple income threshold. It is based on the SECC 2011 (Socio-Economic Caste Census) database.
+Rural households are eligible if they meet at least one of the following:
+
+Living in a single room with kutcha (mud) walls and kutcha roof.
+No adult member between 16 and 59 years in the household.
+Female-headed household with no adult male between 16 and 59.
+Household has a disabled member and no able-bodied adult.
+Scheduled Caste (SC) or Scheduled Tribe (ST) household.
+Landless household depending mainly on casual manual labor.
+
+Automatically included without standard verification:
+
+Destitute individuals surviving on alms.
+Manual scavengers.
+Primitive tribal communities.
+Legally released bonded laborers.
+
+Urban households are eligible if the primary earner works in any of these occupations:
+
+Ragpickers, sweepers, sanitation workers.
+Domestic workers, caregivers, gardeners (malis).
+Street vendors, cobblers, hawkers.
+Construction workers, plumbers, masons, painters, welders, security guards, coolies, head-load workers.
+Home-based workers, artisans, handicrafts workers, tailors.
+Transport workers, drivers, conductors, helpers to drivers and conductors, cart pullers, rickshaw pullers.
+Shop workers, assistants, peons in small establishments, helpers, delivery assistants, attendants, waiters.
+Electricians, mechanics, assemblers, repair workers, washer-men, chowkidars (watchmen).
+Beggars and individuals surviving on alms.
+
+
+Who is NOT Eligible (Exclusions)
+A household is excluded if any of the following are true:
+
+Owns a motorized two-wheeler, three-wheeler, four-wheeler, or motorized fishing boat.
+Owns mechanized farming equipment or 5 acres or more of agricultural land.
+Has a Kisan Credit Card with a credit limit exceeding Rs 50,000.
+Has a government employee in the household or runs a government-managed non-agricultural enterprise.
+Monthly household income exceeds Rs 10,000.
+Owns a refrigerator or landline telephone.
+Lives in a solidly built pucca house with permanent structural integrity.
+
+
+Portability — Use Anywhere in India
+An eligible beneficiary registered in their home state can get cashless treatment at any empanelled hospital anywhere in India. Total empanelled hospitals: 31,466 including 14,194 private hospitals. This is especially useful for migrant workers.
+
+Required Documents
+
+Ration Card (primary household identifier in most states) OR RSBY URN (for legacy scheme beneficiaries) OR PM Letter with Household ID.
+Aadhaar Card for eKYC verification via OTP or biometric fingerprint or iris scan.
+Alternative documents if minor data discrepancies exist: Voter ID, PAN card, driving license, or utility bills.
+
+Important: The Ayushman Card (PMJAY) is different from the ABHA number. The ABHA is a 14-digit digital health record ID available to all Indians. The Ayushman Card is only for the 50 crore eligible SECC beneficiaries.
+
+How to Apply — 3 Ways
+Option 1 — Online via NHA Portal or Ayushman App:
+Step 1: Go to beneficiary.nha.gov.in or open the Ayushman App. Select Beneficiary module. Enter mobile number and verify with OTP.
+Step 2: Select State, District, and Scheme (PMJAY). Search using Aadhaar number, Ration Card number, or name.
+Step 3: If eligible, proceed to eKYC. Enter 12-digit Aadhaar number, accept privacy policy, verify with Aadhaar-linked OTP.
+Step 4: Capture or upload a live photo. Fill in PIN code and submit final declaration.
+Step 5: Card is generated instantly to within 24 hours depending on how well SECC data matches Aadhaar records. Download the e-card as PDF and start using immediately.
+Option 2 — At nearest CSC (Common Service Centre):
+Bring Ration Card and Aadhaar Card. The VLE (Village Level Entrepreneur) at the CSC does biometric verification and prints a physical card.
+Option 3 — At any empanelled hospital:
+Go to the hospital and find the Ayushman Mitra at the hospital. They verify eligibility, handle documentation, and generate the card on-site.
+
+How to Use the Card at a Hospital
+Walk in to any empanelled public or private hospital. Show the Ayushman Card or e-card. The hospital's Ayushman Mitra handles the rest. Treatment is 100% cashless. No payment at any point.
+If a hospital demands cash payment — it is illegal. Call 14555 immediately or contact the Ayushman Mitra.
+
+Maharashtra Special Note
+In Maharashtra, AB-PMJAY is integrated with the state's Mahatma Jyotirao Phule Jan Arogya Yojana (MJPJAY). As of July 2024, MJPJAY covers the entire population of Maharashtra. Combined coverage for eligible categories is Rs 5,00,000 per family per year.
+Maharashtra helplines: 155388 and 1800-233-2200.
+Maharashtra email: mjpjay@mahahealth.gov.in.
+
+Important Tips for Rural Users
+
+Do not wait for a medical emergency to get the Ayushman Card. Register in advance at a CSC or using the Ayushman App.
+PMJAY only covers hospitalization and surgery. OPD visits and pharmacy purchases at home are not covered.
+If a hospital asks for money, call 14555 immediately — cashless treatment is a guaranteed right.
+Make sure the Ration Card is updated with names of all current family members. Mismatch between Ration Card and Aadhaar is the most common reason for card generation failure.
+
+
+Common Reasons for Rejection or Failure
+
+Name or demographic mismatch between SECC database and Aadhaar records — causes eKYC failure and delays card generation up to 24 hours.
+Ration Card not updated with current family members.
+Hospital not empanelled for the specific treatment needed.
+Treatment falls under exclusion category (OPD, cosmetic, fertility, etc.).
+Pre-authorization rejected due to insufficient clinical justification submitted by the hospital.
+
+
+Grievance System — Three Levels
+Level 1: District Grievance Redressal Committee (DGRC) — chaired by the District Magistrate or Deputy Commissioner.
+Level 2: State Grievance Redressal Committee (SGRC) — chaired by the CEO of the State Health Agency.
+Level 3: National Grievance Redressal Committee (NGRC) — chaired by the Deputy CEO of the National Health Authority.
+
+Contact
+National Helpline: 14555 or 1800-111-565. Available 24 hours a day, 7 days a week, 365 days a year. Supports Hindi, English, Kannada, Telugu, Tamil, and Malayalam.
+Website: pmjay.gov.in
+Tech Support: support.pmjay.gov.in
+Ayushman Bharat Digital Mission Helpline: 14477 or 1800-11-4477

@@ -1,0 +1,159 @@
+﻿What is APY?
+Full Name: Atal Pension Yojana
+Launched: June 2015
+Replaced: Swavalamban Scheme (officially replaced in 2016)
+Purpose: Provide a guaranteed monthly pension after age 60 to workers in the unorganized sector who do not have formal pension coverage.
+Regulated by: PFRDA (Pension Fund Regulatory and Development Authority)
+Administered through: National Pension System (NPS)
+Record Keeper: Protean eGov Technologies (formerly NSDL) — issues the PRAN (Permanent Retirement Account Number)
+Where to enroll: Any nationalized bank, private bank, regional rural bank, or post office.
+Website: npscra.proteantech.in
+
+Benefit — The Triple Benefit
+APY provides three guaranteed benefits:
+First benefit — Guaranteed monthly pension for the subscriber for life starting at age 60. Pension amount is either Rs 1,000, Rs 2,000, Rs 3,000, Rs 4,000, or Rs 5,000 per month depending on the pension tier chosen at enrollment.
+Second benefit — After the subscriber's death, the spouse receives the same pension amount for their lifetime.
+Third benefit — After both the subscriber and spouse have died, the entire accumulated pension corpus is handed over to the nominee.
+The minimum pension amount is guaranteed by the Central Government. If the actual returns on investment fall short, the government makes up the difference.
+
+Who is Eligible
+
+Must be an Indian citizen. NRIs and foreign nationals are not eligible.
+Must be between 18 and 40 years of age at the time of enrollment. This ensures a minimum contribution period of 20 years before pension starts at age 60.
+Must have a savings bank account or post office account (for auto-debit of contributions).
+Must NOT be an income tax payer. From October 1, 2022, any person who is or has been an income tax payer is disqualified from joining APY. An income tax payer is defined as a person liable to pay income tax under the Income Tax Act, 1961. If someone who joined after October 2022 is found to have been a tax payer on or before their application date, their account is closed and the accumulated pension wealth is refunded.
+
+
+Who is NOT Eligible
+
+Income tax payers (rule effective from October 1, 2022).
+NRIs and foreign nationals.
+Anyone below 18 or above 40 years of age.
+Anyone who already has an APY account. Only one APY account per subscriber is allowed.
+
+
+Monthly Contribution Amounts
+Contributions depend on the age at enrollment and the pension tier chosen. Younger subscribers pay much less because of the longer compounding period.
+For Rs 1,000 per month pension:
+
+Age 18: Rs 42 per month
+Age 25: Rs 76 per month
+Age 30: Rs 116 per month
+Age 35: Rs 181 per month
+Age 40: Rs 291 per month
+
+For Rs 3,000 per month pension:
+
+Age 18: Rs 126 per month
+Age 25: Rs 226 per month
+Age 30: Rs 347 per month
+Age 35: Rs 543 per month
+Age 40: Rs 873 per month
+
+For Rs 5,000 per month pension:
+
+Age 18: Rs 210 per month
+Age 25: Rs 376 per month
+Age 30: Rs 577 per month
+Age 35: Rs 902 per month
+Age 40: Rs 1,454 per month
+
+Contributions can be paid monthly, quarterly, or half-yearly. They are auto-debited from the savings bank or post office account.
+Subscribers can increase or decrease their pension tier once a year by submitting a modification form to their bank.
+
+Required Documents
+
+Aadhaar card photocopy.
+Bank passbook showing the applicant's name and IFSC code.
+Nominee details and spouse details.
+Active savings bank account or post office account for auto-debit.
+
+
+How to Apply — 3 Ways
+Option 1 — Net Banking or Mobile Banking:
+Log into internet banking and go to the Social Security Schemes or APY section. Personal and bank details are usually pre-filled. Fill in nomination and spouse details. Give digital consent for auto-debit. Contribution frequency is set here.
+Option 2 — eNPS or e-APY Portal (enps.nps-proteantech.in):
+Complete KYC using Aadhaar OTP or by uploading offline Aadhaar XML. A Penny Drop verification is done to confirm the bank account is active. An acknowledgement number is generated. Complete eSign using Aadhaar OTP.
+Option 3 — Offline at any bank branch or post office:
+Fill the physical APY Registration Form (available in multiple languages including Odia, Punjabi, Tamil, and Urdu). Submit with Aadhaar photocopy and bank passbook. After processing, a PRAN card is generated and sent to the registered address.
+
+Penalty for Late or Missed Contributions
+If the subscriber fails to maintain enough balance for auto-debit, a monthly penalty is charged:
+
+Rs 1 per month for contributions up to Rs 100.
+Rs 2 per month for contributions between Rs 101 and Rs 500.
+Rs 5 per month for contributions between Rs 501 and Rs 1,000.
+Rs 10 per month for contributions above Rs 1,001.
+
+If non-payment continues:
+
+After 6 months of default: account is frozen.
+After 12 months of default: account is deactivated.
+After 24 months of default: account is closed and the remaining corpus (after deducting charges and the government co-contribution share) is returned to the subscriber.
+
+
+Exiting the Scheme Before Age 60
+Voluntary exit before 60:
+
+Subscriber gets back their own contributions and the actual interest earned on them.
+The government co-contribution and its returns are forfeited.
+Account maintenance and investment management fees are deducted before payout.
+
+Death of subscriber before 60 — spouse has two choices:
+
+Option A: Continue the contributions in the original subscriber's name for the remaining vesting period and receive the full pension at 60.
+Option B: Exit the scheme and receive the total accumulated corpus including the government co-contribution.
+
+Terminal illness (specified illness as per PFRDA regulations):
+
+Premature exit is permitted and the full corpus is settled with the subscriber.
+
+
+How to Check Balance and Track Account
+
+APY Mobile App on Google Play: Check last 5 contributions and download e-PRAN card.
+e-PRAN Portal: Use PRAN and bank account number to view and print transaction statements anytime at no cost.
+Physical statement: Sent annually to the registered address.
+SMS alerts sent for every contribution.
+
+
+Important Tips
+
+Enrolling early saves a lot of money. An 18-year-old pays nearly 7 times less than a 40-year-old for the same pension amount.
+Keep nominee and spouse details accurate at registration — this determines who gets the benefits without legal issues.
+Ensure Aadhaar is linked to the bank account to avoid DBT failures.
+Keep the bank account active. A dormant account will fail the Penny Drop verification during enrollment.
+
+
+Common Reasons for Rejection
+
+Bank account is dormant or IFSC mismatch causes Penny Drop verification failure.
+Name or date of birth on bank records does not match Aadhaar data.
+Trying to open a second APY account — only one account per person is allowed.
+Applicant is found to be an income tax payer.
+
+
+Exit Rejection Reasons
+
+Pending unbooked contributions in the CRA system — voluntary exit cannot be processed until cleared.
+Subscriber's bank account closed before exit funds are settled — new account details must be provided via the bank.
+
+
+Scheme Statistics as of Early 2026
+
+Total enrollments: exceeded 8.68 crore
+Active subscribers: 7.34 crore
+Total Assets Under Management: Rs 53,985 crore
+Female subscribers: 48%
+Rural participation: approximately 70% of total subscribers
+
+
+Contact
+APY Help Desk (Protean CRA): 1800-889-1030 (toll-free)
+PFRDA Help Desk: 1800-110-069 (toll-free)
+Protean CRA National Helpline: 022-2499-3499
+Protean CRA Address: 1st Floor, Times Tower, Kamala Mills Compound, Senapati Bapat Marg, Lower Parel, Mumbai 400013
+APY Support Email: SunilZ@nsdl.co.in
+Grievance Redressal Officer: gro@nsdl.co.in
+Chief Grievance Redressal Officer: cgro@nsdl.co.in
+Grievances can also be logged on the NSDL CRA Central Grievance Management System (CGMS).

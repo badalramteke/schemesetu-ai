@@ -1,0 +1,125 @@
+﻿
+What is MGNREGA?
+Full Name: Mahatma Gandhi National Rural Employment Guarantee Act
+Also known as: Viksit Bharat – Guarantee for Rozgar and Ajeevika Mission (Gramin) — VB-G RAM G (new name after 2025 Act)
+Original Act: 2005
+Updated by: Viksit Bharat-G RAM G Act, 2025
+Purpose: Guarantee paid wage employment to rural households whose adult members are willing to do unskilled manual work.
+Website: nrega.nic.in
+
+Benefit
+The scheme guarantees 125 days of wage employment per rural household per financial year. This was 100 days before the 2025 Act. The 2025 Act increased it to at least 125 days.
+Wages are paid directly to the beneficiary's bank account or post office account via Aadhaar Based Payment System (ABPS) and DBT. No cash payments at worksites — completely eradicated.
+Wages vary by state and are revised every financial year. They are indexed to the Consumer Price Index for Agricultural Labourers (CPI-AL). The national average wage for 2024-25 is Rs 252.63 per day. The central government notified an average increase of 3% to 10% for 2024-25, with a mean increase of approximately 7%.
+State-wise wages for 2024-25 (per day):
+
+Haryana: Rs 363.55 (highest)
+Goa: Rs 356.00
+Kerala: Rs 344.23
+Andaman and Nicobar: Rs 330.15
+Karnataka: Rs 328.57
+D&N Haveli and Daman & Diu: Rs 324.00
+Punjab: Rs 316.86
+Puducherry: Rs 290.70
+Maharashtra: Rs 282.10
+Tamil Nadu: Rs 275.14
+Jharkhand: Rs 271.79
+Manipur: Rs 271.61
+Himachal Pradesh: Rs 270.89
+Odisha: Rs 270.56
+Mizoram: Rs 265.95
+Ladakh: Rs 258.64
+Jammu and Kashmir: Rs 257.61
+Meghalaya: Rs 253.90
+Sikkim: Rs 249.71
+Assam: Rs 248.43
+Gujarat: Rs 248.16
+Bihar: Rs 239.03
+Uttarakhand: Rs 236.89
+Uttar Pradesh: Rs 236.33
+Nagaland: Rs 233.97
+Arunachal Pradesh: Rs 233.88
+Madhya Pradesh: Rs 228.77
+Chhattisgarh: Rs 219.32
+Tripura: Rs 218.35
+Telangana: Rs 213.90
+Rajasthan: Rs 206.51 (lowest)
+West Bengal: Rs 0 (central funds suspended due to non-compliance)
+Lakshadweep: Rs 0 (zero person-days generated)
+
+Wages must be paid within 15 days of the completion of the assigned work cycle and closure of the muster roll. Delay in wage payment is a grievance subject to independent investigation.
+If the worksite is more than 5 kilometers from the worker's residence, additional wage premiums or transport allowances must be paid.
+
+Unemployment Allowance
+If the state fails to provide work within 15 days of a formal work demand, the Unemployment Allowance is triggered under Section 7 of the Act. This allowance is paid entirely by the State Government, not the Central Government.
+For the first 30 days of unfulfilled demand: at least 25% (one-fourth) of the minimum wage rate.
+For any remaining period in the financial year where demand is unfulfilled: at least 50% (one-half) of the minimum wage rate.
+
+Who is Eligible
+Any adult citizen (18 years or older) residing in a rural area who is willing to do unskilled manual work is eligible. There is no upper age limit as long as the person can perform the required labor. There is no income cap or BPL requirement.
+Mandatory requirements:
+
+Must be an adult (18 years or older).
+Must live within the specific rural village or Gram Panchayat jurisdiction where they are applying.
+Must be willing to do unskilled manual physical labor.
+
+
+Who is NOT Eligible
+
+Urban residents. The scheme is exclusively for rural Gram Panchayat areas. Urban populations are excluded.
+Anyone unwilling or unable to perform unskilled manual physical labor.
+Formal government employees and skilled professionals are functionally excluded because the work is strictly unskilled manual labor.
+
+
+Required Documents
+
+Government-issued identity proof: Ration Card, Voter ID, PAN Card, Kisan Photo Passbook, Driving License, or a photo identity certificate issued by a Gazetted Officer or Tehsildar on official letterhead.
+Aadhaar number and a self-attested copy of Aadhaar Card. If the applicant is illiterate, a consent letter with thumbprint is acceptable.
+Active bank account or post office account details (original and duplicate copies). Cash payments have been completely stopped.
+Proof of age confirming adult status, along with names, ages, and genders of all prospective workers in the household.
+Village, Gram Panchayat, and Block name details.
+Recent passport-sized photograph and specimen signature or thumb impression.
+Optional (not mandatory but helpful): BPL Certificate, Caste Certificate (SC/ST), Disability Certificate, or SHG identification for convergence tracking.
+
+
+How to Apply — Step by Step
+Step 1 — Register and get a Job Card:
+The Job Card is mandatory to demand work. It is not issued automatically. The household must apply.
+Offline: Visit the local Gram Panchayat office. Application can be submitted in writing or verbally.
+Online: Register through the UMANG app or via a nearby CSC (Common Service Centre).
+After submission, the Gram Sabha verifies the household's residency and demographic details. The Gram Panchayat must issue the Job Card within 15 days of application. This is legally mandated.
+Step 2 — Demand work formally:
+Having a Job Card does not mean automatic employment. The worker must formally demand work by specifying how many days they are available. This demand must be recorded with a date. The 15-day countdown for work allocation begins from the date of this recorded demand. Always get a dated receipt when demanding work.
+Step 3 — Work allocation:
+Within 15 days of the demand, the Programme Officer or Gram Panchayat must direct the worker to a specific infrastructure worksite. If they fail to do this, the Unemployment Allowance is triggered.
+Step 4 — Work and attendance:
+Attendance is recorded on Muster Rolls or via the National Mobile Monitoring Service (NMMS) app. Geo-tagged photos are taken of completed work.
+Step 5 — Wage payment:
+Wages are credited to the bank or post office account within 15 days of the work cycle completion and muster roll closure via ABPS and DBT.
+
+Types of Work Done Under MGNREGA
+Work focuses on water security, rural infrastructure, livelihood-related infrastructure, and extreme weather mitigation. Common work types include digging, earth carrying, road work, construction of household latrines (under Swachh Bharat Mission), rural housing labor (under PMAY-G), drought-proofing, water body rejuvenation, micro-irrigation projects, and flood control.
+
+Important Tips for Rural Users
+
+Aadhaar must be seeded and linked to an active bank account. Biometric mismatches or incomplete Aadhaar seeding frequently cause failed wage payments.
+Always demand work formally and get a dated receipt. The 15-day Unemployment Allowance countdown only starts from the date of a formally recorded demand.
+MGNREGA wages can be used alongside PMAY-G to cover labor costs for building your own permanent home.
+If work is not given within 15 days, you are legally entitled to the Unemployment Allowance — file a complaint with the local Ombudsperson.
+
+
+Common Problems Faced by Beneficiaries
+
+Incomplete Aadhaar seeding or biometric mismatches causing failed DBT transactions and delayed wages.
+Local administration not providing work even after a formal demand.
+Failure to formally record the work demand, meaning the 15-day clock never starts.
+
+
+Grievance Redressal
+An Ombudsperson is available at the local level to independently investigate complaints about non-issuance of Job Cards, delayed wages, denial of Unemployment Allowance, and lack of worksite facilities like drinking water, first aid, and creches.
+Weekly disclosure meetings are held at Gram Panchayat level to publicly present the status of works, wage payments, and muster rolls.
+
+Contact
+Website: nrega.nic.in
+Email: support-mgnrega@nic.in
+State Helplines: Decentralized state-specific helplines. Centralized toll-free formats like 1800-111-321 used across rural development initiatives.

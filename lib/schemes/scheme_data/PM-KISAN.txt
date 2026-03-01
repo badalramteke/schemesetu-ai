@@ -1,0 +1,129 @@
+﻿What is PM-KISAN?
+Full Name: Pradhan Mantri Kisan Samman Nidhi Yojana
+Launched: February 2019 (effective from December 1, 2018)
+Funded by: Central Government — 100% Union exchequer funding
+Purpose: Direct income support to landholding farmer families to help with farming expenses, input costs (seeds, fertilisers, pesticides), and household needs.
+
+Benefit
+
+Total: ₹6,000 per year
+Paid in 3 installments of ₹2,000 each
+Payment method: Direct to Aadhaar-linked bank account via DBT (Direct Benefit Transfer)
+No middlemen — money goes directly to bank account
+
+InstallmentPeriodAmount1stApril – July₹2,0002ndAugust – November₹2,0003rdDecember – March₹2,000
+
+Who is Eligible?
+Basic requirements (ALL must be true):
+
+Owns cultivable land in their name (as per official land records)
+Land must have been in their name as of February 1, 2019 (cut-off date)
+Has a valid Aadhaar number
+Has an active bank account seeded/linked with Aadhaar
+Has a unique, active mobile number
+
+Beneficiary unit definition: The scheme treats a family (husband + wife + minor children) as ONE unit. Only one payment per family — not per individual.
+Age: No minimum or maximum age limit. Age is optional during registration.
+Land size: No minimum or maximum land size. All landholding farmers are eligible (was only small/marginal farmers originally, expanded in 2019 to all).
+Geography: Pan-India. Applicable in all states and UTs including North East states (with region-specific verification for communal landholding areas).
+
+Special Land Ownership Rules
+Cut-off date rule: Land must be in the farmer's name as per records dated on or before February 1, 2019.
+
+Land bought/gifted/transferred after Feb 1, 2019 = NOT eligible
+If a registered farmer sells/gifts their entire land after Feb 1, 2019 = they lose eligibility immediately
+
+Inheritance exception: If the original landowner dies, the surviving spouse or minor children who inherit the land ARE eligible — the Feb 1, 2019 cut-off does NOT apply to inheritance cases. State must update land records (mutation) and new heir must submit a fresh self-declaration.
+Transition period rule: If land was transferred between December 1, 2018 and January 31, 2019, the new owner gets a proportionate amount for the first installment (calculated by days).
+
+Who is NOT Eligible (Exclusions)
+1. Institutional landholders
+Corporate farms, trusts, agricultural institutions — not eligible. Scheme is for human family units only.
+2. Constitutional and political post holders
+Current or former: Ministers (Union + State), MPs (Lok Sabha + Rajya Sabha), MLAs, MLCs, Mayors of Municipal Corporations, Chairpersons of District Panchayats.
+3. Government employees
+All serving or retired employees of Central/State Government Ministries, Departments, PSEs (Public Sector Enterprises), and local body employees.
+Exception: MTS (Multi-Tasking Staff), Class IV, and Group D employees ARE eligible despite being government employees.
+4. Pensioners receiving ₹10,000/month or more
+Any retired person drawing a monthly pension of ₹10,000 or above is excluded.
+Exception: Retired MTS, Class IV, and Group D employees are NOT excluded by this pension rule — they remain eligible.
+5. Income tax payers
+Anyone who paid income tax in the previous assessment year is excluded.
+6. Registered practicing professionals
+Doctors, Engineers, Lawyers, Chartered Accountants (CAs), and Architects — excluded if registered with their professional regulatory body and actively practicing.
+
+Required Documents
+
+Aadhaar Card — Mandatory (non-negotiable)
+Land ownership records — Khatauni / Khasra / Revenue Land Passbook (state-specific)
+Bank passbook or account details (Account Number + IFSC code)
+Active mobile number linked to Aadhaar
+
+Upload formats accepted: .pdf and .jpg only
+If Aadhaar is pending: Temporarily use Aadhaar enrollment number + Voter ID, but full Aadhaar is required for continued payments.
+
+How to Apply
+Option 1 — Online (self-registration):
+
+Go to pmkisan.gov.in → Farmers Corner → New Farmer Registration
+Select Rural or Urban farmer
+Enter Aadhaar number + mobile number → OTP verification (if OTP fails, registration is blocked)
+Fill details: State, District, Block, Village, Name, Gender, Category, Bank IFSC, Account Number
+Upload land records, Aadhaar copy, Bank passbook (pdf or jpg)
+Submit → goes to State/District/Block officials for verification
+
+Option 2 — Via CSC (Common Service Centre):
+Visit nearest CSC — operator helps complete registration. No internet or smartphone needed.
+Option 3 — State bulk upload:
+State government can upload village-wise verified farmer lists directly into the portal.
+
+After Applying
+
+Application goes to State Nodal Officer for verification against land and tax databases
+Once approved, name is added to beneficiary list
+First payment starts from the next active installment cycle after approval
+Re-application lockout: Cannot reapply or modify the same application for 30 days after submission
+Timeline to approval: Not fixed — depends on state government verification speed
+
+
+Mandatory eKYC (for existing beneficiaries)
+All registered farmers receiving payments must complete eKYC to continue receiving benefits.
+
+OTP-based eKYC: Aadhaar must be linked to mobile number → complete on pmkisan.gov.in
+Biometric eKYC: Visit nearest CSC → fingerprint or iris scan by operator
+
+
+Check Status / Track Application
+
+Go to pmkisan.gov.in → Beneficiary List or Know Your Status → enter Aadhaar number
+Can also use AI chatbot "Kisan-eMitra" on the portal for real-time status
+
+
+Update / Correct Details
+If details are wrong (bank account, mobile number, name spelling):
+
+Go to pmkisan.gov.in → Edit/Update Self Registration or Update Missing Information
+
+
+Common Reasons for Rejection / Payment Failure
+
+Aadhaar not seeded/linked to bank account for DBT
+Name mismatch between Aadhaar and bank records
+State government rejected land record details
+Applicant found to be paying income tax (detected via automated database check)
+Duplicate family registration detected (husband + wife both registered separately)
+
+
+Important Tips for Rural Users
+
+Name spelling on Aadhaar must exactly match bank account name
+Must link Aadhaar to bank account via NPCI mapping — money will fail without this
+Check status online using Aadhaar number before visiting block office
+
+
+Helpline & Contact
+
+Website: pmkisan.gov.in
+Helpline: 155261 / 1800115526 / 011-24300606 / (011) 24303714
+Email: pmkisan-ict@gov.in
+Support hours: 9:00 AM – 5:30 PM

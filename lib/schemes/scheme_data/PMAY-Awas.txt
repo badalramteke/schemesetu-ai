@@ -1,0 +1,111 @@
+﻿PMAY-G — Clean Structured Data for Pinecone
+
+What is PMAY-G?
+Full Name: Pradhan Mantri Awaas Yojana – Gramin
+Launched: April 1, 2016 (replaced the old Indira Awaas Yojana)
+Purpose: Provide pucca (permanent, durable) houses to eligible rural households living in kutcha (mud/temporary) houses or with no shelter.
+Target: 2.95 crore houses by 2024 + additional 2 crore houses for 2024–2029
+Website: pmayg.nic.in
+
+Benefit
+Plain area households receive Rs 1,20,000.
+Hilly states, North Eastern states, and difficult area households receive Rs 1,30,000.
+UTs of Jammu and Kashmir and Ladakh receive Rs 1,30,000.
+PM-JANMAN households (Primitive Tribal Groups) receive Rs 2,00,000 to Rs 2,39,000.
+Money is paid directly to the beneficiary's bank account via DBT in installments linked to construction progress. First installment after sanction, second after foundation is complete, third after lintel level is complete, fourth after house is fully completed. Each installment is only released after geo-tagged construction photos are submitted and verified.
+Additional benefits given with every house:
+
+Around Rs 22,000 to Rs 27,000 extra as MGNREGS wages for 90 days of unskilled labor in plains or 95 days in hilly areas.
+Rs 12,000 for toilet construction via Swachh Bharat Mission or MGNREGS.
+LPG connection via PM Ujjwala Yojana.
+Electricity connection via Saubhagya scheme.
+Piped water via Jal Jeevan Mission.
+Health insurance mapping to Ayushman Bharat PMJAY.
+Institutional loan option up to Rs 70,000 available if needed.
+
+Funding is shared between Centre and State. Plain areas: 60% Central, 40% State. North Eastern and Himalayan states: 90% Central, 10% State. UTs without legislature: 100% Central.
+
+Who is Eligible
+This scheme does not use a simple income limit. Eligibility is based on the SECC 2011 Socio-Economic and Caste Census database.
+Automatically included with top priority:
+
+Households with no shelter at all.
+Destitute families or those living on alms.
+Manual scavengers.
+Primitive Tribal Groups (PVTGs).
+Legally released bonded laborers.
+
+All other households are ranked by a deprivation score based on 5 equal parameters:
+
+No adult member between 16 and 59 years in the household.
+Female-headed household with no adult male between 16 and 59.
+No literate adult above age 25 in the household.
+Any disabled member with no able-bodied adult.
+Landless household depending mainly on manual casual labor.
+
+If two households have the same deprivation score, priority goes to widows of defense or paramilitary personnel first, then families with members suffering from leprosy, cancer, or HIV, then households with a single girl child.
+
+Who is NOT Eligible (Exclusions)
+A household is excluded if any of the following are true (original criteria before 2024):
+
+Owns a motorized two, three, or four-wheeler or motorized fishing boat.
+Owns mechanized three or four-wheeler agricultural equipment.
+Has a Kisan Credit Card with a limit of Rs 50,000 or above.
+Has a government employee in the household.
+Has a non-agricultural enterprise registered with the government.
+Any family member earns more than Rs 10,000 per month.
+Any member paid income tax.
+Any member paid professional tax.
+Owns a refrigerator.
+Owns a landline phone.
+Owns 2.5 acres or more of irrigated land with at least one irrigation equipment.
+Owns 5 acres or more of irrigated land used for two or more crop seasons.
+Owns 7.5 acres or more of land with at least one irrigation equipment.
+
+Updated exclusions for the 2024 to 2029 phase:
+
+Refrigerators, landline phones, motorized two-wheelers, and mechanized fishing boats are no longer grounds for exclusion.
+Monthly income exclusion limit raised from Rs 10,000 to Rs 15,000.
+Land ownership criteria simplified.
+
+
+How Selection Works
+You cannot self-apply for this scheme. The government selects beneficiaries based on SECC 2011 data.
+Step 1: SECC 2011 data generates a list of potentially eligible households.
+Step 2: List goes to Gram Sabha for verification. Gram Sabha can remove names if family already has a pucca house or meets any exclusion criteria.
+Step 3: Final list is publicized for at least 7 days for public complaints.
+Step 4: Appellate Committee at state or district level resolves complaints.
+Step 5: Final Permanent Wait List is uploaded to AwaasSoft system.
+Step 6: Selected beneficiaries are registered by a government official through AwaasSoft.
+For the 2024 onwards phase, the Awaas+ app is used for fresh surveys with AI face authentication and Aadhaar eKYC verification.
+
+Documents Needed for Registration
+
+Aadhaar number and a signed consent form for its use.
+Bank account number and IFSC code. Name on bank account must exactly match the name in the system.
+MGNREGA Job Card number.
+Swachh Bharat Mission identification number.
+
+
+Landless Beneficiary Rule
+The house must be built on land owned by the beneficiary. If the beneficiary does not own land, the state government must provide homestead land. This is a known delay point. In Bihar, Rs 60,000 is provided under Mukhyamantri Vas Sthal Kray Sahayata Yojana to help landless PMAY-G beneficiaries buy residential land.
+
+Common Reasons for Delays or Incomplete Houses
+
+Beneficiary diverted funds for other use.
+Beneficiary migrated for work.
+Land dispute.
+Death of primary beneficiary.
+First installment released before land was available for landless cases.
+
+
+How to Check Your Name or Status
+Visit pmayg.nic.in and check the beneficiary list by state, district, and village name. Can also check via the UMANG app.
+
+Contact
+National Helpdesk: 011-24364468. Available Monday to Friday, 9 AM to 6 PM.
+Email: support-pmayg@gov.in
+PFMS Helpdesk: helpdesk-pfms@gov.in
+Rural Housing Division: 011-23388431
+Andhra Pradesh Toll-Free: 08663501300
+West Bengal Helpline: 1800 889 9451
