@@ -23,6 +23,7 @@ import { t } from "@/lib/i18n";
 import type { EligibilityResult } from "@/lib/rag-pipeline";
 import {
   inferSchemesFromQuery,
+  getCandidateSchemes,
   type ConvPhase,
 } from "@/lib/conversational-engine";
 
@@ -97,6 +98,9 @@ export default function ChatBox() {
   );
   const [activeQId, setActiveQId] = useState(() => getInitial("activeQId", ""));
   const [goalLabel, setGoalLabel] = useState(() => getInitial("goalLabel", ""));
+  const [askedQuestions, setAskedQuestions] = useState<string[]>(() =>
+    getInitial("askedQuestions", []),
+  );
   const [pendingQuery, setPendingQuery] = useState(() =>
     getInitial("pendingQuery", ""),
   );
@@ -113,6 +117,7 @@ export default function ChatBox() {
         candidates,
         activeQId,
         goalLabel,
+        askedQuestions,
         pendingQuery,
       }),
     );
@@ -123,6 +128,7 @@ export default function ChatBox() {
     candidates,
     activeQId,
     goalLabel,
+    askedQuestions,
     pendingQuery,
     chatId,
   ]);
@@ -153,6 +159,7 @@ export default function ChatBox() {
   const candidatesRef = useRef<string[]>([]);
   const activeQIdRef = useRef("");
   const goalLabelRef = useRef("");
+  const askedQuestionsRef = useRef<string[]>([]);
   const pendingQueryRef = useRef("");
 
   // Keep refs in sync with state
@@ -171,6 +178,9 @@ export default function ChatBox() {
   useEffect(() => {
     goalLabelRef.current = goalLabel;
   }, [goalLabel]);
+  useEffect(() => {
+    askedQuestionsRef.current = askedQuestions;
+  }, [askedQuestions]);
   useEffect(() => {
     pendingQueryRef.current = pendingQuery;
   }, [pendingQuery]);
@@ -226,6 +236,148 @@ export default function ChatBox() {
 
   const makeId = (prefix: string) => `${prefix}${Date.now()}`;
 
+  // ── Follow-up detection: answers from already-shown results ────────────
+
+  /**
+   * Checks if the user's message is a follow-up question about schemes that
+   * were already shown (documents, benefits, eligibility, next steps, etc.).
+   * Returns an answer string if matched, or null to proceed normally.
+   */
+  const handleFollowUp = (query: string, msgs: Message[]): string | null => {
+    const q = query.toLowerCase();
+
+    // If the last AI message was an error / busy message, don't serve stale results
+    const lastAiMsg = [...msgs].reverse().find((m) => m.role === "ai");
+    if (
+      lastAiMsg &&
+      !lastAiMsg.eligibilityResults?.length &&
+      !lastAiMsg.chips
+    ) {
+      // Last AI message was plain text (likely an error) — skip follow-up
+      return null;
+    }
+
+    // Gather all eligibility results from recent messages
+    const lastResults: EligibilityResult[] = [];
+    for (let i = msgs.length - 1; i >= 0; i--) {
+      if (msgs[i].eligibilityResults?.length) {
+        lastResults.push(...msgs[i].eligibilityResults!);
+        break; // only use the most recent result set
+      }
+    }
+    if (lastResults.length === 0) return null;
+
+    // Detect follow-up intent patterns
+    const isDocumentQ =
+      /document|docs|papers|kagaz|proof|certificate|dastavez|कागज|दस्तावेज|कागदपत्|required|need to submit|submit/i.test(
+        q,
+      );
+    const isBenefitQ =
+      /benefit|amount|money|kitna|paisa|rupee|₹|लाभ|पैसा|फायदा|राशि/i.test(q);
+    const isNextStepsQ =
+      /next\s*step|how\s*to\s*apply|apply\s*kaise|process|procedure|kaise|kahan|where|कैसे|कहां|कसे|कुठे/i.test(
+        q,
+      );
+    const isEligibilityQ =
+      /eligible|eligibility|qualify|patra|योग्य|पात्र/i.test(q);
+    const isAboutSchemeQ =
+      /about\s*(this|the)\s*scheme|tell\s*me\s*more|details|jankari|जानकारी|माहिती/i.test(
+        q,
+      );
+
+    if (
+      !isDocumentQ &&
+      !isBenefitQ &&
+      !isNextStepsQ &&
+      !isEligibilityQ &&
+      !isAboutSchemeQ
+    ) {
+      return null; // not a follow-up — let it proceed to new query flow
+    }
+
+    // Try to match a specific scheme name from the query
+    let targetSchemes = lastResults;
+    const mentionedScheme = lastResults.find(
+      (r) =>
+        q.includes(r.schemeName.toLowerCase()) ||
+        q.includes(r.schemeId.toLowerCase()),
+    );
+    if (mentionedScheme) {
+      targetSchemes = [mentionedScheme];
+    }
+
+    // Build a contextual response
+    const parts: string[] = [];
+
+    for (const scheme of targetSchemes) {
+      const header =
+        targetSchemes.length > 1 ? `**${scheme.schemeName}:**\n` : "";
+
+      if (isDocumentQ) {
+        if (scheme.documents?.length) {
+          parts.push(
+            `${header}📋 Documents required for ${scheme.schemeName}:\n` +
+              scheme.documents.map((d, i) => `${i + 1}. ${d}`).join("\n"),
+          );
+        } else {
+          parts.push(
+            `${header}No specific documents listed for ${scheme.schemeName}.`,
+          );
+        }
+      }
+
+      if (isBenefitQ) {
+        if (scheme.benefits) {
+          parts.push(
+            `${header}💰 Benefits of ${scheme.schemeName}:\n${scheme.benefits}`,
+          );
+        } else {
+          parts.push(
+            `${header}Benefits information not available for ${scheme.schemeName}.`,
+          );
+        }
+      }
+
+      if (isNextStepsQ) {
+        if (scheme.nextSteps?.length) {
+          parts.push(
+            `${header}📝 How to apply for ${scheme.schemeName}:\n` +
+              scheme.nextSteps.map((s, i) => `${i + 1}. ${s}`).join("\n"),
+          );
+        } else {
+          parts.push(
+            `${header}Application steps not available for ${scheme.schemeName}.`,
+          );
+        }
+      }
+
+      if (isEligibilityQ) {
+        const status =
+          scheme.eligible === true
+            ? "✅ Eligible"
+            : scheme.eligible === false
+              ? "❌ Not Eligible"
+              : "⚠️ Maybe Eligible";
+        parts.push(
+          `${header}${status} for ${scheme.schemeName}:\n${scheme.reason || "No details available."}`,
+        );
+      }
+
+      if (isAboutSchemeQ) {
+        const lines = [`${header}📌 ${scheme.schemeName}`];
+        if (scheme.reason) lines.push(`• ${scheme.reason}`);
+        if (scheme.benefits) lines.push(`• Benefits: ${scheme.benefits}`);
+        if (scheme.documents?.length)
+          lines.push(`• Documents: ${scheme.documents.join(", ")}`);
+        if (scheme.sourceUrl)
+          lines.push(`• Official website: ${scheme.sourceUrl}`);
+        parts.push(lines.join("\n"));
+      }
+    }
+
+    return parts.length > 0 ? parts.join("\n\n") : null;
+  };
+
   // ── Auto TTS for AI responses after voice input ────────────────────────
 
   const speakResponse = (responseText: string) => {
@@ -257,6 +409,12 @@ export default function ChatBox() {
     addMsg({ id: makeId("l"), role: "ai", isLoading: true });
     setBusy(true);
 
+    // Determine which schemes are relevant so the backend only queries those
+    const goalValue = curAnswers.goal || goalLabelRef.current || "";
+    const candidateSchemes = goalValue
+      ? getCandidateSchemes(goalValue, query)
+      : inferSchemesFromQuery(query);
+
     try {
       const res = await fetch("/api/query", {
         method: "POST",
@@ -266,6 +424,9 @@ export default function ChatBox() {
           language,
           profile: userProfile,
           answers: curAnswers,
+          askedQuestions: askedQuestionsRef.current,
+          candidateSchemes:
+            candidateSchemes.length > 0 ? candidateSchemes : undefined,
         }),
       });
 
@@ -278,6 +439,11 @@ export default function ChatBox() {
       if (data.status === "questioning") {
         setConvPhase("questions");
         convPhaseRef.current = "questions";
+
+        // Track this question so it won't be repeated
+        const newAsked = [...askedQuestionsRef.current, data.question];
+        setAskedQuestions(newAsked);
+        askedQuestionsRef.current = newAsked;
 
         addMsg({
           id: makeId("q"),
@@ -551,11 +717,17 @@ export default function ChatBox() {
     // ── During question phase: handle free text (optional) ──
     if (convPhaseRef.current === "questions") {
       addMsg({ id: makeId("u"), role: "user", content: trimmed });
-      // In dynamic mode, free text could be used to answer the question
-      await fetchNextDynamicTurn(pendingQueryRef.current, {
+      // Use last asked question as key so Gemini knows what was answered
+      const lastQ =
+        askedQuestionsRef.current[askedQuestionsRef.current.length - 1] ||
+        `q_${Date.now()}`;
+      const newAnswers = {
         ...convAnswersRef.current,
-        [Date.now()]: trimmed,
-      });
+        [lastQ]: trimmed,
+      };
+      setConvAnswers(newAnswers);
+      convAnswersRef.current = newAnswers;
+      await fetchNextDynamicTurn(pendingQueryRef.current, newAnswers);
       return;
     }
 
@@ -595,9 +767,31 @@ export default function ChatBox() {
       return;
     }
 
-    // ── Follow-up message after chat is done → restart interview ──
+    // ── Follow-up message after chat is done ──
     if (convPhaseRef.current === "rag") {
-      // Reset state and start fresh
+      addMsg({ id: makeId("u"), role: "user", content: trimmed });
+
+      // Check if this is a follow-up about already-shown results
+      const followUpAnswer = handleFollowUp(trimmed, [
+        ...messages,
+        { id: "temp", role: "user" as const, content: trimmed },
+      ]);
+
+      if (followUpAnswer) {
+        // Answer directly from existing results — no restart needed
+        addMsg({
+          id: makeId("a"),
+          role: "ai",
+          content: followUpAnswer,
+        });
+        speakResponse(followUpAnswer);
+        return;
+      }
+
+      // Genuinely new query → check if we can infer schemes directly
+      const inferred = inferSchemesFromQuery(trimmed);
+
+      // Reset state for new query
       setConvAnswers({});
       convAnswersRef.current = {};
       setCandidates([]);
@@ -606,20 +800,26 @@ export default function ChatBox() {
       activeQIdRef.current = "";
       setGoalLabel("");
       goalLabelRef.current = "";
-
+      setAskedQuestions([]);
+      askedQuestionsRef.current = [];
       setPendingQuery(trimmed);
       pendingQueryRef.current = trimmed;
-      setConvPhase("goal");
-      convPhaseRef.current = "goal";
 
-      addMsg({ id: makeId("u"), role: "user", content: trimmed });
-      addMsg({
-        id: makeId("g"),
-        role: "ai",
-        content: i.chat.goalQuestion,
-        chips: i.chat.goalChips,
-      });
-      speakResponse(i.chat.goalQuestion);
+      if (inferred.length > 0) {
+        // Specific new query → skip goal selection, go straight to questions
+        await fetchNextDynamicTurn(trimmed, {});
+      } else {
+        // Vague new query → show goal selection
+        setConvPhase("goal");
+        convPhaseRef.current = "goal";
+        addMsg({
+          id: makeId("g"),
+          role: "ai",
+          content: i.chat.goalQuestion,
+          chips: i.chat.goalChips,
+        });
+        speakResponse(i.chat.goalQuestion);
+      }
     }
   };
 
@@ -654,16 +854,24 @@ export default function ChatBox() {
       setConvPhase("questions");
       convPhaseRef.current = "questions";
 
-      await fetchNextDynamicTurn(pendingQueryRef.current, { goal: value });
+      // Store goal in answers so it persists for subsequent calls
+      const goalAnswers = { ...convAnswersRef.current, goal: value };
+      setConvAnswers(goalAnswers);
+      convAnswersRef.current = goalAnswers;
+
+      await fetchNextDynamicTurn(pendingQueryRef.current, goalAnswers);
       return;
     }
 
     // ── Phase: eligibility questions ──
     if (phase === "questions") {
-      // Dynamic questions use labels or values as answers
+      // Use the last asked question as key so Gemini knows what was answered
+      const lastQ =
+        askedQuestionsRef.current[askedQuestionsRef.current.length - 1] ||
+        `q_${Date.now()}`;
       const newAnswers = {
         ...convAnswersRef.current,
-        [Date.now().toString()]: value,
+        [lastQ]: value,
       };
       setConvAnswers(newAnswers);
       convAnswersRef.current = newAnswers;

@@ -36,21 +36,21 @@ export interface RAGEcosystemResponse {
 }
 
 const GENERATION_MODELS = [
-  "gemini-2.5-flash", 
-  "gemini-3.0-flash", 
-  "gemini-2.5-flash-lite"
+  "gemini-2.5-flash",
+  "gemini-2.0-flash",
+  "gemini-2.5-flash-lite",
 ];
 
 const FALLBACK_GEMMA_MODELS = [
-  "gemma-3-27b" // Absolute final fallback (Gemma 3 27B)
+  "gemma-3-27b", // Absolute final fallback (Gemma 3 27B)
 ];
 
 const SCHEME_NAMES: Record<string, string> = {
   "pm-kisan": "PM-KISAN",
-  "ayushman": "Ayushman Bharat (PMJAY)",
+  ayushman: "Ayushman Bharat (PMJAY)",
   "pmay-g": "PMAY-G (Awas Yojana)",
-  "mgnrega": "MGNREGA",
-  "apy": "Atal Pension Yojana (APY)",
+  mgnrega: "MGNREGA",
+  apy: "Atal Pension Yojana (APY)",
 };
 
 const ALL_SCHEME_IDS = Object.keys(SCHEME_NAMES);
@@ -68,55 +68,106 @@ const LANG_NAMES: Record<string, string> = {
  */
 export function detectUserIntent(query: string): string | null {
   const lowQuery = query.toLowerCase();
-  
+
   const categories = [
     {
       id: "pm-kisan",
       keywords: [
-        "agriculture", "farming", "farmer", "land", "crop", "cultivation", 
-        "cultivate", "agricultural", "farm", "kisan", "pm-kisan", "paddy", 
-        "wheat", "harvest", "fields", "soil", "plantation"
-      ]
+        "agriculture",
+        "farming",
+        "farmer",
+        "land",
+        "crop",
+        "cultivation",
+        "cultivate",
+        "agricultural",
+        "farm",
+        "kisan",
+        "pm-kisan",
+        "paddy",
+        "wheat",
+        "harvest",
+        "fields",
+        "soil",
+        "plantation",
+      ],
     },
     {
       id: "pmay-g",
       keywords: [
-        "house", "home", "housing", "awas", "kutcha", "pucca", "construction",
-        "roof", "building", "shelter", "dwelling", "residence", "live"
-      ]
+        "house",
+        "home",
+        "housing",
+        "awas",
+        "kutcha",
+        "pucca",
+        "construction",
+        "roof",
+        "building",
+        "shelter",
+        "dwelling",
+        "residence",
+        "live",
+      ],
     },
     {
       id: "ayushman",
       keywords: [
-        "health", "hospital", "medical", "insurance", "doctor", "treatment",
-        "disease", "sick", "illness", "healthcare", "ayushman", "pmjay"
-      ]
+        "health",
+        "hospital",
+        "medical",
+        "insurance",
+        "doctor",
+        "treatment",
+        "disease",
+        "sick",
+        "illness",
+        "healthcare",
+        "ayushman",
+        "pmjay",
+      ],
     },
     {
       id: "mgnrega",
       keywords: [
-        "work", "job", "wage", "daily", "labor", "employment", "mgnrega",
-        "earn", "income", "wages", "work guarantee"
-      ]
+        "work",
+        "job",
+        "wage",
+        "daily",
+        "labor",
+        "employment",
+        "mgnrega",
+        "earn",
+        "income",
+        "wages",
+        "work guarantee",
+      ],
     },
     {
       id: "apy",
       keywords: [
-        "pension", "retirement", "old age", "savings", "future", "elderly",
-        "apy", "atal", "monthly income after 60"
-      ]
-    }
+        "pension",
+        "retirement",
+        "old age",
+        "savings",
+        "future",
+        "elderly",
+        "apy",
+        "atal",
+        "monthly income after 60",
+      ],
+    },
   ];
 
-  const results = categories.map(cat => {
+  const results = categories.map((cat) => {
     let count = 0;
     let firstIndex = Infinity;
 
-    cat.keywords.forEach(kw => {
-      const kwEscaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const regex = new RegExp(`\\b${kwEscaped}\\b`, 'g');
+    cat.keywords.forEach((kw) => {
+      const kwEscaped = kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const regex = new RegExp(`\\b${kwEscaped}\\b`, "g");
       const matches = lowQuery.match(regex);
-      
+
       if (matches) {
         count += matches.length;
         const idx = lowQuery.indexOf(kw.toLowerCase());
@@ -129,10 +180,10 @@ export function detectUserIntent(query: string): string | null {
     return { id: cat.id, count, firstIndex };
   });
 
-  const matched = results.filter(r => r.count > 0);
+  const matched = results.filter((r) => r.count > 0);
   if (matched.length === 0) return null;
 
-  // Sort by highest count first. 
+  // Sort by highest count first.
   // Tiebreaker: the one whose keyword appeared earliest in the string.
   matched.sort((a, b) => {
     if (b.count !== a.count) return b.count - a.count;
@@ -154,7 +205,8 @@ function getGeminiKeys() {
 function getPineconeIndex() {
   const apiKey = process.env.PINECONE_API_KEY;
   const indexName = process.env.PINECONE_INDEX_NAME;
-  if (!apiKey || !indexName) throw new Error("Missing PINECONE_API_KEY or PINECONE_INDEX_NAME");
+  if (!apiKey || !indexName)
+    throw new Error("Missing PINECONE_API_KEY or PINECONE_INDEX_NAME");
   const pc = new Pinecone({ apiKey });
   return pc.index(indexName);
 }
@@ -175,15 +227,25 @@ async function generateContentWithFallback(prompt: string): Promise<string> {
         const result = await model.generateContent(prompt);
         return result.response.text();
       } catch (err: any) {
-        const is429 = err?.message?.includes("429") || err?.message?.includes("RESOURCE_EXHAUSTED");
-        if (!is429) throw err;
-        console.warn(`[Fallback] Model ${modelName} hit quota limit. Trying next fallback...`);
+        const msg = err?.message || "";
+        const isRetryable =
+          msg.includes("429") ||
+          msg.includes("RESOURCE_EXHAUSTED") ||
+          msg.includes("404") ||
+          msg.includes("not found") ||
+          msg.includes("not supported");
+        if (!isRetryable) throw err;
+        console.warn(
+          `[Fallback] Model ${modelName} failed (${msg.includes("404") || msg.includes("not found") ? "model not found" : "quota limit"}). Trying next fallback...`,
+        );
       }
     }
   }
 
   // Phase 2: If ALL Gemini models fail across ALL keys, try Gemma as a last resort
-  console.warn(`[Fallback] All Gemini models exhausted. Failing over to Gemma 3 27B model...`);
+  console.warn(
+    `[Fallback] All Gemini models exhausted. Failing over to Gemma 3 27B model...`,
+  );
   for (const key of keys) {
     const genAI = new GoogleGenerativeAI(key);
     for (const modelName of FALLBACK_GEMMA_MODELS) {
@@ -192,14 +254,24 @@ async function generateContentWithFallback(prompt: string): Promise<string> {
         const result = await model.generateContent(prompt);
         return result.response.text();
       } catch (err: any) {
-        const is429 = err?.message?.includes("429") || err?.message?.includes("RESOURCE_EXHAUSTED");
-        if (!is429) throw err;
-        console.warn(`[Fallback] Gemma Model ${modelName} hit quota limit. Trying next...`);
+        const msg = err?.message || "";
+        const isRetryable =
+          msg.includes("429") ||
+          msg.includes("RESOURCE_EXHAUSTED") ||
+          msg.includes("404") ||
+          msg.includes("not found") ||
+          msg.includes("not supported");
+        if (!isRetryable) throw err;
+        console.warn(
+          `[Fallback] Gemma Model ${modelName} failed. Trying next...`,
+        );
       }
     }
   }
 
-  throw new Error("Quota Exceeded across all available models (including Gemma) and keys");
+  throw new Error(
+    "Quota Exceeded across all available models (including Gemma) and keys",
+  );
 }
 
 async function embedQuery(query: string): Promise<number[]> {
@@ -211,9 +283,13 @@ async function embedQuery(query: string): Promise<number[]> {
       const result = await model.embedContent(query);
       return result.embedding.values as number[];
     } catch (err: any) {
-      const is429 = err?.message?.includes("429") || err?.message?.includes("RESOURCE_EXHAUSTED");
+      const is429 =
+        err?.message?.includes("429") ||
+        err?.message?.includes("RESOURCE_EXHAUSTED");
       if (!is429) throw err;
-      console.warn(`[Fallback] Embedding hit quota limit on a key. Trying next key...`);
+      console.warn(
+        `[Fallback] Embedding hit quota limit on a key. Trying next key...`,
+      );
     }
   }
   throw new Error("Quota Exceeded on embedding across all keys");
@@ -245,20 +321,27 @@ function sortByEligibility(results: EligibilityResult[]): EligibilityResult[] {
  */
 export async function queryMultiSchemeRAG(
   userQuery: string,
-  language: string = "en"
+  language: string = "en",
+  targetSchemes: string[] = [],
 ): Promise<RAGEcosystemResponse> {
   if (!userQuery || userQuery.trim().length < 3) {
     return { matchingSchemes: [], totalMatches: 0, noMatch: [] };
   }
+
+  // Use targeted namespaces if provided, otherwise all
+  const namespacesToSearch =
+    targetSchemes.length > 0
+      ? targetSchemes.filter((id) => ALL_SCHEME_IDS.includes(id))
+      : ALL_SCHEME_IDS;
 
   try {
     // 1. Embed an enriched query to ensure we fetch essential chunks (benefits, documents, application steps)
     const enrichedQuery = `${userQuery}. Include details on financial benefits, required documents, eligibility, and how to apply.`;
     const queryEmbedding = await embedQuery(enrichedQuery);
 
-    // 2. Search Pinecone across ALL scheme namespaces in parallel
+    // 2. Search Pinecone across relevant scheme namespaces in parallel
     const index = getPineconeIndex();
-    const queryPromises = ALL_SCHEME_IDS.map(async (namespaceId) => {
+    const queryPromises = namespacesToSearch.map(async (namespaceId) => {
       try {
         const results = await index.namespace(namespaceId).query({
           vector: queryEmbedding,
@@ -273,20 +356,19 @@ export async function queryMultiSchemeRAG(
     });
 
     const namespaceResults = await Promise.all(queryPromises);
-    
+
     // Flatten and sort by score to get the overall top chunks
     const allMatches = namespaceResults.flat();
     allMatches.sort((a, b) => (b.score || 0) - (a.score || 0));
-    
+
     // Filter out chunks with very low similarity scores
-    const matches = allMatches.filter(m => (m.score || 0) > 0.65).slice(0, 8);
+    const matches = allMatches.filter((m) => (m.score || 0) > 0.65).slice(0, 8);
 
     if (matches.length === 0) {
       return {
         matchingSchemes: [],
         totalMatches: 0,
         noMatch: [], // Don't list all schemes if none match
-
       };
     }
 
@@ -326,7 +408,7 @@ RESPOND ONLY AS VALID JSON ARRAY (no markdown, no code fences):
     "reason": "Expert 1-2 sentence explanation in ${LANG_NAMES[language] || "English"}",
     "documents": ["list", "of", "docs"],
     "nextSteps": ["action", "steps"],
-    "benefits": "exact amounts",
+    "benefits": "List what is covered, then state exact amounts like ₹X per year via DBT. Example: Covers hospitalization, surgery, medicines. ₹5,00,000 per family per year via cashless treatment at empanelled hospitals.",
     "confidence": "High" or "Medium" or "Low",
     "sourceUrl": "official url",
     "lastVerified": "YYYY-MM-DD"
@@ -350,7 +432,7 @@ RULES:
         for (const item of parsedArray) {
           const schemeId = item.schemeId as string;
           const schemeName = SCHEME_NAMES[schemeId] || schemeId;
-          
+
           eligibilityResults.push({
             schemeId,
             schemeName,
@@ -359,9 +441,12 @@ RULES:
             documents: (item.documents as string[]) || [],
             nextSteps: (item.nextSteps as string[]) || [],
             benefits: (item.benefits as string) || "Details not available.",
-            confidence: (item.confidence as "High" | "Medium" | "Low") || "Medium",
+            confidence:
+              (item.confidence as "High" | "Medium" | "Low") || "Medium",
             sourceUrl: (item.sourceUrl as string) || "https://www.india.gov.in",
-            lastVerified: (item.lastVerified as string) || new Date().toISOString().split('T')[0],
+            lastVerified:
+              (item.lastVerified as string) ||
+              new Date().toISOString().split("T")[0],
           });
         }
       }
@@ -372,7 +457,7 @@ RULES:
     }
 
     // 5. Build noMatch list for schemes that weren't found in Pinecone results
-    const noMatch: NoMatchScheme[] = ALL_SCHEME_IDS
+    const noMatch: NoMatchScheme[] = namespacesToSearch
       .filter((id) => !foundSchemeIds.has(id))
       .map((id) => ({
         schemeId: id,
@@ -393,7 +478,7 @@ RULES:
     return {
       matchingSchemes: [],
       totalMatches: 0,
-      noMatch: ALL_SCHEME_IDS.map((id) => ({
+      noMatch: namespacesToSearch.map((id) => ({
         schemeId: id,
         schemeName: SCHEME_NAMES[id],
         reason: "Service temporarily unavailable. Please try again.",
@@ -408,7 +493,7 @@ RULES:
 export async function getSingleSchemeEligibility(
   userQuery: string,
   schemeId: string,
-  language: string = "en"
+  language: string = "en",
 ): Promise<EligibilityResult> {
   const schemeName = SCHEME_NAMES[schemeId] || schemeId;
 
@@ -422,7 +507,7 @@ export async function getSingleSchemeEligibility(
     benefits: "Information not available.",
     confidence: "Low",
     sourceUrl: "https://www.india.gov.in",
-    lastVerified: new Date().toISOString().split('T')[0],
+    lastVerified: new Date().toISOString().split("T")[0],
   };
 
   if (!userQuery || userQuery.trim().length < 3) return defaultResult;
@@ -442,7 +527,10 @@ export async function getSingleSchemeEligibility(
     const matches = searchResults.matches || [];
 
     if (matches.length === 0) {
-      return { ...defaultResult, reason: `No information found for ${schemeName}.` };
+      return {
+        ...defaultResult,
+        reason: `No information found for ${schemeName}.`,
+      };
     }
 
     // 3. Build context from matched chunks
@@ -468,7 +556,7 @@ Respond ONLY as valid JSON (no markdown, no code fences, no extra text):
   "reason": "Detailed 2-3 sentence explanation. Explain exactly WHY they qualify or don't. Be specific about which criteria they meet or miss.",
   "documents": ["Every document they need to apply, be thorough"],
   "nextSteps": ["Detailed step-by-step guide a village person can follow. Include where to go, what to say, and what to expect."],
-  "benefits": "Complete benefits breakdown with exact amounts, frequency, and how they receive the money.",
+  "benefits": "First list what is covered (services, items), then state exact ₹ amounts, frequency, and payment mode. Example: Covers hospitalization, surgery, diagnostics, medicines. ₹5,00,000 per family per year via cashless treatment.",
   "confidence": "High" or "Medium" or "Low",
   "sourceUrl": "Official gov website url for this scheme",
   "lastVerified": "YYYY-MM-DD format date"
@@ -494,16 +582,22 @@ IMPORTANT: Respond with ALL text values (reason, documents, nextSteps, benefits)
         documents: (parsed.documents as string[]) || [],
         nextSteps: (parsed.nextSteps as string[]) || [],
         benefits: (parsed.benefits as string) || defaultResult.benefits,
-        confidence: (parsed.confidence as "High" | "Medium" | "Low") || defaultResult.confidence,
+        confidence:
+          (parsed.confidence as "High" | "Medium" | "Low") ||
+          defaultResult.confidence,
         sourceUrl: (parsed.sourceUrl as string) || defaultResult.sourceUrl,
-        lastVerified: (parsed.lastVerified as string) || defaultResult.lastVerified,
+        lastVerified:
+          (parsed.lastVerified as string) || defaultResult.lastVerified,
       };
     }
 
     return defaultResult;
   } catch (error) {
     console.error(`Single scheme RAG error for ${schemeName}:`, error);
-    return { ...defaultResult, reason: "Service temporarily unavailable. Please try again." };
+    return {
+      ...defaultResult,
+      reason: "Service temporarily unavailable. Please try again.",
+    };
   }
 }
 
@@ -516,18 +610,29 @@ export async function determineNextTurn(
   userQuery: string,
   profile: Record<string, any>,
   answers: Record<string, string>,
-  language: string = "en"
+  language: string = "en",
+  askedQuestions: string[] = [],
+  candidateSchemes: string[] = [],
 ): Promise<DynamicTurn> {
+  // Determine which namespaces to search — prefer explicit candidates, else search all
+  const targetNamespaces =
+    candidateSchemes.length > 0
+      ? candidateSchemes.filter((id) => ALL_SCHEME_IDS.includes(id))
+      : ALL_SCHEME_IDS;
+
   try {
     // 1. Get relevant scheme chunks using an enriched query
-    const enrichedQuery = `${userQuery}. Include details on financial benefits, required documents, eligibility, and how to apply.`;
+    const goalContext = answers.goal ? ` related to ${answers.goal}` : "";
+    const enrichedQuery = `${userQuery}${goalContext}. Include details on financial benefits, required documents, eligibility, and how to apply.`;
     const queryEmbedding = await embedQuery(enrichedQuery);
     const index = getPineconeIndex();
-    
-    // Search all namespaces to identify candidates (fetch top 15 each to maximize document reconstruction)
-    const queryPromises = ALL_SCHEME_IDS.map(async (ns) => {
+
+    // Search ONLY relevant namespaces (not all 5) to get focused context
+    const queryPromises = targetNamespaces.map(async (ns) => {
       try {
-        const res = await index.namespace(ns).query({ vector: queryEmbedding, topK: 15, includeMetadata: true });
+        const res = await index
+          .namespace(ns)
+          .query({ vector: queryEmbedding, topK: 15, includeMetadata: true });
         return res.matches || [];
       } catch (err) {
         console.error(`Pinecone query failed for namespace ${ns}:`, err);
@@ -539,10 +644,16 @@ export async function determineNextTurn(
     const topMatches = allMatches.slice(0, 20); // Top 20 chunks across all schemes overall
 
     if (topMatches.length === 0) {
-      return { status: "complete", results: { matchingSchemes: [], totalMatches: 0, noMatch: [] } };
+      return {
+        status: "complete",
+        results: { matchingSchemes: [], totalMatches: 0, noMatch: [] },
+      };
     }
 
     // 2. Build context for Gemini
+    const targetSchemeNames = targetNamespaces
+      .map((id) => SCHEME_NAMES[id] || id)
+      .join(", ");
     const schemeContext = topMatches
       .map((m) => {
         const meta = m.metadata as any;
@@ -558,28 +669,36 @@ Answers so far: ${JSON.stringify(answers)}
     // 3. Ask Gemini: "What's missing?"
 
     const prompt = `You are the Expert Government Advisor for SchemeSetu. 
+
+IMPORTANT: The user is asking about: ${targetSchemeNames}
+You MUST ONLY ask questions relevant to these specific schemes. Do NOT ask about unrelated topics.
     
 CONTEXT:
 User Query: "${userQuery}"
+Target Schemes: ${targetSchemeNames}
 Candidate Scheme Data: ${schemeContext}
 User Profile: ${JSON.stringify(profile)}
-User Answers: ${JSON.stringify(answers)}
+User Answers (question → answer): ${JSON.stringify(answers)}
+${askedQuestions.length > 0 ? `\nALREADY ASKED QUESTIONS (DO NOT repeat or rephrase any of these):\n${askedQuestions.map((q, i) => `${i + 1}. ${q}`).join("\n")}` : ""}
 
 EXPECTED BEHAVIOR:
-1. Identify the most specific scheme or category the user is interested in.
-2. If the user mentions a scheme (like PM-Kisan) or a sector (Farming), YOU MUST ASK a specific eligibility question related to that scheme's documentation (e.g. "Do you own agricultural land?").
-3. NEVER ask "What are you looking for?" or "How can I help?" once a scheme or sector has been identified.
+1. Focus ONLY on the target schemes listed above. Ignore unrelated scheme data.
+2. Ask eligibility questions SPECIFIC to these schemes (e.g., for Ayushman Bharat ask about income/BPL status/family size, NOT about agricultural land).
+3. NEVER ask "What are you looking for?" or "How can I help?" — the user already told you.
 4. If you have enough details to confirm eligibility, respond with "complete".
+5. NEVER repeat or rephrase a question that was already asked. Each question must gather NEW information.
+6. If 3 or more questions have already been asked, strongly prefer responding with "complete" unless critical info is truly missing.
 
 RULES for "questioning":
 - Output 2-4 interactive chips.
 - Keep the question very short and rural-friendly.
 - Be authoritative. You know the rules.
+- Ask about DIFFERENT eligibility criteria each time (e.g. age, income, BPL card, family size, documents — not the same topic twice).
 
 JSON OUTPUT ONLY:
 {
   "status": "questioning" | "complete",
-  "question": "The specific expert question",
+  "question": "The specific expert question relevant to ${targetSchemeNames}",
   "chips": [{"label": "Option", "value": "val"}],
   "reasoning": "Internal logic"
 }
@@ -596,25 +715,40 @@ JSON OUTPUT ONLY:
       };
     }
 
-    // If complete or fallback, run the actual batch eligibility check without 
+    // If complete or fallback, run the actual batch eligibility check without
     // doing duplicate embed/pinecone fetches. We already have the userQuery!
-    console.log("Determine Next Turn: Complete or Fallback. Fetching final RAG results.");
-    const finalResults = await queryMultiSchemeRAG(userQuery, language);
+    console.log(
+      "Determine Next Turn: Complete or Fallback. Fetching final RAG results.",
+    );
+    const finalResults = await queryMultiSchemeRAG(
+      userQuery,
+      language,
+      targetNamespaces,
+    );
     return { status: "complete", results: finalResults };
-
   } catch (err) {
     console.error("Dynamic turnover error:", err);
     // If the error is a rate limit, bubble it up to show the "Traffic" warning in UI
-    if (err instanceof Error && (err.message.includes("429") || err.message.includes("Retry exhausted"))) {
+    if (
+      err instanceof Error &&
+      (err.message.includes("429") || err.message.includes("Retry exhausted"))
+    ) {
       throw new Error("Quota Exceeded");
     }
-    
+
     // Otherwise try fallback
     try {
-      const fallbackResults = await queryMultiSchemeRAG(userQuery, language);
+      const fallbackResults = await queryMultiSchemeRAG(
+        userQuery,
+        language,
+        targetNamespaces,
+      );
       return { status: "complete", results: fallbackResults };
     } catch {
-      return { status: "complete", results: { matchingSchemes: [], totalMatches: 0, noMatch: [] } };
+      return {
+        status: "complete",
+        results: { matchingSchemes: [], totalMatches: 0, noMatch: [] },
+      };
     }
   }
 }

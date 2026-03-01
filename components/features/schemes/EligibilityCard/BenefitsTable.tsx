@@ -1,74 +1,128 @@
 "use client";
 
 import React from "react";
-import { IndianRupee, Calendar, CreditCard } from "lucide-react";
+import {
+  IndianRupee,
+  Calendar,
+  CreditCard,
+  CheckCircle,
+  FileText,
+} from "lucide-react";
 
-interface BenefitsEntry {
+interface MoneyBenefit {
   label: string;
   value: string;
-  icon?: "rupee" | "calendar" | "card";
+  icon: "rupee" | "calendar" | "card";
 }
 
 interface BenefitsTableProps {
-  /** Raw benefits string from RAG pipeline, e.g. "₹6000/year in 3 instalments via DBT" */
+  /** Raw benefits string from RAG pipeline */
   rawBenefits: string;
 }
 
 /**
- * Parses a raw benefits string into structured rows.
- * Handles patterns like:
- *  - "₹6000 per year" → Amount: ₹6,000 / Frequency: Per year
- *  - "3 instalments" → Instalments: 3
- *  - "via DBT" / "via bank transfer" → Payment: Direct Bank Transfer
+ * Splits a raw benefits string into:
+ *   textBenefits  – what-is-covered items (services, coverage, etc.)
+ *   moneyBenefits – structured financial rows (amount, frequency, payment mode)
  */
-function parseBenefits(raw: string): BenefitsEntry[] {
-  const rows: BenefitsEntry[] = [];
+function parseBenefits(raw: string): {
+  textBenefits: string[];
+  moneyBenefits: MoneyBenefit[];
+} {
+  const moneyBenefits: MoneyBenefit[] = [];
+
+  // ── Extract money-related structured info ──────────────────────────────
 
   // Match rupee amounts
-  const amtMatch = raw.match(/₹\s*[\d,]+(?:\.\d+)?|\d[\d,]*\s*(?:rupee|lakh|crore)/i);
+  const amtMatch = raw.match(
+    /₹\s*[\d,]+(?:\.\d+)?(?:\s*(?:per|\/)\s*(?:year|month|annum|family))?|\d[\d,]*\s*(?:rupee|lakh|crore)/i,
+  );
   if (amtMatch) {
-    rows.push({ label: "Benefit Amount", value: amtMatch[0].replace(/\s+/g, ""), icon: "rupee" });
+    moneyBenefits.push({
+      label: "Benefit Amount",
+      value: amtMatch[0].trim(),
+      icon: "rupee",
+    });
   }
 
   // Frequency
   const freqPatterns = [
-    { re: /per\s+year|annually|yearly/i, val: "Per year" },
+    { re: /per\s+year|annually|yearly|per\s+annum/i, val: "Per year" },
     { re: /per\s+month|monthly/i, val: "Per month" },
+    { re: /per\s+family/i, val: "Per family" },
     { re: /one[- ]time|once|lump[- ]sum/i, val: "One-time payment" },
-    { re: /(\d+)\s+instalment/i, val: (m: RegExpMatchArray) => `${m[1]} instalments` },
+    {
+      re: /(\d+)\s+instalment/i,
+      val: (m: RegExpMatchArray) => `${m[1]} instalments`,
+    },
   ];
   for (const p of freqPatterns) {
     const m = raw.match(p.re);
     if (m) {
-      rows.push({ label: "Frequency", value: typeof p.val === "function" ? p.val(m) : p.val, icon: "calendar" });
+      moneyBenefits.push({
+        label: "Frequency",
+        value: typeof p.val === "function" ? p.val(m) : p.val,
+        icon: "calendar",
+      });
       break;
     }
   }
 
   // Payment mode
   const payPatterns = [
-    { re: /DBT|direct\s+benefit\s+transfer/i, val: "Direct Benefit Transfer (DBT)" },
+    {
+      re: /DBT|direct\s+benefit\s+transfer/i,
+      val: "Direct Benefit Transfer (DBT)",
+    },
     { re: /bank\s+transfer|NEFT|RTGS/i, val: "Bank Transfer" },
+    { re: /cashless/i, val: "Cashless Treatment" },
     { re: /cash/i, val: "Cash" },
     { re: /cheque/i, val: "Cheque" },
     { re: /ration|PDS/i, val: "Public Distribution System" },
+    { re: /empanelled\s+hospital/i, val: "Empanelled Hospitals" },
   ];
   for (const p of payPatterns) {
     if (p.re.test(raw)) {
-      rows.push({ label: "Payment Mode", value: p.val, icon: "card" });
+      moneyBenefits.push({ label: "Payment Mode", value: p.val, icon: "card" });
       break;
     }
   }
 
-  // If nothing parsed, just show the raw text as a single summary row
-  if (rows.length === 0) {
-    rows.push({ label: "Benefits", value: raw, icon: "rupee" });
+  // ── Extract text benefits (what's covered) ────────────────────────────
+
+  // Try to split the raw string into individual benefit points
+  let textBenefits: string[] = [];
+
+  // First try: split on common separators (, and/or bullets/newlines)
+  // We look for "covers ..." or benefit-item lists
+  const coverMatch = raw.match(/covers?\s+(.+)/i);
+  const benefitText = coverMatch ? coverMatch[1] : raw;
+
+  // Split on commas, "and", semicolons, bullet points, or newlines
+  const items = benefitText
+    .split(/[,;\n]|\band\b/i)
+    .map((s) => s.replace(/\.$/, "").trim())
+    .filter((s) => {
+      // Keep only descriptive text items, skip money amounts and very short fragments
+      if (!s || s.length < 3) return false;
+      // Skip items that are purely money references (already captured above)
+      if (/^₹\s*[\d,]+/.test(s)) return false;
+      if (/^\d+\s+instalment/i.test(s)) return false;
+      if (/^(via|through)\s+(DBT|bank)/i.test(s)) return false;
+      return true;
+    });
+
+  if (items.length > 1) {
+    textBenefits = items;
+  } else if (raw.length > 0) {
+    // Fallback: show the full text as a single benefit point
+    textBenefits = [raw];
   }
 
-  return rows;
+  return { textBenefits, moneyBenefits };
 }
 
-const ICONS = {
+const MONEY_ICONS = {
   rupee: IndianRupee,
   calendar: Calendar,
   card: CreditCard,
@@ -77,43 +131,149 @@ const ICONS = {
 export default function BenefitsTable({ rawBenefits }: BenefitsTableProps) {
   if (!rawBenefits) return null;
 
-  const rows = parseBenefits(rawBenefits);
+  const { textBenefits, moneyBenefits } = parseBenefits(rawBenefits);
 
   return (
-    <div style={{
-      borderRadius: 12, overflow: "hidden",
-      border: "1px solid #d0eadb", background: "#f2fbf5",
-    }}>
-      <div style={{
-        padding: "8px 14px",
-        background: "linear-gradient(90deg, rgba(39,174,96,0.12), rgba(39,174,96,0.04))",
-        borderBottom: "1px solid #d0eadb",
-        display: "flex", alignItems: "center", gap: 6,
-      }}>
-        <IndianRupee size={13} color="#27AE60" />
-        <p style={{ fontSize: 11, fontWeight: 700, color: "#27AE60", margin: 0, letterSpacing: "0.05em", textTransform: "uppercase" }}>
-          Benefits Breakdown
-        </p>
-      </div>
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      {/* ── What's Covered (Text Benefits) ── */}
+      {textBenefits.length > 0 && (
+        <div
+          style={{
+            borderRadius: 12,
+            overflow: "hidden",
+            border: "1px solid #e0e7ff",
+            background: "#f8f9ff",
+          }}
+        >
+          <div
+            style={{
+              padding: "8px 14px",
+              background:
+                "linear-gradient(90deg, rgba(79,70,229,0.08), rgba(79,70,229,0.02))",
+              borderBottom: "1px solid #e0e7ff",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+            }}
+          >
+            <FileText size={13} color="#4F46E5" />
+            <p
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                color: "#4F46E5",
+                margin: 0,
+                letterSpacing: "0.05em",
+                textTransform: "uppercase",
+              }}
+            >
+              What&apos;s Covered
+            </p>
+          </div>
 
-      <div style={{ padding: "4px 0" }}>
-        {rows.map((row, i) => {
-          const IconComp = row.icon ? ICONS[row.icon] : IndianRupee;
-          return (
-            <div key={i} style={{
-              display: "flex", alignItems: "center", justifyContent: "space-between",
-              padding: "9px 14px",
-              borderBottom: i < rows.length - 1 ? "1px solid rgba(208,234,219,0.6)" : "none",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <IconComp size={12} color="#555" />
-                <span style={{ fontSize: 12, color: "#777", fontWeight: 500 }}>{row.label}</span>
-              </div>
-              <span style={{ fontSize: 13, fontWeight: 700, color: "#27AE60" }}>{row.value}</span>
+          <div style={{ padding: "10px 14px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {textBenefits.map((item, i) => (
+                <div
+                  key={i}
+                  style={{ display: "flex", alignItems: "flex-start", gap: 8 }}
+                >
+                  <CheckCircle
+                    size={14}
+                    color="#4F46E5"
+                    style={{ flexShrink: 0, marginTop: 2 }}
+                  />
+                  <span
+                    style={{
+                      fontSize: 13,
+                      lineHeight: 1.5,
+                      color: "#444",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {item.charAt(0).toUpperCase() + item.slice(1)}
+                  </span>
+                </div>
+              ))}
             </div>
-          );
-        })}
-      </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Financial Benefits (Money) ── */}
+      {moneyBenefits.length > 0 && (
+        <div
+          style={{
+            borderRadius: 12,
+            overflow: "hidden",
+            border: "1px solid #d0eadb",
+            background: "#f2fbf5",
+          }}
+        >
+          <div
+            style={{
+              padding: "8px 14px",
+              background:
+                "linear-gradient(90deg, rgba(39,174,96,0.12), rgba(39,174,96,0.04))",
+              borderBottom: "1px solid #d0eadb",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+            }}
+          >
+            <IndianRupee size={13} color="#27AE60" />
+            <p
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                color: "#27AE60",
+                margin: 0,
+                letterSpacing: "0.05em",
+                textTransform: "uppercase",
+              }}
+            >
+              Financial Benefits
+            </p>
+          </div>
+
+          <div style={{ padding: "4px 0" }}>
+            {moneyBenefits.map((row, i) => {
+              const IconComp = MONEY_ICONS[row.icon];
+              return (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "9px 14px",
+                    borderBottom:
+                      i < moneyBenefits.length - 1
+                        ? "1px solid rgba(208,234,219,0.6)"
+                        : "none",
+                  }}
+                >
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 6 }}
+                  >
+                    <IconComp size={12} color="#555" />
+                    <span
+                      style={{ fontSize: 12, color: "#777", fontWeight: 500 }}
+                    >
+                      {row.label}
+                    </span>
+                  </div>
+                  <span
+                    style={{ fontSize: 13, fontWeight: 700, color: "#27AE60" }}
+                  >
+                    {row.value}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
