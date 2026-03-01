@@ -35,9 +35,15 @@ export interface RAGEcosystemResponse {
   noMatch: NoMatchScheme[];
 }
 
-// ─── Constants ───────────────────────────────────────────────────────────────
+const GENERATION_MODELS = [
+  "gemini-2.5-flash", 
+  "gemini-3.0-flash", 
+  "gemini-2.5-flash-lite"
+];
 
-const MODEL_NAME = "gemini-2.5-flash"; 
+const FALLBACK_GEMMA_MODELS = [
+  "gemma-3-27b" // Absolute final fallback (Gemma 3 27B)
+];
 
 const SCHEME_NAMES: Record<string, string> = {
   "pm-kisan": "PM-KISAN",
@@ -136,12 +142,13 @@ export function detectUserIntent(query: string): string | null {
   return matched[0].id;
 }
 
-// ─── Clients ─────────────────────────────────────────────────────────────────
-
-function getGeminiClient() {
-  const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-  if (!apiKey) throw new Error("Missing NEXT_PUBLIC_GEMINI_API_KEY");
-  return new GoogleGenerativeAI(apiKey);
+function getGeminiKeys() {
+  const keys = [
+    process.env.NEXT_PUBLIC_GEMINI_API_KEY,
+    process.env.NEXT_PUBLIC_GEMINI_API_KEY_BACKUP,
+  ].filter(Boolean) as string[];
+  if (keys.length === 0) throw new Error("No Gemini API keys found");
+  return keys;
 }
 
 function getPineconeIndex() {
@@ -156,28 +163,60 @@ function getPineconeIndex() {
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-async function retryGemini<T>(fn: () => Promise<T>, retries = 3): Promise<T> {
-  for (let i = 0; i <= retries; i++) {
-    try {
-      return await fn();
-    } catch (err: unknown) {
-      const is429 = err instanceof Error && (err.message.includes("429") || err.message.includes("RESOURCE_EXHAUSTED"));
-      if (!is429 || i === retries) throw err;
-      const wait = Math.pow(2, i + 1) * 1000; // 2s, 4s, 8s
-      console.log(`Gemini rate limited, retrying in ${wait / 1000}s... (attempt ${i + 1}/${retries})`);
-      await delay(wait);
+async function generateContentWithFallback(prompt: string): Promise<string> {
+  const keys = getGeminiKeys();
+
+  // Phase 1: Try all preferred Gemini models across all available keys
+  for (const key of keys) {
+    const genAI = new GoogleGenerativeAI(key);
+    for (const modelName of GENERATION_MODELS) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName });
+        const result = await model.generateContent(prompt);
+        return result.response.text();
+      } catch (err: any) {
+        const is429 = err?.message?.includes("429") || err?.message?.includes("RESOURCE_EXHAUSTED");
+        if (!is429) throw err;
+        console.warn(`[Fallback] Model ${modelName} hit quota limit. Trying next fallback...`);
+      }
     }
   }
-  throw new Error("Retry exhausted");
+
+  // Phase 2: If ALL Gemini models fail across ALL keys, try Gemma as a last resort
+  console.warn(`[Fallback] All Gemini models exhausted. Failing over to Gemma 3 27B model...`);
+  for (const key of keys) {
+    const genAI = new GoogleGenerativeAI(key);
+    for (const modelName of FALLBACK_GEMMA_MODELS) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName });
+        const result = await model.generateContent(prompt);
+        return result.response.text();
+      } catch (err: any) {
+        const is429 = err?.message?.includes("429") || err?.message?.includes("RESOURCE_EXHAUSTED");
+        if (!is429) throw err;
+        console.warn(`[Fallback] Gemma Model ${modelName} hit quota limit. Trying next...`);
+      }
+    }
+  }
+
+  throw new Error("Quota Exceeded across all available models (including Gemma) and keys");
 }
 
 async function embedQuery(query: string): Promise<number[]> {
-  const genAI = getGeminiClient();
-  const model = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
-  return retryGemini(async () => {
-    const result = await model.embedContent(query);
-    return result.embedding.values as number[];
-  });
+  const keys = getGeminiKeys();
+  for (const key of keys) {
+    try {
+      const genAI = new GoogleGenerativeAI(key);
+      const model = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
+      const result = await model.embedContent(query);
+      return result.embedding.values as number[];
+    } catch (err: any) {
+      const is429 = err?.message?.includes("429") || err?.message?.includes("RESOURCE_EXHAUSTED");
+      if (!is429) throw err;
+      console.warn(`[Fallback] Embedding hit quota limit on a key. Trying next key...`);
+    }
+  }
+  throw new Error("Quota Exceeded on embedding across all keys");
 }
 
 function parseGeminiJSON(text: string): any {
@@ -263,8 +302,6 @@ export async function queryMultiSchemeRAG(
     }
 
     // 4. Batch Eligibility Check (One call for all schemes to save quota)
-    const genAI = getGeminiClient();
-    const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
     const schemesContext = Object.entries(chunksByScheme)
       .map(([id, chunks]) => {
@@ -306,8 +343,7 @@ RULES:
     const foundSchemeIds = new Set(Object.keys(chunksByScheme));
 
     try {
-      const result = await retryGemini(() => model.generateContent(batchPrompt));
-      const responseText = result.response.text();
+      const responseText = await generateContentWithFallback(batchPrompt);
       const parsedArray = parseGeminiJSON(responseText);
 
       if (Array.isArray(parsedArray)) {
@@ -416,8 +452,6 @@ export async function getSingleSchemeEligibility(
       .join("\n\n---\n\n");
 
     // 4. Send to Gemini with detailed prompt
-    const genAI = getGeminiClient();
-    const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
     const prompt = `You are SchemeSetu AI, a trusted government scheme advisor for rural Indian citizens.
 
@@ -448,9 +482,7 @@ Rules:
 - Include exact rupee amounts, timelines, and payment methods if in the text.
 
 IMPORTANT: Respond with ALL text values (reason, documents, nextSteps, benefits) in ${LANG_NAMES[language] || "English"}. JSON keys must stay in English.`;
-
-    const result = await retryGemini(() => model.generateContent(prompt));
-    const responseText = result.response.text();
+    const responseText = await generateContentWithFallback(prompt);
     const parsed = parseGeminiJSON(responseText);
 
     if (parsed) {
@@ -524,8 +556,6 @@ Answers so far: ${JSON.stringify(answers)}
     `.trim();
 
     // 3. Ask Gemini: "What's missing?"
-    const genAI = getGeminiClient();
-    const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
     const prompt = `You are the Expert Government Advisor for SchemeSetu. 
     
@@ -555,8 +585,7 @@ JSON OUTPUT ONLY:
 }
 `;
 
-    const result = await retryGemini(() => model.generateContent(prompt));
-    const text = result.response.text();
+    const text = await generateContentWithFallback(prompt);
     const parsed = parseGeminiJSON(text);
 
     if (parsed?.status === "questioning") {

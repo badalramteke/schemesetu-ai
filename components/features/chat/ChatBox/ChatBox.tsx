@@ -3,8 +3,17 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { useApp } from "@/components/providers/AppProvider";
 import {
-  Landmark, Wheat, HeartPulse, Home as HomeIcon,
-  HardHat, Ribbon, GraduationCap, Plus, ArrowUp, AudioLines, FlaskConical,
+  Landmark,
+  Wheat,
+  HeartPulse,
+  Home as HomeIcon,
+  HardHat,
+  Ribbon,
+  GraduationCap,
+  Plus,
+  ArrowUp,
+  AudioLines,
+  FlaskConical,
 } from "lucide-react";
 import ChatMessage from "@/components/features/chat/ChatMessage/ChatMessage";
 import QuestionJumper from "@/components/features/chat/QuestionJumper/QuestionJumper";
@@ -32,18 +41,26 @@ interface Message {
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const SECTOR_ICONS = [
-  { key: "agriculture" as const, icon: Wheat,          color: "#27AE60" },
-  { key: "healthcare"  as const, icon: HeartPulse,     color: "#3498DB" },
-  { key: "housing"     as const, icon: HomeIcon,       color: "#F39C12" },
-  { key: "employment"  as const, icon: HardHat,        color: "#E74C3C" },
-  { key: "pension"     as const, icon: Ribbon,         color: "#9B59B6" },
-  { key: "education"   as const, icon: GraduationCap,  color: "#2980B9" },
+  { key: "agriculture" as const, icon: Wheat, color: "#27AE60" },
+  { key: "healthcare" as const, icon: HeartPulse, color: "#3498DB" },
+  { key: "housing" as const, icon: HomeIcon, color: "#F39C12" },
+  { key: "employment" as const, icon: HardHat, color: "#E74C3C" },
+  { key: "pension" as const, icon: Ribbon, color: "#9B59B6" },
+  { key: "education" as const, icon: GraduationCap, color: "#2980B9" },
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function ChatBox() {
-  const { chatPrefilledQuery, setChatPrefilledQuery, userProfile, language, chatId, chatHistory, setChatHistory } = useApp();
+  const {
+    chatPrefilledQuery,
+    setChatPrefilledQuery,
+    userProfile,
+    language,
+    chatId,
+    chatHistory,
+    setChatHistory,
+  } = useApp();
   const i = t(language);
 
   // Helper to get initial state from localStorage for the active chat
@@ -60,68 +77,137 @@ export default function ChatBox() {
   };
 
   // ── Chat messages ──
-  const [messages, setMessages] = useState<Message[]>(() => getInitial("messages", []));
+  const [messages, setMessages] = useState<Message[]>(() =>
+    getInitial("messages", []),
+  );
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [listening, setListening] = useState(false);
   const [isScrubbing, setIsScrubbing] = useState(false);
 
   // ── Conversational interview state ──
-  const [convPhase, setConvPhase] = useState<ConvPhase>(() => getInitial("convPhase", "idle"));
-  const [convAnswers, setConvAnswers] = useState<Record<string, string>>(() => getInitial("convAnswers", {}));
-  const [candidates, setCandidates] = useState<string[]>(() => getInitial("candidates", []));
+  const [convPhase, setConvPhase] = useState<ConvPhase>(() =>
+    getInitial("convPhase", "idle"),
+  );
+  const [convAnswers, setConvAnswers] = useState<Record<string, string>>(() =>
+    getInitial("convAnswers", {}),
+  );
+  const [candidates, setCandidates] = useState<string[]>(() =>
+    getInitial("candidates", []),
+  );
   const [activeQId, setActiveQId] = useState(() => getInitial("activeQId", ""));
   const [goalLabel, setGoalLabel] = useState(() => getInitial("goalLabel", ""));
-  const [pendingQuery, setPendingQuery] = useState(() => getInitial("pendingQuery", ""));
+  const [pendingQuery, setPendingQuery] = useState(() =>
+    getInitial("pendingQuery", ""),
+  );
 
   // Auto-save state to localStorage whenever it changes
   useEffect(() => {
     if (typeof window === "undefined") return;
-    localStorage.setItem(`chat_data_${chatId}`, JSON.stringify({
-      messages, convPhase, convAnswers, candidates, activeQId, goalLabel, pendingQuery
-    }));
-  }, [messages, convPhase, convAnswers, candidates, activeQId, goalLabel, pendingQuery, chatId]);
+    localStorage.setItem(
+      `chat_data_${chatId}`,
+      JSON.stringify({
+        messages,
+        convPhase,
+        convAnswers,
+        candidates,
+        activeQId,
+        goalLabel,
+        pendingQuery,
+      }),
+    );
+  }, [
+    messages,
+    convPhase,
+    convAnswers,
+    candidates,
+    activeQId,
+    goalLabel,
+    pendingQuery,
+    chatId,
+  ]);
 
   // Push new chat session to History immediately when a message is added
   useEffect(() => {
     if (messages.length > 0) {
-      const exists = chatHistory.some(c => c.id === chatId);
+      const exists = chatHistory.some((c) => c.id === chatId);
       if (!exists) {
-        setChatHistory([{ 
-          id: chatId, 
-          title: messages[0].role === "user" ? (messages[0].content || "New Chat") : "New Chat",
-          timestamp: Date.now() 
-        }, ...chatHistory]);
+        setChatHistory([
+          {
+            id: chatId,
+            title:
+              messages[0].role === "user"
+                ? messages[0].content || "New Chat"
+                : "New Chat",
+            timestamp: Date.now(),
+          },
+          ...chatHistory,
+        ]);
       }
     }
   }, [messages, chatId, chatHistory, setChatHistory]);
 
   // Refs for async-safe access
-  const convPhaseRef    = useRef<ConvPhase>("idle");
-  const convAnswersRef  = useRef<Record<string, string>>({});
-  const candidatesRef   = useRef<string[]>([]);
-  const activeQIdRef    = useRef("");
-  const goalLabelRef    = useRef("");
+  const convPhaseRef = useRef<ConvPhase>("idle");
+  const convAnswersRef = useRef<Record<string, string>>({});
+  const candidatesRef = useRef<string[]>([]);
+  const activeQIdRef = useRef("");
+  const goalLabelRef = useRef("");
   const pendingQueryRef = useRef("");
 
   // Keep refs in sync with state
-  useEffect(() => { convPhaseRef.current   = convPhase; },    [convPhase]);
-  useEffect(() => { convAnswersRef.current  = convAnswers; },  [convAnswers]);
-  useEffect(() => { candidatesRef.current   = candidates; },   [candidates]);
-  useEffect(() => { activeQIdRef.current    = activeQId; },    [activeQId]);
-  useEffect(() => { goalLabelRef.current    = goalLabel; },    [goalLabel]);
-  useEffect(() => { pendingQueryRef.current = pendingQuery; }, [pendingQuery]);
+  useEffect(() => {
+    convPhaseRef.current = convPhase;
+  }, [convPhase]);
+  useEffect(() => {
+    convAnswersRef.current = convAnswers;
+  }, [convAnswers]);
+  useEffect(() => {
+    candidatesRef.current = candidates;
+  }, [candidates]);
+  useEffect(() => {
+    activeQIdRef.current = activeQId;
+  }, [activeQId]);
+  useEffect(() => {
+    goalLabelRef.current = goalLabel;
+  }, [goalLabel]);
+  useEffect(() => {
+    pendingQueryRef.current = pendingQuery;
+  }, [pendingQuery]);
 
-  const scrollRef  = useRef<HTMLDivElement>(null);
-  const endRef     = useRef<HTMLDivElement>(null);
-  const textRef    = useRef<HTMLTextAreaElement>(null);
-  const recogRef   = useRef<SpeechRecognition | null>(null);
-  const msgRefs    = useRef<Map<number, HTMLDivElement>>(new Map());
-  const autoSent   = useRef(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const endRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLTextAreaElement>(null);
+  const recogRef = useRef<SpeechRecognition | null>(null);
+  const manualStopRef = useRef(false);
+  const finalTranscriptRef = useRef("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const msgRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const autoSent = useRef(false);
+  const voiceInitiatedRef = useRef(false);
+  const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sendRef = useRef<(input: string) => Promise<void>>(async () => {});
 
   const hasMessages = messages.length > 0;
 
-  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // Cancel TTS and cleanup on unmount
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis?.cancel();
+      if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+      if (recogRef.current) {
+        try {
+          recogRef.current.abort();
+        } catch {
+          /* ignore */
+        }
+      }
+    };
+  }, []);
 
   // Auto-send pre-filled query (from sector chip on home screen)
   useEffect(() => {
@@ -140,9 +226,34 @@ export default function ChatBox() {
 
   const makeId = (prefix: string) => `${prefix}${Date.now()}`;
 
+  // ── Auto TTS for AI responses after voice input ────────────────────────
+
+  const speakResponse = (responseText: string) => {
+    if (!voiceInitiatedRef.current) return;
+    voiceInitiatedRef.current = false;
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    // Strip markdown/HTML for cleaner speech
+    const cleanText = responseText
+      .replace(/[#*_~`>]/g, "")
+      .replace(/<[^>]*>/g, "")
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      .trim();
+    if (!cleanText) return;
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang =
+      language === "hi" ? "hi-IN" : language === "mr" ? "mr-IN" : "en-IN";
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
+  };
+
   // ── Dynamic Turn API Call ──────────────────────────────────────────────────
 
-  const fetchNextDynamicTurn = async (query: string, curAnswers: Record<string, string>) => {
+  const fetchNextDynamicTurn = async (
+    query: string,
+    curAnswers: Record<string, string>,
+  ) => {
     addMsg({ id: makeId("l"), role: "ai", isLoading: true });
     setBusy(true);
 
@@ -150,11 +261,11 @@ export default function ChatBox() {
       const res = await fetch("/api/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          userQuery: query, 
+        body: JSON.stringify({
+          userQuery: query,
           language,
           profile: userProfile,
-          answers: curAnswers
+          answers: curAnswers,
         }),
       });
 
@@ -167,21 +278,23 @@ export default function ChatBox() {
       if (data.status === "questioning") {
         setConvPhase("questions");
         convPhaseRef.current = "questions";
-        
+
         addMsg({
           id: makeId("q"),
           role: "ai",
           content: data.question,
           chips: data.chips,
         });
+        speakResponse(data.question);
       } else if (data.status === "complete") {
         setConvPhase("rag");
         convPhaseRef.current = "rag";
 
         const results = data.results;
-        const msg = (results?.totalMatches || 0) > 0
-          ? i.chat.foundSchemes(results.totalMatches)
-          : i.chat.noSchemes;
+        const msg =
+          (results?.totalMatches || 0) > 0
+            ? i.chat.foundSchemes(results.totalMatches)
+            : i.chat.noSchemes;
 
         addMsg({
           id: makeId("a"),
@@ -189,59 +302,271 @@ export default function ChatBox() {
           content: msg,
           eligibilityResults: results?.matchingSchemes || [],
         });
+        speakResponse(msg);
       }
     } catch (err) {
       console.error("Dynamic turn error:", err);
       setMessages((p) =>
-        p.filter((m) => !m.isLoading).concat({ id: makeId("e"), role: "ai", content: i.chat.busy })
+        p
+          .filter((m) => !m.isLoading)
+          .concat({ id: makeId("e"), role: "ai", content: i.chat.busy }),
       );
     } finally {
       setBusy(false);
     }
   };
 
-  // ── Voice ──────────────────────────────────────────────────────────────────
+  // ── File Upload ────────────────────────────────────────────────────────────
 
-  const toggleVoice = () => {
-    if (listening) { recogRef.current?.stop(); setListening(false); return; }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const SR: any = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SR) { alert(i.chat.voiceNotSupported); return; }
-    const r = new SR();
-    r.continuous = false;
-    r.interimResults = true;
-    r.lang = language === "hi" ? "hi-IN" : language === "mr" ? "mr-IN" : "en-IN";
-    r.onresult = (e: SpeechRecognitionEvent) => {
-      let t = "";
-      for (let j = 0; j < e.results.length; j++) t += e.results[j][0].transcript;
-      setText(t);
-    };
-    r.onend = () => setListening(false);
-    r.onerror = () => setListening(false);
-    recogRef.current = r;
-    r.start();
-    setListening(true);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Add visual indicator of user upload
+    addMsg({
+      id: makeId("u"),
+      role: "user",
+      content: `📎 Uploaded Document: ${file.name}`,
+    });
+
+    // Simulate AI document processing
+    setBusy(true);
+    setTimeout(() => {
+      let reply = "";
+      if (language === "hi")
+        reply = `मैंने आपका दस्तावेज़ (${file.name}) प्राप्त कर लिया है। अब मैं आपकी पात्रता की जांच करने के लिए इसका उपयोग करूंगा। कृपया अपना सवाल पूछें।`;
+      else if (language === "mr")
+        reply = `मला तुमचे दस्तऐवज (${file.name}) मिळाले आहे. आता मी तुमच्या पात्रतेची तपासणी करण्यासाठी याचा वापर करेन. कृपया तुमचा प्रश्न विचारा.`;
+      else
+        reply = `I have received and securely attached your document (${file.name}). I will cross-reference this to verify your eligibility. How can I help you today?`;
+
+      addMsg({
+        id: makeId("a"),
+        role: "ai",
+        content: reply,
+      });
+      setBusy(false);
+    }, 1500);
+
+    // Reset input
+    e.target.value = "";
   };
 
+  // ── Voice ──────────────────────────────────────────────────────────────────
 
+  // Clean up old recognition instance before starting a new one
+  const cleanupRecognition = () => {
+    if (silenceTimerRef.current) {
+      clearTimeout(silenceTimerRef.current);
+      silenceTimerRef.current = null;
+    }
+    if (recogRef.current) {
+      try {
+        manualStopRef.current = true; // prevent auto-restart in onend
+        recogRef.current.abort();
+      } catch {
+        /* already stopped */
+      }
+      recogRef.current = null;
+    }
+  };
+
+  // Silence auto-send: resets a 2-second timer on every speech result.
+  // When no new speech for 2s → stop & auto-send.
+  const resetSilenceTimer = () => {
+    if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+    silenceTimerRef.current = setTimeout(() => {
+      // Auto-stop and send after 2s of silence
+      if (recogRef.current) {
+        manualStopRef.current = true;
+        try {
+          recogRef.current.stop();
+        } catch {
+          /* ignore */
+        }
+        setListening(false);
+        voiceInitiatedRef.current = true;
+        // Use sendRef (always fresh) to avoid stale closure
+        setTimeout(() => {
+          const val =
+            textRef.current?.value.trim() || finalTranscriptRef.current.trim();
+          if (val) sendRef.current(val);
+        }, 100);
+      }
+    }, 2000);
+  };
+
+  const toggleVoice = () => {
+    if (listening) {
+      // ── Manual stop: user clicked mic to stop & send ──
+      manualStopRef.current = true;
+      if (silenceTimerRef.current) {
+        clearTimeout(silenceTimerRef.current);
+        silenceTimerRef.current = null;
+      }
+      try {
+        recogRef.current?.stop();
+      } catch {
+        /* ignore */
+      }
+      setListening(false);
+      voiceInitiatedRef.current = true;
+      // Auto-send the accumulated text (use sendRef to avoid stale closure)
+      setTimeout(() => {
+        const val =
+          textRef.current?.value.trim() || finalTranscriptRef.current.trim();
+        if (val) sendRef.current(val);
+      }, 150);
+      return;
+    }
+
+    // ── Start listening ──
+    // Cancel any ongoing TTS before starting a new voice session
+    window.speechSynthesis?.cancel();
+
+    // Clean up any previous instance
+    cleanupRecognition();
+    manualStopRef.current = false;
+    finalTranscriptRef.current = text ? text + " " : "";
+
+    const SR =
+      (window as unknown as Record<string, SpeechRecognitionConstructor>)
+        .SpeechRecognition ||
+      (window as unknown as Record<string, SpeechRecognitionConstructor>)
+        .webkitSpeechRecognition;
+    if (!SR) {
+      alert(
+        i.chat.voiceNotSupported ||
+          "Voice recognition is not supported in this browser.",
+      );
+      return;
+    }
+    try {
+      const r = new SR();
+      r.continuous = true;
+      r.interimResults = true;
+      r.lang =
+        language === "hi" ? "hi-IN" : language === "mr" ? "mr-IN" : "en-IN";
+
+      // We maintain a local string of what this specific session has finalized
+      let currentSessionFinal = "";
+
+      r.onresult = (e: SpeechRecognitionEvent) => {
+        let interim = "";
+        let final = "";
+
+        for (let j = e.resultIndex; j < e.results.length; j++) {
+          if (e.results[j].isFinal) {
+            final += e.results[j][0].transcript;
+          } else {
+            interim += e.results[j][0].transcript;
+          }
+        }
+
+        if (final) {
+          currentSessionFinal += final + " ";
+        }
+
+        // Combine everything from previous sessions + this session + realtime interim
+        const displayString = (
+          finalTranscriptRef.current +
+          currentSessionFinal +
+          interim
+        ).trim();
+        setText(displayString);
+
+        // Auto-expand textarea to fit the new text
+        if (textRef.current) {
+          textRef.current.style.height = "auto";
+          textRef.current.style.height = `${Math.min(textRef.current.scrollHeight, 120)}px`;
+        }
+
+        // Reset the 2-second silence timer so we auto-send after user stops speaking
+        resetSilenceTimer();
+      };
+
+      r.onend = () => {
+        if (!manualStopRef.current) {
+          // Save what we successfully transcribed before the drop
+          finalTranscriptRef.current += currentSessionFinal;
+          currentSessionFinal = "";
+
+          // Browser needs a tiny breather before hot-restarting the microphone hardware
+          setTimeout(() => {
+            if (!manualStopRef.current) {
+              try {
+                r.start();
+              } catch {
+                setListening(false);
+              }
+            }
+          }, 250);
+        } else {
+          setListening(false);
+        }
+      };
+
+      r.onerror = (e: Event) => {
+        const error = (e as Event & { error: string }).error;
+        if (error === "no-speech") return; // Silence is fine
+
+        if (error === "not-allowed" || error === "audio-capture") {
+          manualStopRef.current = true;
+          if (silenceTimerRef.current) {
+            clearTimeout(silenceTimerRef.current);
+            silenceTimerRef.current = null;
+          }
+          setListening(false);
+          alert(
+            "Microphone access denied. Please allow microphone permissions in your browser.",
+          );
+        }
+        // If e.error === "network", it will naturally fall through to `onend` and cleanly auto-restart!
+      };
+
+      recogRef.current = r;
+      r.start();
+      setListening(true);
+    } catch (err) {
+      console.error("Microphone Initialization Failed:", err);
+      setListening(false);
+    }
+  };
 
   // ── Core send (user types and sends) ──────────────────────────────────────
 
   const send = async (input: string) => {
+    // Stop any ongoing TTS when sending a new message
+    window.speechSynthesis?.cancel();
     const trimmed = input.trim();
     if (!trimmed || busy) return;
 
-    // Prevent duplicate triggers if already in a non-idle phase
-    if (messages.length > 0 && convPhaseRef.current === "idle") return;
+    // Clean up voice state
+    cleanupRecognition();
 
     setText("");
+    finalTranscriptRef.current = "";
     if (textRef.current) textRef.current.style.height = "auto";
 
     // ── During question phase: handle free text (optional) ──
     if (convPhaseRef.current === "questions") {
       addMsg({ id: makeId("u"), role: "user", content: trimmed });
       // In dynamic mode, free text could be used to answer the question
-      await fetchNextDynamicTurn(pendingQueryRef.current, { ...convAnswersRef.current, [Date.now()]: trimmed });
+      await fetchNextDynamicTurn(pendingQueryRef.current, {
+        ...convAnswersRef.current,
+        [Date.now()]: trimmed,
+      });
+      return;
+    }
+
+    // ── During goal phase: treat voice/text as goal selection ──
+    if (convPhaseRef.current === "goal") {
+      addMsg({ id: makeId("u"), role: "user", content: trimmed });
+      setGoalLabel(trimmed);
+      goalLabelRef.current = trimmed;
+      setConvPhase("questions");
+      convPhaseRef.current = "questions";
+      await fetchNextDynamicTurn(pendingQueryRef.current, { goal: trimmed });
       return;
     }
 
@@ -265,6 +590,7 @@ export default function ChatBox() {
           content: i.chat.goalQuestion,
           chips: i.chat.goalChips,
         });
+        speakResponse(i.chat.goalQuestion);
       }
       return;
     }
@@ -280,7 +606,7 @@ export default function ChatBox() {
       activeQIdRef.current = "";
       setGoalLabel("");
       goalLabelRef.current = "";
-      
+
       setPendingQuery(trimmed);
       pendingQueryRef.current = trimmed;
       setConvPhase("goal");
@@ -293,8 +619,12 @@ export default function ChatBox() {
         content: i.chat.goalQuestion,
         chips: i.chat.goalChips,
       });
+      speakResponse(i.chat.goalQuestion);
     }
   };
+
+  // Keep sendRef always pointing to the latest send function (avoids stale closures)
+  sendRef.current = send;
 
   // ── Chip click handler ─────────────────────────────────────────────────────
 
@@ -302,12 +632,18 @@ export default function ChatBox() {
     if (busy) return;
 
     // Remove chips from whichever message just had them
-    setMessages((p) => p.map((m) => (m.chips ? { ...m, chips: undefined, sensitiveNote: undefined } : m)));
-
-
+    setMessages((p) =>
+      p.map((m) =>
+        m.chips ? { ...m, chips: undefined, sensitiveNote: undefined } : m,
+      ),
+    );
 
     // Show user's selection as a user message bubble
-    addMsg({ id: makeId("u"), role: "user", content: label.replace(/^[^\w₹"\u0900-\u097f\u0a80-\u0aff]+/, "") });
+    addMsg({
+      id: makeId("u"),
+      role: "user",
+      content: label.replace(/^[^\w₹"\u0900-\u097f\u0a80-\u0aff]+/, ""),
+    });
 
     const phase = convPhaseRef.current;
 
@@ -317,7 +653,7 @@ export default function ChatBox() {
       goalLabelRef.current = label;
       setConvPhase("questions");
       convPhaseRef.current = "questions";
-      
+
       await fetchNextDynamicTurn(pendingQueryRef.current, { goal: value });
       return;
     }
@@ -325,7 +661,10 @@ export default function ChatBox() {
     // ── Phase: eligibility questions ──
     if (phase === "questions") {
       // Dynamic questions use labels or values as answers
-      const newAnswers = { ...convAnswersRef.current, [Date.now().toString()]: value };
+      const newAnswers = {
+        ...convAnswersRef.current,
+        [Date.now().toString()]: value,
+      };
       setConvAnswers(newAnswers);
       convAnswersRef.current = newAnswers;
 
@@ -335,16 +674,19 @@ export default function ChatBox() {
 
   // ── RAG API call ───────────────────────────────────────────────────────────
 
-
-
   // ── QuestionJumper helpers ─────────────────────────────────────────────────
 
-  const chatQuestions: ChatQuestion[] = useMemo(() =>
-    messages
-      .map((m, idx) => ({ m, idx }))
-      .filter(({ m }) => m.role === "user" && m.content)
-      .map(({ m, idx }) => ({ id: m.id, text: m.content!, messageIndex: idx })),
-    [messages]
+  const chatQuestions: ChatQuestion[] = useMemo(
+    () =>
+      messages
+        .map((m, idx) => ({ m, idx }))
+        .filter(({ m }) => m.role === "user" && m.content)
+        .map(({ m, idx }) => ({
+          id: m.id,
+          text: m.content!,
+          messageIndex: idx,
+        })),
+    [messages],
   );
 
   const jumpToQuestion = (messageIndex: number) => {
@@ -353,61 +695,165 @@ export default function ChatBox() {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
       el.style.transition = "background 0.3s";
       el.style.background = "rgba(145,10,103,0.08)";
-      setTimeout(() => { el.style.background = "transparent"; }, 1500);
+      setTimeout(() => {
+        el.style.background = "transparent";
+      }, 1500);
     }
   };
 
   // ── Input handlers ─────────────────────────────────────────────────────────
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(text); }
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      send(text);
+    }
   };
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
     if (textRef.current) {
       textRef.current.style.height = "auto";
-      textRef.current.style.height = Math.min(textRef.current.scrollHeight, 120) + "px";
+      textRef.current.style.height =
+        Math.min(textRef.current.scrollHeight, 120) + "px";
     }
   };
 
   // ── Greeting ───────────────────────────────────────────────────────────────
 
   const hour = new Date().getHours();
-  const tod  = hour < 12 ? i.chat.morning : hour < 17 ? i.chat.afternoon : i.chat.evening;
+  const tod =
+    hour < 12 ? i.chat.morning : hour < 17 ? i.chat.afternoon : i.chat.evening;
   const greet = i.chat.greeting(userProfile.name || "", tod);
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "calc(100dvh - 56px)", background: "#fff" }}>
-
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "calc(100dvh - 56px)",
+        background: "#fff",
+      }}
+    >
       {/* ─── SCROLLABLE AREA ─── */}
       <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
-        <div ref={scrollRef} className="hide-scrollbar"
-          style={{ height: "100%", overflowY: "auto", display: "flex", flexDirection: "column" }}>
-
+        <div
+          ref={scrollRef}
+          className="hide-scrollbar"
+          style={{
+            height: "100%",
+            overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           {/* Empty state */}
           {!hasMessages && (
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 20px 0" }}>
-              <div style={{ textAlign: "center", marginBottom: 32, animation: "fadeInUp 0.4s ease-out" }}>
-                <div style={{ width: 48, height: 48, borderRadius: 14, background: "rgba(145,10,103,0.08)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "24px 20px 0",
+              }}
+            >
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: 32,
+                  animation: "fadeInUp 0.4s ease-out",
+                }}
+              >
+                <div
+                  style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: 14,
+                    background: "rgba(145,10,103,0.08)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "0 auto 12px",
+                  }}
+                >
                   <Landmark size={24} color="#910A67" />
                 </div>
-                <h2 style={{ fontSize: 26, fontWeight: 700, color: "#1a1a2e", margin: 0 }}>{greet}</h2>
-                <p style={{ fontSize: 14, color: "#888", marginTop: 6, maxWidth: 320 }}>{i.chat.placeholder}</p>
+                <h2
+                  style={{
+                    fontSize: 26,
+                    fontWeight: 700,
+                    color: "#1a1a2e",
+                    margin: 0,
+                  }}
+                >
+                  {greet}
+                </h2>
+                <p
+                  style={{
+                    fontSize: 14,
+                    color: "#888",
+                    marginTop: 6,
+                    maxWidth: 320,
+                  }}
+                >
+                  {i.chat.placeholder}
+                </p>
               </div>
-              <button onClick={loadTestData}
-                style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 16px", fontSize: 12, fontWeight: 500, color: "#910A67", background: "rgba(145,10,103,0.06)", border: "1px dashed rgba(145,10,103,0.3)", borderRadius: 99, cursor: "pointer", fontFamily: "inherit", marginBottom: 16 }}>
-                <FlaskConical size={14} /> {i.chat.loadTest}
-              </button>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 10,
+                  marginBottom: 16,
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                }}
+              >
+                <button
+                  onClick={loadTestData}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    padding: "8px 16px",
+                    fontSize: 12,
+                    fontWeight: 500,
+                    color: "#910A67",
+                    background: "rgba(145,10,103,0.06)",
+                    border: "1px dashed rgba(145,10,103,0.3)",
+                    borderRadius: 99,
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                  }}
+                >
+                  <FlaskConical size={14} /> {i.chat.loadTest}
+                </button>
+              </div>
             </div>
           )}
 
           {/* Messages */}
           {hasMessages && (
-            <div style={{ flex: 1, padding: "8px 0", paddingRight: chatQuestions.length >= 2 ? 28 : 0, maxWidth: 760, margin: "0 auto", width: "100%" }}>
+            <div
+              style={{
+                flex: 1,
+                padding: "8px 0",
+                paddingRight: chatQuestions.length >= 2 ? 28 : 0,
+                maxWidth: 760,
+                margin: "0 auto",
+                width: "100%",
+              }}
+            >
               {messages.map((m, idx) => (
-                <div key={m.id} ref={(el) => { if (el) msgRefs.current.set(idx, el); }} style={{ borderRadius: 8 }}>
+                <div
+                  key={m.id}
+                  ref={(el) => {
+                    if (el) msgRefs.current.set(idx, el);
+                  }}
+                  style={{ borderRadius: 8 }}
+                >
                   <ChatMessage {...m} onChipClick={handleChipClick} />
                 </div>
               ))}
@@ -429,19 +875,58 @@ export default function ChatBox() {
       </div>
 
       {/* ─── BOTTOM INPUT ─── */}
-      <div style={{ padding: "0 20px 24px", maxWidth: 720, width: "100%", margin: "0 auto", display: isScrubbing ? "none" : "block" }}>
-
+      <div
+        style={{
+          padding: "0 20px 24px",
+          maxWidth: 720,
+          width: "100%",
+          margin: "0 auto",
+          display: isScrubbing ? "none" : "block",
+        }}
+      >
         {/* Sector chips (empty state only) */}
         {!hasMessages && (
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 8, marginBottom: 16, animation: "fadeInUp 0.4s ease-out 0.2s both" }}>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: 8,
+              marginBottom: 16,
+              animation: "fadeInUp 0.4s ease-out 0.2s both",
+            }}
+          >
             {SECTOR_ICONS.map((s) => {
               const Icon = s.icon;
               const sector = i.chat.sectors[s.key];
               return (
-                <button key={s.key} onClick={() => send(i.chat.sectorPrompt(sector.query))}
-                  style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 16px", fontSize: 13, fontWeight: 500, color: "#555", background: "#fff", border: "1px solid #e8e8f0", borderRadius: 99, cursor: "pointer", transition: "all 0.15s", fontFamily: "inherit" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = s.color; e.currentTarget.style.color = s.color; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#e8e8f0"; e.currentTarget.style.color = "#555"; }}>
+                <button
+                  key={s.key}
+                  onClick={() => send(i.chat.sectorPrompt(sector.query))}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    padding: "8px 16px",
+                    fontSize: 13,
+                    fontWeight: 500,
+                    color: "#555",
+                    background: "#fff",
+                    border: "1px solid #e8e8f0",
+                    borderRadius: 99,
+                    cursor: "pointer",
+                    transition: "all 0.15s",
+                    fontFamily: "inherit",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = s.color;
+                    e.currentTarget.style.color = s.color;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "#e8e8f0";
+                    e.currentTarget.style.color = "#555";
+                  }}
+                >
                   <Icon size={14} /> {sector.label}
                 </button>
               );
@@ -450,23 +935,128 @@ export default function ChatBox() {
         )}
 
         {/* Input box */}
-        <div style={{ padding: "12px 16px", background: "#f8f8fc", border: listening ? "2px solid #910A67" : "1px solid #e8e8f0", borderRadius: 20, transition: "all 0.3s", boxShadow: listening ? "0 0 0 4px rgba(145,10,103,0.15)" : "0 1px 4px rgba(0,0,0,0.04)" }}>
-          <textarea ref={textRef} value={text} onChange={handleInput} onKeyDown={handleKeyDown}
-            placeholder={i.chat.placeholder} rows={1} disabled={busy}
-            style={{ width: "100%", minHeight: 24, maxHeight: 120, padding: 0, fontSize: 15, color: "#1a1a2e", background: "transparent", border: "none", outline: "none", resize: "none", fontFamily: "inherit", opacity: busy ? 0.5 : 1 }} />
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 8 }}>
-            <button aria-label="Attach" style={{ width: 32, height: 32, borderRadius: 99, border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#aaa" }}>
+        <div
+          style={{
+            padding: "12px 16px",
+            background: "#f8f8fc",
+            border: listening ? "2px solid #910A67" : "1px solid #e8e8f0",
+            borderRadius: 20,
+            transition: "all 0.3s",
+            boxShadow: listening
+              ? "0 0 0 4px rgba(145,10,103,0.15)"
+              : "0 1px 4px rgba(0,0,0,0.04)",
+          }}
+        >
+          <textarea
+            ref={textRef}
+            value={text}
+            onChange={handleInput}
+            onKeyDown={handleKeyDown}
+            placeholder={i.chat.placeholder}
+            rows={1}
+            disabled={busy}
+            style={{
+              width: "100%",
+              minHeight: 24,
+              maxHeight: 120,
+              padding: 0,
+              fontSize: 15,
+              color: "#1a1a2e",
+              background: "transparent",
+              border: "none",
+              outline: "none",
+              resize: "none",
+              fontFamily: "inherit",
+              opacity: busy ? 0.5 : 1,
+            }}
+          />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginTop: 8,
+            }}
+          >
+            {/* Real File Input Trigger */}
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              aria-label="Attach"
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: 99,
+                border: "none",
+                background: "transparent",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#aaa",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "#910A67";
+                e.currentTarget.style.background = "rgba(145,10,103,0.08)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "#aaa";
+                e.currentTarget.style.background = "transparent";
+              }}
+            >
               <Plus size={18} />
             </button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept="image/*,application/pdf"
+              style={{ display: "none" }}
+            />
+
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              {text.trim() ? (
-                <button onClick={() => send(text)} disabled={busy} aria-label="Send"
-                  style={{ width: 36, height: 36, borderRadius: 99, border: "none", background: "#910A67", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", opacity: busy ? 0.5 : 1 }}>
+              {text.trim() && !listening ? (
+                <button
+                  onClick={() => send(text)}
+                  disabled={busy}
+                  aria-label="Send"
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 99,
+                    border: "none",
+                    background: "#910A67",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#fff",
+                    opacity: busy ? 0.5 : 1,
+                  }}
+                >
                   <ArrowUp size={18} />
                 </button>
               ) : (
-                <button onClick={toggleVoice} aria-label={listening ? "Stop listening" : "Start voice input"}
-                  style={{ width: 36, height: 36, borderRadius: 99, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", background: listening ? "#910A67" : "rgba(145,10,103,0.08)", color: listening ? "#fff" : "#910A67", transition: "all 0.2s", animation: listening ? "pulseGlow 1.5s infinite" : "none" }}>
+                <button
+                  onClick={toggleVoice}
+                  aria-label={
+                    listening ? "Stop listening" : "Start voice input"
+                  }
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 99,
+                    border: "none",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: listening ? "#910A67" : "rgba(145,10,103,0.08)",
+                    color: listening ? "#fff" : "#910A67",
+                    transition: "all 0.2s",
+                    animation: listening ? "pulseGlow 1.5s infinite" : "none",
+                  }}
+                >
                   <AudioLines size={18} />
                 </button>
               )}

@@ -23,11 +23,22 @@ export default function AudioFeedback({ text, lang = "en-IN" }: AudioFeedbackPro
       setSpeaking(false);
       return;
     }
-
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = lang;
     utter.rate = 0.95;
     utter.pitch = 1;
+
+    // Fix for multi-lingual TTS: Force the engine to use a native regional voice if available.
+    // Some browsers default to a generic English accent if we don't explicitly pass the Voice object.
+    const voices = window.speechSynthesis.getVoices();
+    const specificVoice = voices.find((v) => 
+      v.lang.toLowerCase() === lang.toLowerCase() || 
+      v.lang.toLowerCase().startsWith(lang.split("-")[0].toLowerCase())
+    );
+    if (specificVoice) {
+      utter.voice = specificVoice;
+    }
+
     utter.onend = () => setSpeaking(false);
     utter.onerror = () => setSpeaking(false);
     uttRef.current = utter;

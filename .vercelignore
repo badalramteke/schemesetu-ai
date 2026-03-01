@@ -1,0 +1,13 @@
+.git
+.gitignore
+.next
+node_modules
+npm-debug.log
+firebase.json
+.firebaserc
+Dockerfile
+docker-compose.yml
+.env
+.env.local
+functions/
+__tests__/

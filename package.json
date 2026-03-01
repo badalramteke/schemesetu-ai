@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "node server.js",
     "lint": "eslint"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "firebase-tools": "^15.8.0",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5"

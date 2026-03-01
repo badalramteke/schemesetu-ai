@@ -31,6 +31,7 @@ interface SpeechRecognition extends EventTarget {
   start: () => void;
   stop: () => void;
   abort: () => void;
+  forcedStop?: boolean;
 }
 
 interface SpeechRecognitionConstructor {
