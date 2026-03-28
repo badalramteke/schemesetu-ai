@@ -231,7 +231,7 @@ export default function OnboardingWizard() {
     border: active
       ? "1.5px solid var(--primary)"
       : "1.5px solid var(--secondary)",
-    background: active ? "rgba(68, 167, 84, 0.04)" : "var(--accent)",
+    background: active ? "rgba(68, 167, 84, 0.04)" : "var(--surface)",
     color: active ? "var(--primary)" : "var(--text)",
   });
 

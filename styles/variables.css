@@ -33,15 +33,15 @@
 
     /* Application channel palettes */
     --channel-online: #3b82f6;
-    --channel-online-soft: #eff6ff;
-    --channel-online-border: #bfdbfe;
+    --channel-online-soft: rgba(59, 130, 246, 0.08);
+    --channel-online-border: rgba(59, 130, 246, 0.25);
     --channel-online-gradient: linear-gradient(135deg, #3b82f6, #2563eb);
     --channel-offline: #10b981;
-    --channel-offline-soft: #ecfdf5;
-    --channel-offline-border: #a7f3d0;
+    --channel-offline-soft: rgba(16, 185, 129, 0.08);
+    --channel-offline-border: rgba(16, 185, 129, 0.25);
     --channel-offline-gradient: linear-gradient(135deg, #10b981, #059669);
     --channel-hospital: #f59e0b;
-    --channel-hospital-border: #fde68a;
+    --channel-hospital-border: rgba(245, 158, 11, 0.25);
     --channel-hospital-gradient: linear-gradient(135deg, #f59e0b, #d97706);
 
     /* Semantic aliases for easier future refactors */

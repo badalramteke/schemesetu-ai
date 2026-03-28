@@ -248,7 +248,7 @@ function ChatMessage({
                     e.currentTarget.style.borderColor =
                       "var(--secondary-softest)";
                     e.currentTarget.style.color = "var(--text)";
-                    e.currentTarget.style.background = "var(--accent)";
+                    e.currentTarget.style.background = "var(--background)";
                   }}
                 >
                   {chip.label}

@@ -224,7 +224,7 @@ export default function Page() {
                 width: 22,
                 height: 22,
                 borderRadius: "50%",
-                background: "#fff",
+                background: "var(--text)",
                 transition: "left 0.2s",
               }}
             />

@@ -38,7 +38,7 @@ export default function VideoTutorial({
         padding: "12px 14px",
         borderRadius: 12,
         border: "1px solid var(--secondary)",
-        background: hover ? "var(--surface)" : "var(--accent)",
+        background: hover ? "var(--surface-alt)" : "var(--surface)",
         textDecoration: "none",
         transition: "all 0.2s",
         boxShadow: hover ? "0 2px 8px rgba(0,0,0,0.06)" : "none",
