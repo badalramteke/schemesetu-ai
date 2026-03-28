@@ -19,10 +19,10 @@ async function embedQuery(query: string): Promise<number[]> {
       const model = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
       const result = await model.embedContent(query);
       return result.embedding.values as number[];
-    } catch (err: any) {
+    } catch (err: unknown) {
       const is429 =
-        err?.message?.includes("429") ||
-        err?.message?.includes("RESOURCE_EXHAUSTED");
+        (err instanceof Error && err.message?.includes("429")) ||
+        (err instanceof Error && err.message?.includes("RESOURCE_EXHAUSTED"));
       if (!is429) throw err;
     }
   }

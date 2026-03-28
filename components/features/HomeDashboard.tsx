@@ -12,6 +12,7 @@ import {
   GraduationCap,
   MessageCircle,
 } from "lucide-react";
+import DocumentHistory from "@/components/features/documents/DocumentHistory";
 
 const SECTORS = [
   {
@@ -184,6 +185,9 @@ export default function HomeDashboard() {
           );
         })}
       </div>
+
+      {/* Document Memory Section */}
+      <DocumentHistory />
 
       <button
         onClick={() => {

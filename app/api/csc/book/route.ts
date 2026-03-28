@@ -6,7 +6,9 @@ import { findNearestLocation } from "@/lib/utils/haversine";
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const rawWhatsAppNumber = process.env.TWILIO_WHATSAPP_NUMBER || "+14155238886";
-const twilioWhatsAppNumber = rawWhatsAppNumber.startsWith("whatsapp:") ? rawWhatsAppNumber : `whatsapp:${rawWhatsAppNumber}`;
+const twilioWhatsAppNumber = rawWhatsAppNumber.startsWith("whatsapp:")
+  ? rawWhatsAppNumber
+  : `whatsapp:${rawWhatsAppNumber}`;
 
 // Hardcoded confirmation number
 const CONFIRMATION_WHATSAPP = "+918767708514";
@@ -23,7 +25,7 @@ export async function POST(request: Request) {
       if (!lat || !lng) {
         return NextResponse.json(
           { error: "Latitude and longitude are required." },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -32,7 +34,7 @@ export async function POST(request: Request) {
       if (!nearestCSC) {
         return NextResponse.json(
           { error: "Could not find nearest CSC." },
-          { status: 500 }
+          { status: 500 },
         );
       }
 
@@ -52,7 +54,7 @@ export async function POST(request: Request) {
       if (!userName || !userPhone) {
         return NextResponse.json(
           { error: "Name and phone number are required." },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -78,13 +80,16 @@ export async function POST(request: Request) {
             from: twilioWhatsAppNumber,
             to: `whatsapp:${CONFIRMATION_WHATSAPP}`,
           });
-          console.log(`WhatsApp booking sent to ${CONFIRMATION_WHATSAPP}`);
+          if (process.env.NODE_ENV === "development")
+            console.log(`WhatsApp booking sent to ${CONFIRMATION_WHATSAPP}`);
         } catch (err) {
           console.error("Failed to send WhatsApp booking message:", err);
         }
       } else {
-        console.warn("Twilio not configured (SID must start with AC). Booking logged:");
-        console.log(message);
+        console.warn(
+          "Twilio not configured (SID must start with AC). Booking logged:",
+        );
+        if (process.env.NODE_ENV === "development") console.log(message);
       }
 
       return NextResponse.json({
@@ -95,13 +100,13 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       { error: "Invalid action. Use 'locate' or 'book'." },
-      { status: 400 }
+      { status: 400 },
     );
   } catch (error) {
     console.error("Error processing request:", error);
     return NextResponse.json(
       { error: "Internal server error." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

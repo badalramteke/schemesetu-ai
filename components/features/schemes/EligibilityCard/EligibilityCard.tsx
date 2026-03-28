@@ -18,7 +18,7 @@ interface EligibilityCardProps {
   state?: string;
 }
 
-export default function EligibilityCard({
+function EligibilityCard({
   result,
   index,
   district,
@@ -327,3 +327,5 @@ export default function EligibilityCard({
     </div>
   );
 }
+
+export default React.memo(EligibilityCard);

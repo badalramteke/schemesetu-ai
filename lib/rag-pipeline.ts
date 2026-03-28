@@ -29,6 +29,15 @@ export interface DynamicTurn {
   results?: RAGEcosystemResponse;
 }
 
+export interface WizardQuestion {
+  id: string;
+  question: string;
+  inputType: "single-select" | "multi-select" | "dropdown" | "text" | "number";
+  options?: { label: string; value: string }[];
+  required: boolean;
+  placeholder?: string;
+}
+
 export interface RAGEcosystemResponse {
   matchingSchemes: EligibilityResult[];
   totalMatches: number;
@@ -316,8 +325,6 @@ function getPineconeIndex() {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
 async function generateContentWithFallback(prompt: string): Promise<string> {
   const keys = getGeminiKeys();
 
@@ -329,8 +336,8 @@ async function generateContentWithFallback(prompt: string): Promise<string> {
         const model = genAI.getGenerativeModel({ model: modelName });
         const result = await model.generateContent(prompt);
         return result.response.text();
-      } catch (err: any) {
-        const msg = err?.message || "";
+      } catch (err: unknown) {
+        const msg = (err instanceof Error ? err.message : String(err)) || "";
         const isRetryable =
           msg.includes("429") ||
           msg.includes("RESOURCE_EXHAUSTED") ||
@@ -356,8 +363,8 @@ async function generateContentWithFallback(prompt: string): Promise<string> {
         const model = genAI.getGenerativeModel({ model: modelName });
         const result = await model.generateContent(prompt);
         return result.response.text();
-      } catch (err: any) {
-        const msg = err?.message || "";
+      } catch (err: unknown) {
+        const msg = (err instanceof Error ? err.message : String(err)) || "";
         const isRetryable =
           msg.includes("429") ||
           msg.includes("RESOURCE_EXHAUSTED") ||
@@ -385,10 +392,10 @@ async function embedQuery(query: string): Promise<number[]> {
       const model = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
       const result = await model.embedContent(query);
       return result.embedding.values as number[];
-    } catch (err: any) {
+    } catch (err: unknown) {
       const is429 =
-        err?.message?.includes("429") ||
-        err?.message?.includes("RESOURCE_EXHAUSTED");
+        (err instanceof Error && err.message?.includes("429")) ||
+        (err instanceof Error && err.message?.includes("RESOURCE_EXHAUSTED"));
       if (!is429) throw err;
       console.warn(
         `[Fallback] Embedding hit quota limit on a key. Trying next key...`,
@@ -398,6 +405,7 @@ async function embedQuery(query: string): Promise<number[]> {
   throw new Error("Quota Exceeded on embedding across all keys");
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function parseGeminiJSON(text: string): any {
   try {
     // Strip markdown fences if present
@@ -426,6 +434,8 @@ export async function queryMultiSchemeRAG(
   userQuery: string,
   language: string = "en",
   targetSchemes: string[] = [],
+  answers: Record<string, string> = {},
+  profile: Record<string, unknown> = {},
 ): Promise<RAGEcosystemResponse> {
   if (!userQuery || userQuery.trim().length < 3) {
     return { matchingSchemes: [], totalMatches: 0, noMatch: [] };
@@ -495,10 +505,24 @@ export async function queryMultiSchemeRAG(
       })
       .join("\n\n====================\n\n");
 
+    // Build user context from answers and profile
+    const answerEntries = Object.entries(answers);
+    const profileEntries = Object.entries(profile).filter(
+      ([, v]) => v !== undefined && v !== null && v !== "",
+    );
+    const userAnswersBlock =
+      answerEntries.length > 0
+        ? `\nUser's Answers to Eligibility Questions:\n${answerEntries.map(([q, a]) => `- ${q}: ${a}`).join("\n")}`
+        : "";
+    const userProfileBlock =
+      profileEntries.length > 0
+        ? `\nUser Profile Information:\n${profileEntries.map(([k, v]) => `- ${k}: ${v}`).join("\n")}`
+        : "";
+
     const batchPrompt = `You are the Expert Government Advisor. 
 Based ONLY on the scheme information provided across different sections, evaluate the user's eligibility ONLY for schemes that are highly relevant to their situation.
 
-User situation: "${userQuery}"
+User situation: "${userQuery}"${userAnswersBlock}${userProfileBlock}
 
 OFFICIAL SCHEME INFORMATION:
 ${schemesContext}
@@ -705,17 +729,189 @@ IMPORTANT: Respond with ALL text values (reason, documents, nextSteps, benefits)
 }
 
 /**
+ * WIZARD QUESTIONS GENERATOR:
+ * Fetches all eligibility questions at once so the UI can show a step-by-step wizard.
+ */
+export async function generateWizardQuestions(
+  userQuery: string,
+  profile: Record<string, unknown>,
+  language: string = "en",
+  candidateSchemes: string[] = [],
+  memoryContext: string = "",
+): Promise<WizardQuestion[]> {
+  const targetNamespaces =
+    candidateSchemes.length > 0
+      ? candidateSchemes.filter((id) => ALL_SCHEME_IDS.includes(id))
+      : ALL_SCHEME_IDS;
+
+  try {
+    const goalContext = userQuery ? ` related to ${userQuery}` : "";
+    const enrichedQuery = `${userQuery}${goalContext}. Include details on eligibility criteria.`;
+    const queryEmbedding = await embedQuery(enrichedQuery);
+    const index = getPineconeIndex();
+
+    const queryPromises = targetNamespaces.map(async (ns) => {
+      try {
+        const res = await index
+          .namespace(ns)
+          .query({ vector: queryEmbedding, topK: 10, includeMetadata: true });
+        return res.matches || [];
+      } catch {
+        return [];
+      }
+    });
+    const allMatches = (await Promise.all(queryPromises)).flat();
+    allMatches.sort((a, b) => (b.score || 0) - (a.score || 0));
+    const topMatches = allMatches.slice(0, 15);
+
+    const targetSchemeNames = targetNamespaces
+      .map((id) => SCHEME_NAMES[id] || id)
+      .join(", ");
+    const schemeContext = topMatches
+      .map((m) => {
+        const meta = m.metadata as Record<string, string>;
+        return `[Scheme: ${SCHEME_NAMES[meta.schemeId] || meta.schemeId}]\n${meta.text}`;
+      })
+      .join("\n\n---\n\n");
+
+    const prompt = `You are the Expert Government Advisor for SchemeSetu.
+
+CONTEXT:
+User Query: "${userQuery}"
+Target Schemes: ${targetSchemeNames}
+Scheme Information: ${schemeContext}
+User Profile (already known): ${JSON.stringify(profile)}
+${memoryContext ? `\nDocument Memory:\n${memoryContext}\nIMPORTANT: Do NOT ask questions about facts already known from uploaded documents or profile.` : ""}
+
+TASK: Generate ALL eligibility questions needed to determine the user's eligibility for ${targetSchemeNames}.
+Return exactly 3-5 questions. Each question gathers DIFFERENT information (do NOT repeat topics).
+
+For each question decide the best input type:
+- "single-select": 2-4 button options (best for yes/no, categories)
+- "multi-select": 2-6 button options where user can pick multiple
+- "dropdown": 5+ options in a dropdown list (best for states, districts)
+- "text": free text input (best for names, specific info)
+- "number": number input (best for age, income amounts)
+
+Skip any question if the answer is already in the user profile or memory.
+
+RESPOND ONLY AS VALID JSON ARRAY (no markdown, no code fences):
+[
+  {
+    "id": "q1",
+    "question": "Short, rural-friendly question in ${LANG_NAMES[language] || "English"}",
+    "inputType": "single-select",
+    "options": [{"label": "Display text", "value": "machine_value"}],
+    "required": true,
+    "placeholder": "Optional hint text"
+  }
+]
+
+RULES:
+- Questions must be specific to ${targetSchemeNames} CORE eligibility criteria
+- Focus on PRIMARY criteria: income level, house type/condition, land ownership, BPL/APL status, family size, age, occupation, location (state/district)
+- Use common terms that ordinary people understand: "BPL card", "APL card", "Below Poverty Line" — NOT bureaucratic categories like "AAY", "PHH", "Priority Household"
+- For EVERY single-select or multi-select question, ALWAYS include an "Other" option with value "other" as the LAST option so users can provide their own answer
+- Do NOT ask about social vulnerability categories (widow status, disability, specific diseases like leprosy/cancer/HIV) — these are secondary priority criteria, not initial eligibility questions
+- Do NOT ask about farming equipment, livestock, or tools unless the scheme is specifically about agriculture
+- Use simple language a farmer or village person would understand
+- All question text must be in ${LANG_NAMES[language] || "English"}
+- Keep questions concise (under 15 words)
+- For "text" and "number" types, include a helpful placeholder
+- For "dropdown" type, provide all relevant options plus "Other" as last option
+- ID format: q1, q2, q3, etc.`;
+
+    const text = await generateContentWithFallback(prompt);
+    const parsed = parseGeminiJSON(text);
+
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return parsed.map((q: any, i: number) => ({
+        id: q.id || `q${i + 1}`,
+        question: q.question || "",
+        inputType: q.inputType || "single-select",
+        options: q.options || undefined,
+        required: q.required !== false,
+        placeholder: q.placeholder || undefined,
+      }));
+    }
+
+    // Fallback: return basic questions
+    return [
+      {
+        id: "q1",
+        question:
+          language === "hi"
+            ? "आपकी आयु क्या है?"
+            : language === "mr"
+              ? "तुमचे वय किती?"
+              : "What is your age?",
+        inputType: "number" as const,
+        required: true,
+        placeholder: language === "hi" ? "आयु दर्ज करें" : "Enter your age",
+      },
+      {
+        id: "q2",
+        question:
+          language === "hi"
+            ? "आपकी वार्षिक आय कितनी है?"
+            : language === "mr"
+              ? "तुमचे वार्षिक उत्पन्न किती?"
+              : "What is your annual income?",
+        inputType: "single-select" as const,
+        options: [
+          {
+            label: language === "hi" ? "₹1 लाख से कम" : "Below ₹1 Lakh",
+            value: "below_1l",
+          },
+          { label: "₹1-2.5 Lakh", value: "1l_2.5l" },
+          { label: "₹2.5-5 Lakh", value: "2.5l_5l" },
+          {
+            label: language === "hi" ? "₹5 लाख से ऊपर" : "Above ₹5 Lakh",
+            value: "above_5l",
+          },
+        ],
+        required: true,
+      },
+      {
+        id: "q3",
+        question:
+          language === "hi"
+            ? "क्या आपके पास BPL कार्ड है?"
+            : language === "mr"
+              ? "तुमच्याकडे BPL कार्ड आहे का?"
+              : "Do you have a BPL card?",
+        inputType: "single-select" as const,
+        options: [
+          { label: language === "hi" ? "हाँ" : "Yes", value: "yes" },
+          { label: language === "hi" ? "नहीं" : "No", value: "no" },
+          {
+            label: language === "hi" ? "पता नहीं" : "Not sure",
+            value: "not_sure",
+          },
+        ],
+        required: true,
+      },
+    ];
+  } catch (err) {
+    console.error("Wizard questions generation error:", err);
+    throw err;
+  }
+}
+
+/**
  * DYNAMIC AI INTERVIEWER:
  * Analyzes retrieved chunks and decides whether to ask a follow-up question
  * or show final RAG results.
  */
 export async function determineNextTurn(
   userQuery: string,
-  profile: Record<string, any>,
+  profile: Record<string, unknown>,
   answers: Record<string, string>,
   language: string = "en",
   askedQuestions: string[] = [],
   candidateSchemes: string[] = [],
+  memoryContext: string = "",
 ): Promise<DynamicTurn> {
   // Determine which namespaces to search — prefer explicit candidates, else search all
   const targetNamespaces =
@@ -759,15 +955,10 @@ export async function determineNextTurn(
       .join(", ");
     const schemeContext = topMatches
       .map((m) => {
-        const meta = m.metadata as any;
+        const meta = m.metadata as Record<string, string>;
         return `[Scheme: ${SCHEME_NAMES[meta.schemeId] || meta.schemeId}]\n${meta.text}`;
       })
       .join("\n\n---\n\n");
-
-    const userInfo = `
-Profile: ${JSON.stringify(profile)}
-Answers so far: ${JSON.stringify(answers)}
-    `.trim();
 
     // 3. Ask Gemini: "What's missing?"
 
@@ -781,7 +972,7 @@ User Query: "${userQuery}"
 Target Schemes: ${targetSchemeNames}
 Candidate Scheme Data: ${schemeContext}
 User Profile: ${JSON.stringify(profile)}
-User Answers (question → answer): ${JSON.stringify(answers)}
+User Answers (question → answer): ${JSON.stringify(answers)}${memoryContext ? `\n\n${memoryContext}\nIMPORTANT: Do NOT ask questions about facts already known from uploaded documents. Use these facts directly for eligibility assessment.` : ""}
 ${askedQuestions.length > 0 ? `\nALREADY ASKED QUESTIONS (DO NOT repeat or rephrase any of these):\n${askedQuestions.map((q, i) => `${i + 1}. ${q}`).join("\n")}` : ""}
 
 EXPECTED BEHAVIOR:
@@ -810,7 +1001,11 @@ JSON OUTPUT ONLY:
     const text = await generateContentWithFallback(prompt);
     const parsed = parseGeminiJSON(text);
 
-    if (parsed?.status === "questioning") {
+    // If 3+ answers already collected (wizard batch), skip further questioning
+    const answerCount = Object.keys(answers).filter((k) => k !== "goal").length;
+    const forceComplete = answerCount >= 3;
+
+    if (parsed?.status === "questioning" && !forceComplete) {
       return {
         status: "questioning",
         question: parsed.question as string,
@@ -818,8 +1013,8 @@ JSON OUTPUT ONLY:
       };
     }
 
-    // If complete or fallback, run the actual batch eligibility check without
-    // doing duplicate embed/pinecone fetches. We already have the userQuery!
+    // If complete or fallback, run the actual batch eligibility check
+    // Pass answers and profile so the AI can evaluate eligibility
     console.log(
       "Determine Next Turn: Complete or Fallback. Fetching final RAG results.",
     );
@@ -827,6 +1022,8 @@ JSON OUTPUT ONLY:
       userQuery,
       language,
       targetNamespaces,
+      answers,
+      profile,
     );
     return { status: "complete", results: finalResults };
   } catch (err) {
@@ -845,6 +1042,8 @@ JSON OUTPUT ONLY:
         userQuery,
         language,
         targetNamespaces,
+        answers,
+        profile,
       );
       return { status: "complete", results: fallbackResults };
     } catch {

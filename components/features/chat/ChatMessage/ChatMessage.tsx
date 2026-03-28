@@ -16,7 +16,7 @@ interface ChatMessageProps {
   onChipClick?: (value: string, label: string) => void;
 }
 
-export default function ChatMessage({
+function ChatMessage({
   role,
   content,
   eligibilityResults,
@@ -27,6 +27,21 @@ export default function ChatMessage({
   const { language, userProfile } = useApp();
   const lang =
     language === "hi" ? "hi-IN" : language === "mr" ? "mr-IN" : "en-IN";
+
+  // Render text with newlines and **bold** markdown
+  const renderContent = (text: string) => {
+    return text.split("\n").map((line, i) => (
+      <React.Fragment key={i}>
+        {i > 0 && <br />}
+        {line.split(/(\*\*[^*]+\*\*)/).map((part, j) => {
+          if (part.startsWith("**") && part.endsWith("**")) {
+            return <strong key={j}>{part.slice(2, -2)}</strong>;
+          }
+          return <span key={j}>{part}</span>;
+        })}
+      </React.Fragment>
+    ));
+  };
 
   // Build spoken text for AudioFeedback
   const spokenText = [
@@ -129,7 +144,7 @@ export default function ChatMessage({
             borderRadius: "16px 16px 4px 16px",
           }}
         >
-          {content}
+          {renderContent(content || "")}
         </div>
       </div>
     );
@@ -188,7 +203,7 @@ export default function ChatMessage({
               borderRadius: "16px 16px 16px 4px",
             }}
           >
-            {content}
+            {renderContent(content)}
           </div>
         )}
 
@@ -260,3 +275,5 @@ export default function ChatMessage({
     </div>
   );
 }
+
+export default React.memo(ChatMessage);

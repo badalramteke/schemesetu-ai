@@ -17,10 +17,11 @@ import {
 } from "lucide-react";
 import ChatMessage from "@/components/features/chat/ChatMessage/ChatMessage";
 import QuestionJumper from "@/components/features/chat/QuestionJumper/QuestionJumper";
+import WizardForm from "@/components/features/chat/WizardForm/WizardForm";
 import type { ChatQuestion } from "@/components/features/chat/QuestionJumper/QuestionJumper";
 import { MOCK_MESSAGES } from "@/lib/mock-messages";
 import { t } from "@/lib/i18n";
-import type { EligibilityResult } from "@/lib/rag-pipeline";
+import type { EligibilityResult, WizardQuestion } from "@/lib/rag-pipeline";
 import {
   inferSchemesFromQuery,
   getCandidateSchemes,
@@ -117,6 +118,10 @@ export default function ChatBox() {
     getInitial("pendingQuery", ""),
   );
 
+  // ── Wizard state ──
+  const [wizardQuestions, setWizardQuestions] = useState<WizardQuestion[]>([]);
+  const [showWizard, setShowWizard] = useState(false);
+
   // Auto-save state to localStorage whenever it changes
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -174,28 +179,24 @@ export default function ChatBox() {
   const askedQuestionsRef = useRef<string[]>([]);
   const pendingQueryRef = useRef("");
 
-  // Keep refs in sync with state
+  // Keep refs in sync with state (single effect to reduce overhead)
   useEffect(() => {
     convPhaseRef.current = convPhase;
-  }, [convPhase]);
-  useEffect(() => {
     convAnswersRef.current = convAnswers;
-  }, [convAnswers]);
-  useEffect(() => {
     candidatesRef.current = candidates;
-  }, [candidates]);
-  useEffect(() => {
     activeQIdRef.current = activeQId;
-  }, [activeQId]);
-  useEffect(() => {
     goalLabelRef.current = goalLabel;
-  }, [goalLabel]);
-  useEffect(() => {
     askedQuestionsRef.current = askedQuestions;
-  }, [askedQuestions]);
-  useEffect(() => {
     pendingQueryRef.current = pendingQuery;
-  }, [pendingQuery]);
+  }, [
+    convPhase,
+    convAnswers,
+    candidates,
+    activeQId,
+    goalLabel,
+    askedQuestions,
+    pendingQuery,
+  ]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
@@ -428,6 +429,14 @@ export default function ChatBox() {
       : inferSchemesFromQuery(query);
 
     try {
+      // Get userId for memory context
+      let currentUserId: string | undefined;
+      try {
+        const { getOrCreateUserId } =
+          await import("@/lib/services/document-service");
+        currentUserId = getOrCreateUserId();
+      } catch {}
+
       const res = await fetch("/api/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -439,6 +448,7 @@ export default function ChatBox() {
           askedQuestions: askedQuestionsRef.current,
           candidateSchemes:
             candidateSchemes.length > 0 ? candidateSchemes : undefined,
+          userId: currentUserId,
         }),
       });
 
@@ -467,6 +477,8 @@ export default function ChatBox() {
       } else if (data.status === "complete") {
         setConvPhase("rag");
         convPhaseRef.current = "rag";
+        setShowWizard(false);
+        setWizardQuestions([]);
 
         const results = data.results;
         const msg =
@@ -494,40 +506,351 @@ export default function ChatBox() {
     }
   };
 
-  // ── File Upload ────────────────────────────────────────────────────────────
+  // ── Wizard: Fetch all questions at once ────────────────────────────────────
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const fetchWizardQuestions = async (
+    query: string,
+    curAnswers: Record<string, string>,
+  ) => {
+    setBusy(true);
+    addMsg({ id: makeId("l"), role: "ai", isLoading: true });
+
+    const goalValue = curAnswers.goal || goalLabelRef.current || "";
+    const candidateSchemes = goalValue
+      ? getCandidateSchemes(goalValue, query)
+      : inferSchemesFromQuery(query);
+
+    try {
+      let currentUserId: string | undefined;
+      try {
+        const { getOrCreateUserId } =
+          await import("@/lib/services/document-service");
+        currentUserId = getOrCreateUserId();
+      } catch {}
+
+      const res = await fetch("/api/wizard-questions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userQuery: query,
+          language,
+          profile: userProfile,
+          candidateSchemes:
+            candidateSchemes.length > 0 ? candidateSchemes : undefined,
+          userId: currentUserId,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.error) throw new Error(data.message);
+
+      setMessages((p) => p.filter((m) => !m.isLoading));
+
+      if (data.questions && data.questions.length > 0) {
+        setWizardQuestions(data.questions);
+        setShowWizard(true);
+        setConvPhase("questions");
+        convPhaseRef.current = "questions";
+        addMsg({
+          id: makeId("w"),
+          role: "ai",
+          content:
+            i.chat.wizardIntro ||
+            "Please answer a few questions so I can check your eligibility:",
+        });
+      } else {
+        // No questions needed — go straight to results
+        await fetchNextDynamicTurn(query, curAnswers);
+      }
+    } catch (err) {
+      console.error("Wizard questions error:", err);
+      setMessages((p) => p.filter((m) => !m.isLoading));
+      // Fallback to single-question mode
+      await fetchNextDynamicTurn(query, curAnswers);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  // ── Wizard: Submit all answers ─────────────────────────────────────────────
+
+  const handleWizardSubmit = async (wizAnswers: Record<string, string>) => {
+    setShowWizard(false);
+    setWizardQuestions([]);
+
+    // Map wizard question IDs to question text for the backend
+    const mappedAnswers: Record<string, string> = {
+      ...convAnswersRef.current,
+    };
+    wizardQuestions.forEach((q) => {
+      if (wizAnswers[q.id]) {
+        mappedAnswers[q.question] = wizAnswers[q.id];
+      }
+    });
+
+    // Show summary as user message
+    const summaryLines = wizardQuestions
+      .filter((q) => wizAnswers[q.id])
+      .map((q) => {
+        const val = wizAnswers[q.id];
+        // Resolve label from options
+        const opt = q.options?.find((o) => o.value === val);
+        return `• ${q.question}: **${opt?.label || val}**`;
+      });
+
+    addMsg({
+      id: makeId("u"),
+      role: "user",
+      content: summaryLines.join("\n"),
+    });
+
+    setConvAnswers(mappedAnswers);
+    convAnswersRef.current = mappedAnswers;
+
+    // Persist wizard answers to user profile memory (localStorage + Firestore)
+    try {
+      const { getOrCreateUserId, getProfileMemory, saveProfileMemory } =
+        await import("@/lib/services/document-service");
+      const userId = getOrCreateUserId();
+      const existingMemory = await getProfileMemory(userId);
+
+      // Map wizard answers to profile-compatible field names
+      const fieldMapping: Record<string, string> = {
+        age: "age",
+        income: "income",
+        "annual income": "income",
+        "house type": "houseType",
+        "land ownership": "landOwnership",
+        "bpl card": "rationCardType",
+        "ration card": "rationCardType",
+        state: "state",
+        district: "district",
+        occupation: "occupation",
+        gender: "gender",
+        "family size": "familySize",
+      };
+
+      const mergedFacts: Record<string, string> =
+        existingMemory?.mergedFacts || {};
+      for (const [question, answer] of Object.entries(mappedAnswers)) {
+        if (answer && question !== "goal") {
+          // Try to map to known field name
+          const lowerQ = question.toLowerCase();
+          let fieldKey = question;
+          for (const [keyword, field] of Object.entries(fieldMapping)) {
+            if (lowerQ.includes(keyword)) {
+              fieldKey = field;
+              break;
+            }
+          }
+          mergedFacts[fieldKey] = answer;
+        }
+      }
+
+      await saveProfileMemory({
+        userId,
+        mergedFacts,
+        fieldSources: existingMemory?.fieldSources || {},
+        missingFields: existingMemory?.missingFields || [],
+        documentRefs: existingMemory?.documentRefs || [],
+        lastUpdated: Date.now(),
+      });
+    } catch (e) {
+      console.warn("Failed to persist wizard answers to memory:", e);
+    }
+
+    // Set asked questions
+    const asked = wizardQuestions.map((q) => q.question);
+    setAskedQuestions(asked);
+    askedQuestionsRef.current = asked;
+
+    // Fetch final results with all answers
+    setConvPhase("questions");
+    convPhaseRef.current = "questions";
+    await fetchNextDynamicTurn(pendingQueryRef.current, mappedAnswers);
+  };
+
+  // ── File Upload + OCR Processing ──────────────────────────────────────────
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    e.target.value = "";
 
-    // Add visual indicator of user upload
+    const sourceType = file.type.includes("pdf")
+      ? ("pdf" as const)
+      : ("gallery" as const);
+
+    // Show upload indicator
     addMsg({
       id: makeId("u"),
       role: "user",
       content: `📎 Uploaded Document: ${file.name}`,
     });
-
-    // Simulate AI document processing
     setBusy(true);
-    setTimeout(() => {
-      let reply = "";
-      if (language === "hi")
-        reply = `मैंने आपका दस्तावेज़ (${file.name}) प्राप्त कर लिया है। अब मैं आपकी पात्रता की जांच करने के लिए इसका उपयोग करूंगा। कृपया अपना सवाल पूछें।`;
-      else if (language === "mr")
-        reply = `मला तुमचे दस्तऐवज (${file.name}) मिळाले आहे. आता मी तुमच्या पात्रतेची तपासणी करण्यासाठी याचा वापर करेन. कृपया तुमचा प्रश्न विचारा.`;
-      else
-        reply = `I have received and securely attached your document (${file.name}). I will cross-reference this to verify your eligibility. How can I help you today?`;
+
+    try {
+      // 1) Store locally + get base64
+      const {
+        uploadDocument,
+        getOrCreateUserId,
+        saveOCRResults,
+        updateDocumentStatus,
+      } = await import("@/lib/services/document-service");
+      const userId = getOrCreateUserId();
 
       addMsg({
-        id: makeId("a"),
+        id: makeId("p"),
         role: "ai",
-        content: reply,
+        content: "⏳ Uploading your document...",
       });
-      setBusy(false);
-    }, 1500);
+      const { doc: userDoc, base64Data } = await uploadDocument(
+        file,
+        userId,
+        sourceType,
+      );
 
-    // Reset input
-    e.target.value = "";
+      // 2) Run OCR via Gemini Vision (send base64 directly)
+      setMessages((p) => p.filter((m) => !m.content?.startsWith("⏳")));
+      addMsg({
+        id: makeId("p"),
+        role: "ai",
+        content: "🔍 Processing document with AI...",
+      });
+
+      await updateDocumentStatus(userDoc.documentId, "processing");
+
+      const ocrRes = await fetch("/api/ocr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          base64Data,
+          mimeType: userDoc.mimeType,
+          documentId: userDoc.documentId,
+          userId,
+        }),
+      });
+
+      if (!ocrRes.ok) {
+        const errBody = await ocrRes.json().catch(() => ({}));
+        throw new Error(errBody.error || `OCR failed (${ocrRes.status})`);
+      }
+      const ocrData = await ocrRes.json();
+
+      // 3) Save OCR results to Firestore
+      await saveOCRResults(
+        userDoc.documentId,
+        ocrData.ocrText,
+        ocrData.extractedFields,
+        ocrData.documentTags,
+      );
+
+      // 4) Merge into profile memory
+      const { mergeDocumentIntoMemory } =
+        await import("@/lib/services/memory-service");
+      const memory = await mergeDocumentIntoMemory(
+        userId,
+        userDoc.documentId,
+        ocrData.extractedFields,
+      );
+
+      await updateDocumentStatus(userDoc.documentId, "ai_available");
+
+      // 5) Show extracted info
+      setMessages((p) => p.filter((m) => !m.content?.startsWith("🔍")));
+
+      const docType = ocrData.documentType || "Document";
+      const fields = ocrData.extractedFields || {};
+      const fieldCount = Object.keys(fields).length;
+      const memoryCount = Object.keys(memory.mergedFacts || {}).length;
+
+      // Build a readable summary of key extracted fields
+      const fieldLabels: Record<string, string> = {
+        fullName: "Name",
+        fatherName: "Father",
+        dateOfBirth: "DOB",
+        age: "Age",
+        gender: "Gender",
+        state: "State",
+        district: "District",
+        pincode: "Pincode",
+        caste: "Category",
+        income: "Income",
+        occupation: "Occupation",
+        rationCardType: "Ration Card",
+        landOwnership: "Land",
+        bankName: "Bank",
+      };
+
+      const fieldLines: string[] = [];
+      for (const [key, label] of Object.entries(fieldLabels)) {
+        const f = fields[key];
+        if (f?.value) {
+          fieldLines.push(`  • **${label}:** ${f.value}`);
+        }
+      }
+      const fieldSummary =
+        fieldLines.length > 0 ? `\n${fieldLines.join("\n")}\n` : "";
+
+      let reply = "";
+      if (language === "hi") {
+        const hiLabels: Record<string, string> = {
+          fullName: "नाम",
+          fatherName: "पिता",
+          dateOfBirth: "जन्म तिथि",
+          age: "आयु",
+          gender: "लिंग",
+          state: "राज्य",
+          district: "जिला",
+          pincode: "पिनकोड",
+          caste: "वर्ग",
+          income: "आय",
+        };
+        const hiLines: string[] = [];
+        for (const [key, label] of Object.entries(hiLabels)) {
+          const f = fields[key];
+          if (f?.value) hiLines.push(`  • **${label}:** ${f.value}`);
+        }
+        reply =
+          `✅ **${docType}** सफलतापूर्वक प्रोसेस किया गया!\n\n` +
+          `📋 **${fieldCount} जानकारियाँ निकाली गईं:**\n${hiLines.join("\n")}\n\n` +
+          `🧠 AI मेमोरी में ${memoryCount} तथ्य सहेजे गए\n\n` +
+          `अब मैं इस जानकारी का उपयोग करके आपकी योजना पात्रता की जांच कर सकता हूँ।`;
+      } else if (language === "mr") {
+        reply =
+          `✅ **${docType}** यशस्वीरित्या प्रक्रिया झाली!\n\n` +
+          `📋 **${fieldCount} माहिती काढली:**\n${fieldSummary}\n` +
+          `🧠 AI मेमोरीमध्ये ${memoryCount} तथ्य जतन केले\n\n` +
+          `आता मी या माहितीचा वापर करून तुमच्या योजना पात्रतेची तपासणी करू शकतो.`;
+      } else {
+        reply =
+          `✅ **${docType}** processed successfully!\n\n` +
+          `📋 **${fieldCount} fields extracted:**\n${fieldSummary}\n` +
+          `🧠 ${memoryCount} facts saved to AI memory\n\n` +
+          `I'll now use this information to check your scheme eligibility. What would you like to know?`;
+      }
+
+      addMsg({ id: makeId("a"), role: "ai", content: reply });
+    } catch (err) {
+      console.error("Document processing error:", err);
+      setMessages((p) =>
+        p.filter((m) =>
+          m.content?.startsWith("⏳") || m.content?.startsWith("🔍")
+            ? false
+            : true,
+        ),
+      );
+
+      const errMsg =
+        language === "hi"
+          ? "❌ दस्तावेज़ प्रोसेसिंग में त्रुटि। कृपया पुनः प्रयास करें।"
+          : language === "mr"
+            ? "❌ दस्तऐवज प्रक्रियेत त्रुटी. कृपया पुन्हा प्रयत्न करा."
+            : "❌ Error processing document. Please try again.";
+      addMsg({ id: makeId("e"), role: "ai", content: errMsg });
+    } finally {
+      setBusy(false);
+    }
   };
 
   // ── Voice ──────────────────────────────────────────────────────────────────
@@ -743,39 +1066,14 @@ export default function ChatBox() {
       return;
     }
 
-    // ── During goal phase: treat voice/text as goal selection ──
-    if (convPhaseRef.current === "goal") {
-      addMsg({ id: makeId("u"), role: "user", content: trimmed });
-      setGoalLabel(trimmed);
-      goalLabelRef.current = trimmed;
-      setConvPhase("questions");
-      convPhaseRef.current = "questions";
-      await fetchNextDynamicTurn(pendingQueryRef.current, { goal: trimmed });
-      return;
-    }
-
     // ── First message ever → start dynamic conversation ──
-    if (convPhaseRef.current === "idle") {
+    if (convPhaseRef.current === "idle" || convPhaseRef.current === "goal") {
       addMsg({ id: makeId("u"), role: "user", content: trimmed });
       setPendingQuery(trimmed);
       pendingQueryRef.current = trimmed;
 
-      const inferred = inferSchemesFromQuery(trimmed);
-      if (inferred.length > 0) {
-        // Specific query (e.g. from sector chip) → fetch first dynamic turn immediately
-        await fetchNextDynamicTurn(trimmed, {});
-      } else {
-        // Vague query → ask for goal
-        setConvPhase("goal");
-        convPhaseRef.current = "goal";
-        addMsg({
-          id: makeId("g"),
-          role: "ai",
-          content: i.chat.goalQuestion,
-          chips: i.chat.goalChips,
-        });
-        speakResponse(i.chat.goalQuestion);
-      }
+      // Go directly to wizard/RAG — no goal selection step
+      await fetchWizardQuestions(trimmed, {});
       return;
     }
 
@@ -800,9 +1098,7 @@ export default function ChatBox() {
         return;
       }
 
-      // Genuinely new query → check if we can infer schemes directly
-      const inferred = inferSchemesFromQuery(trimmed);
-
+      // Genuinely new query → reset and go directly to wizard
       // Reset state for new query
       setConvAnswers({});
       convAnswersRef.current = {};
@@ -814,24 +1110,13 @@ export default function ChatBox() {
       goalLabelRef.current = "";
       setAskedQuestions([]);
       askedQuestionsRef.current = [];
+      setShowWizard(false);
+      setWizardQuestions([]);
       setPendingQuery(trimmed);
       pendingQueryRef.current = trimmed;
 
-      if (inferred.length > 0) {
-        // Specific new query → skip goal selection, go straight to questions
-        await fetchNextDynamicTurn(trimmed, {});
-      } else {
-        // Vague new query → show goal selection
-        setConvPhase("goal");
-        convPhaseRef.current = "goal";
-        addMsg({
-          id: makeId("g"),
-          role: "ai",
-          content: i.chat.goalQuestion,
-          chips: i.chat.goalChips,
-        });
-        speakResponse(i.chat.goalQuestion);
-      }
+      // Go directly to wizard/RAG — no goal selection step
+      await fetchWizardQuestions(trimmed, {});
     }
   };
 
@@ -858,22 +1143,6 @@ export default function ChatBox() {
     });
 
     const phase = convPhaseRef.current;
-
-    // ── Phase: goal selection ──
-    if (phase === "goal") {
-      setGoalLabel(label);
-      goalLabelRef.current = label;
-      setConvPhase("questions");
-      convPhaseRef.current = "questions";
-
-      // Store goal in answers so it persists for subsequent calls
-      const goalAnswers = { ...convAnswersRef.current, goal: value };
-      setConvAnswers(goalAnswers);
-      convAnswersRef.current = goalAnswers;
-
-      await fetchNextDynamicTurn(pendingQueryRef.current, goalAnswers);
-      return;
-    }
 
     // ── Phase: eligibility questions ──
     if (phase === "questions") {
@@ -1077,6 +1346,18 @@ export default function ChatBox() {
                   <ChatMessage {...m} onChipClick={handleChipClick} />
                 </div>
               ))}
+
+              {/* Wizard Form (shown during questions phase) */}
+              {showWizard && wizardQuestions.length > 0 && (
+                <div style={{ padding: "12px 16px" }}>
+                  <WizardForm
+                    questions={wizardQuestions}
+                    onSubmit={handleWizardSubmit}
+                    loading={busy}
+                  />
+                </div>
+              )}
+
               <div ref={endRef} />
             </div>
           )}
