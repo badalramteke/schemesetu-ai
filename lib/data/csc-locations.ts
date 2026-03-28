@@ -8,14 +8,85 @@ export interface CSCLocation {
 }
 
 export const cscLocations: CSCLocation[] = [
-  { "id": "csc-01", "name": "Digital Seva Kendra - Metro", "lat": 28.6139, "lng": 77.2090, "whatsapp": "+919876543210", "address": "Near Connaught Place, Delhi" },
-  { "id": "csc-02", "name": "Rural Digital Connect", "lat": 19.0760, "lng": 72.8777, "whatsapp": "+919123456789", "address": "Opp. Railway Station, Mumbai" },
-  { "id": "csc-03", "name": "Gramin Suvidha Center", "lat": 13.0827, "lng": 80.2707, "whatsapp": "+919012345678", "address": "Anna Nagar Main Road, Chennai" },
-  { "id": "csc-04", "name": "E-Seva Jan Seva Kendra", "lat": 22.5726, "lng": 88.3639, "whatsapp": "+919887766554", "address": "Salt Lake Sector V, Kolkata" },
-  { "id": "csc-05", "name": "Tech-Village Services", "lat": 12.9716, "lng": 77.5946, "whatsapp": "+918877665544", "address": "Near MG Road, Bengaluru" },
-  { "id": "csc-06", "name": "Adarsh Digital Point", "lat": 17.3850, "lng": 78.4867, "whatsapp": "+917766554433", "address": "Jubilee Hills Checkpost, Hyderabad" },
-  { "id": "csc-07", "name": "Smart Village Hub", "lat": 23.0225, "lng": 72.5714, "whatsapp": "+916655443322", "address": "Navrangpura Market, Ahmedabad" },
-  { "id": "csc-08", "name": "Bharat Digital Kendra", "lat": 26.8467, "lng": 80.9462, "whatsapp": "+919900881122", "address": "Hazratganj, Lucknow" },
-  { "id": "csc-09", "name": "Coastal Digital Seva", "lat": 15.2993, "lng": 73.9857, "whatsapp": "+918811223344", "address": "Near Bus Stand, Margao, Goa" },
-  { "id": "csc-10", "name": "Himalayan E-Portal", "lat": 30.7333, "lng": 76.7794, "whatsapp": "+917722334455", "address": "Sector 17 Market, Chandigarh" }
-];
+  {
+    "id": "ngp-01",
+    "name": "Quality Xerox and CSC Centre",
+    "lat": 21.1711,
+    "lng": 79.0614,
+    "whatsapp": "+919730347189",
+    "address": "Yogendranagar, Buddha Vihar, Borgaon"
+  },
+  {
+    "id": "ngp-02",
+    "name": "Maha E Seva Kendra - Sitabuldi",
+    "lat": 21.1466,
+    "lng": 79.0833,
+    "whatsapp": "+919422100001",
+    "address": "Sitabuldi, Near Arvind Photo Studio"
+  },
+  {
+    "id": "ngp-03",
+    "name": "Shri Khatu Shyam Cyber Cafe",
+    "lat": 21.1895,
+    "lng": 79.0911,
+    "whatsapp": "+919860451234",
+    "address": "Indira Nagar, Jaripatka Ring Road"
+  },
+  {
+    "id": "ngp-04",
+    "name": "Janseva Kendra Bhandewadi",
+    "lat": 21.1528,
+    "lng": 79.1411,
+    "whatsapp": "+919765432101",
+    "address": "Bhandewadi Road, Shiv Nagar"
+  },
+  {
+    "id": "ngp-05",
+    "name": "Aaple Sarkar Seva Kendra",
+    "lat": 21.1167,
+    "lng": 79.0667,
+    "whatsapp": "+919011223344",
+    "address": "Wardha Road, Chhatrapati Square"
+  },
+  {
+    "id": "ngp-06",
+    "name": "Indian CSC Digital Seva Kendra",
+    "lat": 21.0955,
+    "lng": 79.1022,
+    "whatsapp": "+917048994199",
+    "address": "Near Hudkeshwar Police Station, Mhalgi Nagar"
+  },
+  {
+    "id": "ngp-07",
+    "name": "Sahara Online & CSC Center",
+    "lat": 21.1750,
+    "lng": 79.0711,
+    "whatsapp": "+918888776655",
+    "address": "Jafar Nagar, Near Bank of India"
+  },
+  {
+    "id": "ngp-08",
+    "name": "Shifa Infotech CSC Center",
+    "lat": 21.1211,
+    "lng": 79.0411,
+    "whatsapp": "+919922334455",
+    "address": "Jaitala Road, Opposite Shitla Mata Mandir"
+  },
+  {
+    "id": "ngp-09",
+    "name": "Kanha Enterprises CSC",
+    "lat": 21.1122,
+    "lng": 79.1311,
+    "whatsapp": "+917766554433",
+    "address": "Umred Road, Dighori"
+  },
+  {
+    "id": "ngp-10",
+    "name": "CSC Center - Hingna",
+    "lat": 21.1011,
+    "lng": 79.0011,
+    "whatsapp": "+918080706050",
+    "address": "CRPF Road, Meshram Layout, Hingna"
+  }
+]
+;

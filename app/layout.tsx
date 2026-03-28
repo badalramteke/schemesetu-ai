@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning>
         {/* Accessibility: Skip to main content */}
         <a href="#main-content" className="skip-link">
           Skip to main content

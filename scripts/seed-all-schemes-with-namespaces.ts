@@ -23,6 +23,11 @@ const SCHEMES = [
   { file: "PMAY-Awas.txt", namespace: "pmay-g", label: "PMAY-G" },
   { file: "MGNREGA.txt", namespace: "mgnrega", label: "MGNREGA" },
   { file: "APY .txt", namespace: "apy", label: "APY" },
+  { file: "Janani Suraksha Yojana Scheme Research.txt", namespace: "jsy", label: "JSY" },
+  { file: "NMMSS Scheme Information Extraction.txt", namespace: "nmmss", label: "NMMSS" },
+  { file: "PMFBY Scheme Information Extraction.txt", namespace: "pmfby", label: "PMFBY" },
+  { file: "PMKVY Scheme Information Extraction.txt", namespace: "pmkvy", label: "PMKVY" },
+  { file: "PMUY Scheme Information Extraction.txt", namespace: "pmuy", label: "PMUY" },
 ];
 
 const CHUNK_SIZE = 500; // characters per chunk

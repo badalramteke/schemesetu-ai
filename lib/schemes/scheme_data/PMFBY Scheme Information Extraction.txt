@@ -1,0 +1,161 @@
+﻿The Architecture of Agricultural Resilience: A Comprehensive Research Report on the Pradhan Mantri Fasal Bima Yojana (PMFBY)
+The trajectory of agricultural risk management in India has been defined by a continuous evolution of insurance mechanisms designed to buffer the agrarian economy against the inherent volatility of natural phenomena. The Pradhan Mantri Fasal Bima Yojana (PMFBY), institutionalized in 2016, represents the zenith of this evolutionary process, succeeding a series of historical frameworks that began with the Comprehensive Crop Insurance Scheme (CCIS) in 1985. Prior to the inception of PMFBY, the National Agricultural Insurance Scheme (NAIS) functioned from 1999 to 2013 as a liberalized iteration that first envisaged the inclusion of non-loanee farmers. However, the systemic inefficiencies of these earlier models—ranging from high premium rates to delayed claim settlements—necessitated a paradigm shift toward a more comprehensive, technology-driven, and farmer-centric solution. The subsequent National Crop Insurance Programme (NCIP) in 2013-14, which integrated the Modified NAIS (MNAIS) and the Weather Based Crop Insurance Scheme (WBCIS), served as the immediate precursor to the current PMFBY framework.
+The fundamental objectives of PMFBY are rooted in the stabilization of farmer incomes and the promotion of sustainable agricultural production. By providing exhaustive financial support to farmers suffering from crop loss or damage arising out of unforeseen events, the scheme ensures their continued engagement in the agricultural sector. Beyond mere compensation, the yojana is designed to encourage the adoption of innovative and modern agricultural practices while ensuring a consistent flow of credit to the agriculture sector. This dual focus on risk mitigation and creditworthiness contributes significantly to national food security and the overall competitiveness of Indian agriculture on a global scale.
+Operational Framework and the Principle of the Area Approach
+The structural integrity of PMFBY rests upon the "Area Approach" principle, which posits that all farmers within a predefined geographical territory, known as the Insurance Unit (IU), are exposed to similar risk profiles. For major crops, the state governments typically notify the Village or Village Panchayat as the insurance unit. For minor crops, the unit may be elevated to a higher administrative level, such as a block or taluka, to ensure that a statistically significant number of Crop Cutting Experiments (CCEs) can be conducted within the season.
+The definition of these units is a critical component of the notification process, which must be finalized by the State Level Coordination Committee on Crop Insurance (SLCCCI) prior to the commencement of each crop season. The operational guidelines mandate that the state government should ensure the issuance and circulation of these notifications at least one month in advance of the crop season, incorporating essential details such as insured crops, notified areas, the Scale of Finance, and the sum insured.
+Notification and Administrative Hierarchy
+Administrative Entity
+	Primary Responsibility in PMFBY
+	Source
+	SLCCCI
+	Finalizing terms, conditions, and bidding for insurance company selection.
+	
+
+	State Government
+	Notifying crops/areas, conducting CCEs, and providing 10-year yield data.
+	
+
+	
+
+	DLTC
+	Fixing the Scale of Finance (SOF) for each crop at the district level.
+	SLTC
+	Approving weather perils and correlations for specific crop notifications.
+	
+
+	DAC&FW
+	Overall guidance, control, and monitoring of premium rates.
+	
+
+	The reliance on historical data is paramount for the actuarial health of the scheme. State governments are required to provide ten years of historical yield data to insurance companies to facilitate the calculation of indemnity limits, threshold yields, and premium rates. In instances where data at the insurance unit level is absent, the weighted average of contiguous units or the next higher administrative unit's data is employed as determined by the SLCCCI.
+Eligibility Criteria and Enrollment Dynamics
+The scheme is designed for broad inclusivity, encompassing all farmers, including sharecroppers and tenant farmers, who are growing notified crops in notified areas. A prerequisite for coverage is the possession of an "insurable interest" in the crop being insured. Historically, enrollment was bifurcated into compulsory and voluntary categories. Loanee farmers—those who have been sanctioned Seasonal Agricultural Operations (SAO) loans or possess a Kisan Credit Card (KCC) account for notified crops—were traditionally covered compulsorily. However, evolving policy directives have moved toward a voluntary model for all farmers, empowering cultivators to make informed decisions regarding their risk management strategies.
+For non-loanee farmers, participation remains optional. These farmers must provide verifiable documentary evidence to confirm their status and insurable interest. The documentation includes land records such as the Record of Rights (RoR) or the Land Possession Certificate (LPC). In the case of sharecroppers or tenant farmers, applicable contract or agreement details, as permitted by the state government, must be submitted.
+The AgriStack Farmer ID Mandate
+A significant technological advancement in the enrollment process is the mandatory integration of the AgriStack Farmer ID (FID) starting from the Kharif 2025 season. This requirement applies to non-loanee farmers in specific high-saturation states, including Andhra Pradesh, Assam, Karnataka, Kerala, Madhya Pradesh, Odisha, Rajasthan, Chhattisgarh, Tamil Nadu, and Uttar Pradesh. The FID serves as a "Single Source of Truth," ensuring consistency between the National Crop Insurance Portal (NCIP) and the Digital Crop Survey (DCS) databases. By standardizing farmer identification, the government aims to eliminate duplication, prevent fraudulent enrollments, and discourage moral hazards such as over-insurance.
+Farmers who do not yet possess an FID are required to register through the AgriStack portal or authorized Common Service Centres (CSCs) before they can complete their insurance enrollment. The system allows for real-time validation of enrollment details through API integration, which significantly enhances the transparency and operational efficiency of the scheme.
+Comprehensive Risk Coverage and Peril Taxonomy
+PMFBY provides a multi-stage risk solution that covers the entire agricultural lifecycle, from the pre-sowing phase to the post-harvest stage. This comprehensive approach is designed to mitigate the financial impact of non-preventable natural risks.
+Stages of Covered Risks
+1. Prevented Sowing/Planting Risk: This coverage is triggered when an insured area is prevented from sowing or planting due to a deficit in rainfall or other adverse seasonal conditions.
+2. Standing Crop Risks: From the time of sowing until harvest, the scheme provides comprehensive insurance against yield losses caused by non-preventable risks. These include drought, dry spells, floods, inundation, pests and diseases, landslides, natural fire, lightning, storms, hailstorms, cyclones, typhoons, tempests, hurricanes, and tornadoes.
+3. Localized Calamities: This component addresses loss or damage resulting from identified localized risks such as hailstorms, landslides, and inundation that affect isolated farms within a notified area.
+4. Post-Harvest Losses: Coverage extends up to a maximum period of 14 days from the date of harvesting for crops that are kept in a "cut and spread" condition in the field to dry. This specifically protects against damage from cyclones, cyclonic rains, and unseasonal rains.
+Peril Exclusions and Preventable Risks
+While the scheme is expansive, it explicitly excludes "preventable risks" to maintain the integrity of the indemnity principle. General exclusions include losses arising from war and nuclear risks, riots, malicious damage, theft, or acts of enmity. Furthermore, damage caused by domestic or wild animals is generally excluded, although states have the option to include "wild animal damage" as an add-on coverage. For hydrophilic crops like paddy, jute, and sugarcane, inundation is covered for widespread calamities but is specifically excluded from localized claim assessments.
+Financial Metrics: Premium Rates and Subsidy Sharing
+The economic viability of PMFBY for the farming community is sustained by a highly subsidized premium structure. The maximum insurance charges payable by the farmer are capped as a percentage of the sum insured, ensuring that the financial burden remains minimal.
+Premium Caps by Crop Category
+Crop Season
+	Type of Crops
+	Farmer Premium (% of Sum Insured)
+	Source
+	Kharif
+	Foodgrains and Oilseeds (Cereals, Millets, Pulses)
+	2.0%
+	
+
+	Rabi
+	Foodgrains and Oilseeds (Cereals, Millets, Pulses)
+	1.5%
+	
+
+	Kharif & Rabi
+	Annual Commercial / Annual Horticultural
+	5.0%
+	
+
+	The difference between the actuarial premium rate—which is determined through a competitive bidding process among empanelled insurance companies—and the farmer's share is the premium subsidy. This subsidy is typically shared on a 50:50 basis between the Central and State Governments. To address the unique geographical and economic challenges of specific regions, the sharing ratio was modified to 90:10 for North Eastern states (effective Kharif 2020) and for Himalayan states (effective Kharif 2023).
+Actuarial Bidding and District Clustering
+To normalize risk profiles and ensure lower bidded premiums, state governments are required to cluster districts for the bidding process. Each cluster is designed to contain a mix of districts with varying risk levels (high risk vs. low risk). This diversification prevents insurance companies from quoting excessively high rates for high-risk areas alone. For instance, the premium rate in 2023-24 was observed at 10.8%, a significant reduction from the 15.9% recorded in 2020-21, reflecting the efficacy of these strategic interventions.
+Yield Estimation and the Threshold Calculation
+The calculation of claims in PMFBY is fundamentally linked to the "Threshold Yield," which serves as the benchmark for identifying crop loss. The Threshold Yield (TY) for a notified crop in an insurance unit is derived from the following formula:
+The Average Yield is defined as the moving average yield of the preceding seven years, with the provision to exclude up to two years of declared natural calamities. The scheme offers three distinct indemnity levels—70%, 80%, and 90%—which correspond to the high, moderate, and low-risk profiles of the notified areas.
+Crop Cutting Experiments (CCEs) and Technology
+The primary method for estimating the actual yield during a given season is through CCEs. The state governments are responsible for conducting a requisite number of these experiments at the insurance unit level and submitting the resulting yield data to the insurance companies within a stipulated time frame.
+To enhance the transparency and reliability of this data, several technological interventions have been integrated into the yield estimation process:
+* CCE-Agri Mobile App: Used to capture and upload real-time yield data from the field to the National Crop Insurance Portal.
+* YES-TECH (Yield Estimation System based on Technology): This initiative, launched for paddy and wheat in Kharif 2023 and extended to soybean in Kharif 2024, mandates that 30% weightage be assigned to yield estimations derived through satellite imaging and remote sensing.
+* WINDS (Weather Information Network & Data System): This system builds a national database of weather data to facilitate better parametric insurance products and accurate weather prediction for disaster management.
+Claim Settlement Mechanisms and Penalties for Delay
+The PMFBY framework has evolved to prioritize the timely disbursement of claims to prevent the cycle of rural indebtedness. A critical component of this is the "DigiClaim Module," which integrates the National Crop Insurance Portal with the Public Finance Management System (PFMS) and the accounting systems of insurance companies. This integration ensures that claim payments are processed transparently and transferred directly to the farmers' bank accounts.
+Settlement Timelines and Penal Interest
+The scheme mandates that insurance companies settle claims within two months of the harvest. To enforce this, the revamped operational guidelines have introduced a penalty for delays. Insurance companies are now required to pay a penal interest of 12% per annum to the farmers for any period beyond the stipulated timeline, provided the final yield data has been received from the state government.
+Phase of Claim
+	Action Item
+	Source
+	Mid-Season Adversity
+	On-account payment up to 25% of likely claims if yield expected < 50% of normal.
+	
+
+	Localized Peril
+	Farmer notification within 72 hours of the event.
+	
+
+	Investigation
+	Investigator appointment within 48 hours of intimation.
+	
+
+	Assessment
+	Completion of damage investigation within 10 days of appointment.
+	
+
+	Settlement
+	Payment within 15 days of the final assessment report receipt.
+	
+
+	Administrative Improvements and Escrow Accounts
+Historical data indicates that a major cause for delayed claim payments was the late release of the state's share of the premium subsidy. To mitigate this, the Central Government has begun releasing its share of the subsidy in advance, delinked from the release of the state government's share. Furthermore, from the Kharif 2025 season onwards, it is mandatory for state governments to open an Escrow account and deposit their premium share in advance to ensure the seamless flow of funds to insurers.
+Application Pathways and Documentation Requirements
+Farmers can access the PMFBY through both digital and physical channels. Regardless of the method, the final eligibility is contingent upon the farmer's data being uploaded to the National Crop Insurance Portal (NCIP).
+Online Application Process
+Farmers may register directly via the official portal (pmfby.gov.in) under the "Farmer Corner". The registration form requires:
+1. Identification Details: Aadhaar number and mobile number for OTP-based authentication.
+2. Residential and Land Details: State, district, sub-district, village, and the specific survey or land identification number.
+3. Crop Information: Declaration of the crop sown or intended to be sown for the notified season.
+4. Bank Account Details: Savings account number and IFSC code for direct claim transfer.
+5. Document Upload: Scanned copies of land records (RoR/LPC), bank passbook, and a sowing certificate or self-declaration of the crop.
+Offline Application via CSCs and Banks
+For non-loanee farmers who prefer physical assistance, the Village Level Entrepreneur (VLE) at a Common Service Centre (CSC) can facilitate the process. The farmer must provide documentation for Aadhaar-enabled e-KYC and manual entry of land details. For loanee farmers, the process is streamlined; the loan-disbursing bank branch calculates the premium based on the Scale of Finance and the declared acreage, deducts the farmer's share as an additional component of the loan, and mandatorily uploads the data to the NCIP.
+Rejection Analysis and Quality Assurance
+Applications enrolled in the NCIP are subjected to rigorous quality checks and validation to ensure compliance with the operational guidelines. An application may be rejected if it lacks an insurable interest, fails to provide valid proof of tenancy, or contains discrepancies in land area (e.g., insuring more area than actually owned).
+Principal Grounds for Application Rejection
+Rejection Reason
+	Detailed Description
+	Source
+	Documentation Deficiency
+	Failure to provide/upload RoR, LPC, or agreement details within 60 days.
+	
+
+	Crop Mismatch
+	Disparity between the crop listed in the insurance proposal and the crop actually sown.
+	
+
+	Aadhaar Discrepancy
+	Mismatch between the farmer's name on the application and their Aadhaar record.
+	
+
+	Duplicate Insurance
+	Insuring the same crop on the same land through two different agencies.
+	
+
+	In case of documentation deficiencies, insurance companies are required to revert the application to the enrollment channel (CSC, bank, or intermediary) for correction. Furthermore, no application can be rejected solely by an insurance company; rejections must be reconciled and approved by the concerned State Government through the NCIP.
+Grievance Redressal and Stakeholder Feedback
+To ensure farmer-friendly implementation, the scheme provides a multi-layered grievance redressal mechanism. The "Krishi Rakshak Portal & Helpline" (KRPH), reachable via the toll-free number 14447, serves as the first point of contact for reporting crop loss and lodging complaints. This service is operational 24x7 and is integrated with the larger Digital Agriculture Mission to track and resolve queries in real-time.
+Additionally, District Level Monitoring Committees (DLMC), chaired by the District Magistrate, and State Level Monitoring Committees (SLMC), chaired by the Principal Secretary of Agriculture, provide administrative oversight. For formal disputes, farmers can approach the District Level Grievance Redressal Committee (DGRC) or the State Grievance Redressal Committee (SGRC). Data from 2024 indicates that the average time taken for grievance resolution across ministries, including Agriculture, was approximately 13 days, reflecting an increased efficiency in public grievance management.
+Technological Synergy and the Digital Agriculture Mission
+The Digital Agriculture Mission, launched in 2024 with a total outlay of ₹2,817 crore, provides the overarching technological framework for PMFBY's future. This mission aims to synchronize information across various platforms to enhance resource efficiency and the delivery of farmer-centric solutions.
+* National Pest Surveillance System (NPSS): As of December 2025, this system supports 66 crops and monitors 432 pest species. It uses AI and 10,000 extension workers to provide early warnings to farmers, reducing the "preventable risk" portion of crop loss.
+* AI-Based Monsoon Forecasting: A pilot program for Kharif 2025 reached 3.88 crore farmers across 13 states, providing local monsoon onset data that influenced sowing decisions for a significant percentage of the recipients.
+* Whatsapp Chatbot: The integration of a chatbot (7065514447) allows farmers to interact with the PMFBY system in their local languages, making scheme-related information more accessible.
+Synthesis of Policy Implications and Future Recommendations
+The analysis of PMFBY reveals a scheme that has moved significantly beyond the traditional "payout" model to a holistic "risk management" ecosystem. The enrollment of farmers has seen a 32% increase between 2022 and 2025, reaching 4.19 crore applications. This growth is largely attributed to the digitization of land records and the removal of the "compulsory" mandate for loanee farmers, which has fostered a sense of voluntary ownership among cultivators.
+The transition to technology-weighted yield estimation (YES-TECH) and the mandatory use of the WINDS network signal a move toward more objective and less labor-intensive assessment methods. By reducing human intervention in CCEs and utilizing satellite imagery, the government is addressing the historical challenges of yield-related disputes and data transmission delays.
+For future sustainability, the scheme must focus on the following pillars:
+1. Saturation of AgriStack: Expanding the Farmer ID mandate to all states will ensure a "Single Source of Truth," virtually eliminating the possibility of multiple insurance claims on the same land parcel.
+2. Climate-Resilient Modeling: Integrating data on crop diversification and sustainable practices (like micro-irrigation or organic farming) into premium rating could incentivize climate-smart agriculture.
+3. Hyper-local Parametric Insurance: Continued investment in the WINDS infrastructure will eventually allow for Panchayat-level weather-based payouts, reducing the two-month wait time currently associated with traditional CCE-based settlements.
+The Pradhan Mantri Fasal Bima Yojana stands as a landmark initiative in India's agricultural policy, successfully leveraging deep technology to provide a safety net for millions of farmers while driving the digital transformation of the rural economy. Through continuous refinement of its operational guidelines and a commitment to transparency, it continues to serve as the primary buffer against the uncertainties of climate change and natural calamities in the agricultural sector.
+Works cited
+1. Download - PMFBY, https://pmfby.gov.in/compendium/General/1_2_3_merged.pdf 2. STANDING COMMITTEE ON AGRICULTURE (2020-2021) SEVENTEENTH LOK SABHA MINISTRY OF AGRICULTURE AND FARMERS WELFARE ON THE SUBJECT & - PMFBY, https://pmfby.gov.in/compendium/General/2021%20-%20Pradhan%20Mantri%20Fasal%20Bima%20Yojana_Parliamentary%20Committee%20Report%20-%2029th%20Report.pdf 3. National Grop Insurance Programme (NCIP) - issue of Operational Guidelines I am directed to refer to this Department's - PMFBY, https://pmfby.gov.in/pdf/aws_gui_cre.pdf 4. OPERATIONAL GUIDELINES - PMFBY, https://pmfby.gov.in/pdf/Revised_Operational_Guidelines.pdf 5. PRADHAN MANTRI FASAL BIMA YOJANA (PMFBY), https://pmfby.gov.in/pdf/New%20Schemes-english_.pdf 6. Oprational Guidelines - Department of Agriculture & Farmers Welfare, https://agriwelfare.gov.in/Documents/OprationalGuidelines1822016.pdf 7. pradhan mantri fasal bima yojana (pmfby) - Department of Agriculture & Farmers Welfare, https://agriwelfare.gov.in/Documents/DocCredit/PMFBY-Draft-Guidelines-V-1.1.pdf 8. Empowering Annadatas: Pradhan Mantri Fasal Bima Yojana - PIB, https://www.pib.gov.in/PressNoteDetails.aspx?NoteId=155010&ModuleId=3&reg=3&lang=2 9. Performance Evaluation of Pradhan Mantri Fasal Bima Yojana (PMFBY) in Madhya Pradesh, https://pmfby.gov.in/compendium/Performance%20Evaluation/2018%20-%20Performance%20evaluation%20of%20pradhan%20mantri%20fasal%20bima%20yojana%20madhya%20pradesh.pdf 10. Untitled - Department of Agriculture & Farmers Welfare, https://agriwelfare.gov.in/sites/MinistryLettersCompendium/use_cases/Letters%20to%20States%20ICs%20Banks%20regarding%20mandatory%20Use%20of%20AgStack%20FID%20under%20PMFBY--09072.pdf 11. PMFBY Provides Comprehensive Crop Insurance; States Allowed Add-On Cover for Wild Animal Damage - PIB, https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2222799 12. Pradhan Mantri Fasal Bima Yojna (PMFBY) - myScheme, https://www.myscheme.gov.in/schemes/pmfby 13. Revival of Fasal Bima Yojana - Department of Agriculture & Farmers Welfare, https://www.agriwelfare.gov.in/Documents/News06Aug24.pdf 14. Pradhan Mantri Fasal Bima Yojana Provides Comprehensive Crop Insurance to Farmers at Highly Subsidized Premium Rates - PIB, https://www.pib.gov.in/PressReleseDetail.aspx?PRID=2237736&reg=6&lang=1 15. budget allocation - Press Release: Press Information Bureau, https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2114895 16. Register for New Farmer User - PMFBY, https://www.pmfby.gov.in/farmerRegistrationForm 17. Operational Guidelines of Pradhan Mantri Fasal Bima Yojana - PIB, https://www.pib.gov.in/PressReleasePage.aspx?PRID=2197713&reg=3&lang=1 18. Pradhan Mantri Fasal Bima Yojana - Crop Insurance | PMFBY - Crop Insurance, https://pmfby.gov.in/ 19. Press Note Details: Press Information Bureau - PIB, https://www.pib.gov.in/PressNoteDetails.aspx?id=157351&NoteId=157351&ModuleId=3&reg=1&lang=1 20. CPGRAMS, https://static.pib.gov.in/WriteReadData/specificdocs/documents/2025/jan/doc2025131492301.pdf 21. PRIME MINISTER DHAN-DHAANYA KRISHI YOJANA - Department of Agriculture & Farmers Welfare, https://agriwelfare.gov.in/Documents/Guidelines/Guidelines_PM_DDKY_19092025_Final[1]_0.pdf

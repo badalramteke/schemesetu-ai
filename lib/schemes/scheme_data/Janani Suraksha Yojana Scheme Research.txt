@@ -1,0 +1,140 @@
+﻿Strategic Analysis and Operational Framework of the Janani Suraksha Yojana: A Safe Motherhood Intervention under the National Health Mission
+The Janani Suraksha Yojana (JSY) represents a cornerstone of India’s maternal health policy, functioning as a 100% centrally sponsored conditional cash transfer mechanism designed to significantly reduce maternal and neonatal mortality. Launched on April 12, 2005, by the Government of India, the scheme serves as a critical safe motherhood intervention under the National Health Mission (NHM), specifically within the National Rural Health Mission (NRHM) framework. Its primary objective is to incentivize institutional delivery among poor pregnant women, thereby ensuring that skilled birth attendance is available to mitigate the risks associated with pregnancy and childbirth. The yojana evolved from the modification of the National Maternity Benefit Scheme (NMBS), which had been in effect since August 1995. While the NMBS provided a uniform financial assistance of ₹500 to pregnant women from Below Poverty Line (BPL) households, JSY introduced a graded scale of assistance based on geographic performance and socio-economic vulnerability.
+The fundamental rationale for the JSY initiative is rooted in the high rates of maternal and infant mortality that have historically plagued various regions of India. Evidence indicates that a substantial majority of these deaths occur within the first week following birth, often due to complications that could be prevented or managed through professional medical intervention in a clinical setting. By promoting institutional delivery, the scheme aims to address both the demand-side barriers (through cash incentives) and supply-side constraints (through the deployment of community health workers) that impede access to safe maternal healthcare.
+Institutional Architecture and State Categorization
+The operational efficiency of JSY is predicated on a strategic classification of Indian states and Union Territories into two distinct categories: Low Performing States (LPS) and High Performing States (HPS). This categorization was initially determined based on the institutional delivery rate of each state at the time of the scheme’s launch. States with an institutional delivery rate of 25% or less were classified as LPS, while those with rates exceeding 25% were designated as HPS.
+Category
+	States and Union Territories
+	Strategy
+	Low Performing States (LPS)
+	Uttar Pradesh, Uttarakhand, Bihar, Jharkhand, Madhya Pradesh, Chhattisgarh, Assam, Rajasthan, Odisha, and Jammu & Kashmir
+	Universal coverage for all pregnant women delivering in government or accredited private facilities, irrespective of age or parity
+	High Performing States (HPS)
+	All other states and Union Territories not listed as 
+LPS
+	Targeted coverage restricted to women from BPL households, Scheduled Castes (SC), and Scheduled Tribes (ST)
+	This structural dichotomy allows the central government to allocate resources more heavily toward regions where the healthcare infrastructure and cultural norms are most resistant to institutionalization. In LPS, the scheme focuses on broad-based behavioral change, while in HPS, the focus shifts toward ensuring equity for the most marginalized groups who remain excluded from general health progress.
+Detailed Eligibility Criteria
+The eligibility framework for JSY is designed to target the most vulnerable socio-economic segments while recognizing the specific needs of different geographic regions. Over time, many of the initial restrictive criteria have been relaxed or removed to ensure maximum coverage and effectiveness.
+Primary Target Audience and State-Specific Rules
+The primary target audience consists of pregnant women residing in rural areas, those belonging to BPL households, and women from SC and ST communities. The specific eligibility rules differ significantly between the state categories. In LPS, all pregnant women who choose to deliver in a government health center (including Sub-centers, Primary Health Centers, Community Health Centers, and First Referral Units) or in general wards of district or state hospitals are eligible for the institutional delivery incentive. This universal approach in LPS means that factors such as the mother's age and the number of living children (parity) do not disqualify a woman from receiving the benefit.
+In HPS, eligibility is more restrictive and focuses on those with the greatest economic and social need. In these states, the applicant must belong to a BPL household or an SC/ST category to qualify for institutional delivery benefits. Furthermore, while LPS has removed parity restrictions, some HPS guidelines and home delivery provisions still reference a limit of the first two live births. However, official updates have clarified that the exclusion criteria regarding the age of the mother (previously set at 19 years or older) and the two-child limit have been largely removed for institutional deliveries to promote wider adoption of the scheme.
+Income and Occupational Restrictions
+The scheme is primarily targeted at the poor, with the BPL status serving as the central income restriction. There are no specific occupational requirements; however, integrated reports frequently highlight the inclusion of unorganized agricultural workers, laborers, and marginalized farmers as key beneficiaries. Verification of BPL status is mandatory, typically requiring a BPL ration card or a certificate issued by a competent local authority such as a Tehsildar, Talathi, or Gram Panchayat.
+Explicit Exclusions
+The most significant exclusion criterion is the location of delivery. Women who deliver in non-accredited private hospitals are not eligible for the cash incentive. Furthermore, if a pregnant woman is a government employee, she may be excluded if she is already entitled to maternity benefits or medical coverage through her employer’s separate healthcare schemes. In HPS, women who fall into the Above Poverty Line (APL) category and do not belong to SC/ST communities are explicitly excluded from the financial benefits of the scheme.
+Comprehensive Benefits and Financial Assistance
+The benefit structure of JSY is carefully calibrated to address both the direct and indirect costs of accessing healthcare. By providing a cash lump sum, the scheme aims to compensate for transport costs, nutritional requirements, and potential wage loss for the family during the hospital stay.
+Graded Scale of Institutional Delivery Incentives
+The incentive amount is tiered based on the state’s performance category (LPS vs. HPS) and the residence of the mother (Rural vs. Urban).
+Category of State
+	Rural Areas (Incentive in ₹)
+	Urban Areas (Incentive in ₹)
+	LPS Mother's Package
+	₹1,400
+	₹1,000
+	LPS ASHA's Package
+	₹600
+	₹400
+	HPS Mother's Package
+	₹700
+	₹600
+	HPS ASHA's Package
+	₹600
+	₹400
+	In rural areas, the ASHA package of ₹600 is split into two components: ₹300 for completing the required ANC services and ₹300 for facilitating the institutional delivery itself. In urban areas, the ₹400 package is split as ₹200 for ANC and ₹200 for facilitation. This financial assistance is a one-time benefit provided for each eligible pregnancy.
+Provisions for Home Delivery
+The scheme maintains a component for home deliveries to ensure that the most impoverished women who cannot or do not reach a facility still receive some support. BPL pregnant women delivering at home are entitled to ₹500 per delivery. This benefit is generally available regardless of the age of the pregnant woman and the number of living children, provided they have a BPL certificate.
+Specialized Medical Assistance
+Beyond routine delivery, JSY provides specific funding for complications and specialized services.
+* Caesarean Sections: If a government health institution lacks an in-house specialist, it is authorized to hire a private specialist or utilize one from another government setup. For this purpose, up to ₹1,500 per case is available to the health facility to pay for specialists' honorariums or transport costs.
+* Obstetric Complications: The ₹1,500 allocation also covers the management of severe complications like obstructed labor, postpartum hemorrhage (PPH), eclampsia, and sepsis.
+* Administrative Expenses: Up to 7% of the total funds released to states can be utilized for monitoring, office expenses, and Information, Education, and Communication (IEC) activities.
+Synergies with Janani Shishu Suraksha Karyakram (JSSK)
+The cash benefit of JSY is supplemented by the Janani Shishu Suraksha Karyakram (JSSK), launched on June 1, 2011. While JSY provides a cash incentive, JSSK ensures that all costs within the hospital are waived for pregnant women and sick infants. These entitlements include free and cashless delivery, free C-sections, free drugs and consumables, free diagnostics, free diet during the hospital stay, and free provision of blood. Furthermore, JSSK provides free transport from home to the institution, between facilities in case of referral, and a drop-back home after 48 hours.
+Required Documentation for Enrollment
+The verification process is essential for the disbursement of funds through Direct Benefit Transfer (DBT). Applicants must produce specific identification and socio-economic proof to the health worker.
+1. Aadhaar Number: This is the primary identification required for linking the beneficiary to the RCH portal and facilitating bank transfers.
+2. BPL Certification: A BPL ration card or a poor/destitute certificate issued by the competent local authority. In the absence of a BPL card, Antyodaya Anna Yojana cards may be substituted in some jurisdictions.
+3. Caste Certificate: For SC and ST women in HPS, a certificate from the Tehsildar or a similar officer is necessary to access benefits.
+4. Janani Suraksha Card: A dedicated scheme card provided by the health worker at the time of registration.
+5. MCP (Mother and Child Protection) Card: Used to track ANC checkups and immunization status.
+6. Bank Account Details: A bank account is mandatory for receiving the cash incentive. Health workers (ASHAs/ANMs) are mandated to assist beneficiaries in opening zero-balance accounts under the Pradhan Mantri Jan-Dhan Yojana if they do not already have one.
+7. Referral Slip: Essential for women who deliver away from their usual residence, such as at their mother's house. This slip, issued by the local health worker, determines the cash entitlement based on the woman's permanent residence (Rural vs. Urban).
+The Application and Enrollment Process
+The application for JSY is an integrated part of the maternal health tracking system. It involves a multi-step sequence from early pregnancy to the postnatal period.
+Step-by-Step Sequence for Enrollment
+* Registration: The pregnant woman should register with an ASHA, ANM, or the nearest health center as soon as the pregnancy is confirmed. Ideally, this occurs between 20 to 24 weeks before the expected date of delivery, though early registration in the first trimester is recommended for better health outcomes.
+* Documentation and Card Issuance: The health worker collects the necessary documents and issues the JSY and MCP cards. The ASHA helps the woman open a bank account if she lacks one.
+* Antenatal Care Compliance: The mother must undergo at least three mandatory ANC checkups, which include TT injections and IFA tablets. These visits are recorded on her cards.
+* Institutional Delivery: At the time of labor, the ASHA escorts the woman to a government health facility or an accredited private hospital. The beneficiary must present her cards and referral slip at the facility.
+* Disbursement of Funds:
+   * Institutional Delivery: The payment is ideally made at the time of discharge or within seven days of delivery. In most states, this is done through DBT into the mother's bank account.
+   * Home Delivery: The ₹500 assistance is disbursed by the ANM, ASHA, or health worker at the time of delivery or around seven days before delivery to meet incidental expenses.
+Online vs. Offline Modalities
+While many states have migrated to online registration through dedicated portals (e.g., the State JSY portals or the RCH portal), offline registration remains the standard at the grass-roots level. In the offline method, beneficiaries provide hard copies of their documents to the ASHA or the local Anganwadi center, where health workers manually facilitate the enrollment process. Online tracking is then handled by administrative staff who input the data into the RCH portal.
+The Crucial Role of Health Workers and ASHAs
+The success of the JSY scheme is largely dependent on the performance of the Accredited Social Health Activist (ASHA), who serves as an effective link between the government and pregnant women. Her role is meticulously defined across the continuum of care :
+* Community Mapping: Identifying every pregnant woman in the community who is eligible for the scheme.
+* Micro-Birth Planning: At least 8-10 weeks before the expected delivery date, the ASHA, in consultation with the family, prepares a birth plan. This plan identifies the destination hospital, transport arrangements, and emergency contact numbers.
+* Escort and Stay: The ASHA escorts the woman to the facility and stays with her until discharge, providing emotional and logistical support.
+* Postnatal Follow-up: She visits the mother within seven days of delivery, monitors the health of the mother and child, facilitates the BCG immunization for the newborn, and reports any complications to the Medical Officer.
+The ASHA’s own incentive is performance-based and tied to these specific outcomes. If the ASHA fails to fulfill her duties, such as organizing transport, her transport assistance funds may be diverted directly to the beneficiary.
+Implementation Strategy in Maharashtra
+Maharashtra, as an HPS, provides a clear example of how national guidelines are localized through state-specific government resolutions. The National Health Mission, Maharashtra, manages the JSY implementation across rural and urban areas through the Zilla Parishads.
+State-Specific Norms and Benefits
+In Maharashtra, the scheme targets SC, ST, and BPL families. The financial benefits follow the HPS norms: ₹700 for rural institutional delivery and ₹600 for urban institutional delivery. For home deliveries, the benefit is ₹500. Additionally, in specific districts like Beed and Akola, the state emphasizes registration before 12 weeks of pregnancy and requires five ANC checkups for full compliance with local tracking systems.
+Regional Administrative Contact Points
+Beneficiaries in Maharashtra can contact their respective District Health Officers (DHO) for enrollment and status tracking.
+District
+	Designation
+	Contact Number / Landline
+	Email ID
+	Nagpur
+	District Health Officer
+	0712-2564843
+	dhonagpur2017[at]gmail[dot]com
+	Akola
+	District Health Officer
+	0724-2437375
+	dhoako[at]rediffmail[dot]com
+	Beed
+	District Health Officer
+	02442-222374
+	dhobeed[at]rediffmail[dot]com
+	Amravati
+	District Health Officer
+	0721-2662591
+	dhopamt[at]gmail[dot]com
+	The state also operates centralized helplines: 104 for health advice and grievance redressal, and 102 for transport-related issues under JSSK.
+Grievance Redressal Mechanisms and Support
+A robust grievance redressal system is vital to address issues such as delayed payments or procedural rejections.
+Portals and Helplines
+* Aaple Sarkar Portal: Maharashtra’s one-stop portal for citizen services where applicants can track their registration status and file appeals against administrative delays.
+* MahaGrievance System: (https://grievances.maharashtra.gov.in) provides a digital platform where complaints are assigned a token number and must be resolved by the competent authority within 21 days.
+* National Toll-Free Helplines: 1800-180-1111 or 1800-110-001 for broader financial and social security scheme issues.
+* Health-Specific Helplines: 1075 (National) and 104 (Maharashtra).
+Process for Filing a Grievance
+1. Local Level: First, the beneficiary should contact the ANM or the Medical Officer of the PHC where they delivered.
+2. District Level: If unresolved, a written complaint can be sent to the District Health Officer (DHO). The DHO offices are required to maintain grievance cells.
+3. Digital Filing: Registering a complaint on the state grievance portal or the CM’s grievance cell.
+4. Tracking: Using the token number to monitor the progress of the complaint online.
+Common Issues and Critical Challenges
+Operational audits and community studies have identified several hurdles that prevent the seamless delivery of JSY benefits.
+Reasons for Rejection or Failure
+* Banking Obstacles: Approximately 24.3% of eligible women fail to receive benefits because they do not have a bank account or their account is not linked to Aadhaar.
+* Documentation Delays: Many women struggle to obtain BPL or SC/ST certificates within the short timeframe of the pregnancy. Rejections also occur if the JSY card is not filled out or submitted correctly by the health worker.
+* Migration Hurdles: Women who go to their mother's house for delivery often do not carry their referral slip, leading to confusion at the delivering facility regarding their rural/urban entitlement.
+* Submission Deadlines: Some states consider payments "illegitimate" if not made within seven days of delivery, which can sometimes lead to administrative paralysis if the deadline is missed.
+Essential Tips for Marginalized Users
+To ensure the successful receipt of benefits, users should follow these guidelines :
+1. Register Early and Verify Cards: Ensure you receive both the JSY and MCP cards from the ASHA or ANM by the 12th week of pregnancy.
+2. Activate DBT Linkage: Confirm that your bank account is active and seeded with your Aadhaar number before your expected delivery date.
+3. Always Request a Referral Slip: If you deliver anywhere other than your local hospital, demand a referral slip from your local ASHA. This is your most important document for proving your residency-based entitlement.
+4. Monitor the PHC Notice Board: All disbursement lists must be displayed publicly. If your name is missing a month after delivery, immediately raise the issue with the Medical Officer or via the 104 helpline.
+Socio-Cultural Barriers and Strategic Considerations
+Research indicates that the effectiveness of the JSY scheme is often modulated by socio-cultural factors such as low literacy among rural mothers, limited financial autonomy within the household, and the influence of traditional healers or birth attendants. Decisions regarding the place of delivery are frequently made by the husband or mother-in-law, which necessitates family-level counseling by ASHA workers rather than just targeting the mother. Furthermore, in remote tribal areas, the lack of sufficient female staff in Primary Health Centers can act as a deterrent for institutional delivery.
+The JSY framework continues to adapt to these challenges. By integrating cash transfers with systemic "zero-cost" clinical care (JSSK), the Indian government aims to create a comprehensive safety net that removes the economic fear associated with hospital births. The movement toward complete DBT and real-time portal tracking (RCH) signals a future where administrative delays are minimized, ensuring that the incentive serves its true purpose: protecting the life and health of every mother and newborn in India.
+The budgetary allocations for JSY remain substantial, with the government allocating thousands of crores annually to sustain the program across all states and Union Territories. This sustained investment, coupled with the empowerment of frontline health workers like ASHAs, has led to a significant increase in institutional delivery rates and a corresponding decrease in the Maternal Mortality Ratio (MMR) and Infant Mortality Rate (IMR) across the country. As the scheme enters its third decade of implementation, the focus remains on reaching the last mile—the poorest women in the most remote areas who still face the highest risks of childbirth.
+Works cited
+1. Janani Suraksha Yojana - National Health Mission, https://nhm.gov.in/index1.php%3Flang%3D1%26level%3D3%26lid%3D309%26sublinkid%3D841 2. Janani Suraksha Yojana | Vikaspedia - Health, https://health.vikaspedia.in/viewcontent/health/nrhm/national-health-programmes-1/janani-suraksha-yojana?lgn=en 3. Janani Suraksha Yojana, http://www.iapsm.org/pdf/Guidelines/RMNCH+A/Guidelines%20for%20Janani%20Suraksha%20Yojana.pdf 4. Janani Suraksha Yojana (JSY) | National Health Mission, Government of Meghalaya, https://nhmmeghalaya.nic.in/programmes/jsy/jsy.html 5. Homepage | National Health Mission (NHM) Maharashtra | Healthy Village, Healthy Nation | India, https://nhm.maharashtra.gov.in/en/ 6. How effective is Janani Suraksha Yojana? - Ideas for India, https://www.ideasforindia.in/topics/human-development/how-effective-is-janani-suraksha-yojana 7. OPERATIONAL GUIDELINES FOR IMPLEMENTATION OF JANANI SURAKSHA YOJANA - NHM Odisha, https://nhmodisha.gov.in/wp-content/uploads/2023/08/Guideline-for-JSY.pdf 8. JANANI SURAKSHA YOJANA (JSY): FREQUENTLY ASKED QUESTION - National Institute of Health & Family Welfare, https://nihfw.ac.in/Doc/JSY.doc 9. Janani Suraksha Yojana - PIB, https://www.pib.gov.in/newsite/PrintRelease.aspx?relid=106950 10. GOVERNMENT OF INDIA MINISTRY OF HEALTH AND FAMILY WELFARE DEPARTMENT OF HEALTH AND FAMILY WELFARE LOK SABHA UNSTARRED QUESTION N, https://sansad.in/getFile/loksabhaquestions/annex/7/AU1483.pdf?source=pqals 11. JANANI SURAKSHA YOJANA, https://mohfw.gov.in/sites/default/files/FEATURES%20FREQUENTLY%20ASKED%20QUESTIONS.pdf 12. 148 Brief communication Barriers and Challenges for Implementation of Janani Suraksha Yojna (JSY) from Gender Perspective in Ind, https://www.banglajol.info/index.php/BJMS/article/view/25969/18244 13. Janani Suraksha Yojana (JSY) - myScheme, https://www.myscheme.gov.in/schemes/jsy1 14. Original Article . MISSED OPPORTUNITIES OF JANANI SURAKSHA YOJANA BENEFITS AMONG THE BENEFICIARIES IN SLUM AREAS Wadgave Hanmant, https://njcmindia.com/index.php/file/article/download/1840/1518 15. JANANI SURAKSHA YOJANA (JSY)-Criteria - NHM Goa, https://nhm.goa.gov.in/janani-suraksha-yojana-jsy-criteria/ 16. Janani Suraksha Yojana (JSY) Benefits Eligibility and Documents - SBI Life, https://www.sbilife.co.in/en/knowledge-centre/insurance-basics-financial-advice/janani-suraksha-yojana 17. Janani Suraksha Yojana: Eligibility, Benefits and Application Process | Generali Central, https://www.generalicentralinsurance.com/blog/health-insurance/janani-suraksha-yojana-eligibility-benefits-and-application-process 18. View of Missed Opportunities of Janani Suraksha Yojana Benefits Among the Beneficiaries in Slum Areas - National Journal of Community Medicine, https://njcmindia.com/index.php/file/article/view/1840/1518 19. Mukhyamantri Majadoor Suraksha Yojana - myScheme, https://www.myscheme.gov.in/schemes/mmsymp 20. Janani Sahayogi Yojana - myScheme, https://www.myscheme.gov.in/schemes/jsymp 21. Janani Suraksha Yojana | Zilla Parishad Beed | India - जिल्हा परिषद बीड, https://www.zpbeed.gov.in/en/scheme/janani-suraksha-yojana/ 22. RCH-Janani Suraksha Yojana (JSY) | National Health Mission (NHM) Maharashtra | India, https://nhm.maharashtra.gov.in/en/scheme/rch-janani-suraksha-yojana-jsy/ 23. Janani Suraksha Yojana(JSY) | NATIONAL HEALTH MISSION Govt. of UTTARAKHAND, https://nhm.uk.gov.in/scheme/mahatma-gandhi-national-rural-employment-guarantee-act/ 24. Janani Shishu Suraksha Karyakaram (JSSK) - National Health Mission, https://nhm.gov.in/showlink.php?id=178 25. Janani Shishu Suraksha Karyakram - myScheme, https://www.myscheme.gov.in/schemes/jssk 26. Steps taken for Reducing Maternal Mortality - PIB, https://www.pib.gov.in/PressReleasePage.aspx?PRID=2239637&reg=3&lang=1 27. Janani Suraksha Yojana (JSY) - S3waas, https://cdnbbsr.s3waas.gov.in/s303e7ef47cee6fa4ae7567394b99912b7/uploads/2026/01/202601301663356986.pdf 28. Proportion of beneficiaries and factors affecting Janani Suraksha Yojana direct cash transfer scheme in Puducherry, India - PMC, https://pmc.ncbi.nlm.nih.gov/articles/PMC5353820/ 29. Janani Suraksha Yojana (JSY) - Panchayat Samiti Mokhada, https://psmokhada.zppalghar.gov.in/en/%E0%A4%9C%E0%A4%A8%E0%A4%A8%E0%A5%80-%E0%A4%B8%E0%A5%81%E0%A4%B0%E0%A4%95%E0%A5%8D%E0%A4%B7%E0%A4%BE-%E0%A4%AF%E0%A5%8B%E0%A4%9C%E0%A4%A8%E0%A4%BE-jsy/ 30. Janani Bal Suraksha Yojana - myScheme, https://www.myscheme.gov.in/schemes/jbsyb 31. District Health Officer (DHO) - Vaccine Haffkine, https://www.vaccinehaffkine.com/district-health-officer.html?start=20 32. Directory | Public Health Department | India - सार्वजनिक आरोग्य विभाग, https://phd.maharashtra.gov.in/en/directory/ 33. Grievance Redressal | Public Health Department | India - सार्वजनिक आरोग्य विभाग, https://phd.maharashtra.gov.in/en/grievance-redressal-2/ 34. National Toll Free : 1800-180-1111 / 1800-110-001 - Jan-Dhan Se Jan Suraksha, https://www.jansuraksha.gov.in/ContactUs.aspx 35. Helpline | District Nagpur,Government of Maharashtra | India, https://nagpur.gov.in/helpline/ 36. Helpline | Public Health Department | India - सार्वजनिक आरोग्य विभाग, https://phd.maharashtra.gov.in/en/helpline/ 37. State Consumer Helpline | Department of Food, Civil Supplies and Consumer Protection | India - अन्न, नागरी पुरवठा आणि ग्राहक संरक्षण विभाग, https://mahafood.gov.in/en/state-consumer-helpline/ 38. Grievances Redressal - JanSuraksha, https://jansuraksha.in/grievance 39. Register Complaint - Greater Chennai Corporation Portal Login, https://erp.chennaicorporation.gov.in/pgr/citizen/BeforeReg.do 40. Grievance Redressal | Social Justice & Special Assistance Department | India - ️ SJSA Maharashtra, https://sjsa.maharashtra.gov.in/en/service/grievance-redressal/ 41. Certificate Name :- जननी सुरक्षा योजना Close - aaplesarkar.mahaonline.gov.in, https://aaplesarkar.mahaonline.gov.in/en/Login/Certificate_Documents?ServiceId=4029 42. How to Submit Online Grievance to CM on Janasunani Portal | Step-by-Step - YouTube, https://www.youtube.com/watch?v=TTI4K_CAHug 43. a study of awareness and utilization of janani suraksha yojana (jsy) among beneficiaries - International Journal of Academic Medicine and Pharmacy, https://academicmed.org/Uploads/Volume6Issue3/208.%20%5B3236.%20JAMP_Farhan%5D%20940-945.pdf
