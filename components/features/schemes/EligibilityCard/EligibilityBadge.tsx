@@ -14,28 +14,32 @@ const CONFIG = {
   true: {
     Icon: CheckCircle2,
     text: "Eligible",
-    bg: "#e8f8ef",
-    color: "#27AE60",
-    border: "#b8e6cc",
+    bg: "var(--success-soft)",
+    color: "var(--primary)",
+    border: "var(--secondary)",
   },
   false: {
     Icon: XCircle,
     text: "Not Eligible",
-    bg: "#fde8e8",
-    color: "#E74C3C",
-    border: "#f5c0c0",
+    bg: "var(--danger-soft)",
+    color: "var(--danger)",
+    border: "var(--danger)",
   },
   null: {
     Icon: AlertTriangle,
     text: "Maybe Eligible",
-    bg: "#fff5e6",
-    color: "#E67E22",
-    border: "#f5deb3",
+    bg: "var(--warning-soft)",
+    color: "var(--warning)",
+    border: "var(--warning)",
   },
 };
 
-export default function EligibilityBadge({ eligible, size = "md" }: EligibilityBadgeProps) {
-  const key = eligible === true ? "true" : eligible === false ? "false" : "null";
+export default function EligibilityBadge({
+  eligible,
+  size = "md",
+}: EligibilityBadgeProps) {
+  const key =
+    eligible === true ? "true" : eligible === false ? "false" : "null";
   const { Icon, text, bg, color, border } = CONFIG[key];
 
   const iconSize = size === "sm" ? 11 : 13;

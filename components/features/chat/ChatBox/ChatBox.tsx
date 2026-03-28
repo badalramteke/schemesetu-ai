@@ -42,12 +42,24 @@ interface Message {
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const SECTOR_ICONS = [
-  { key: "agriculture" as const, icon: Wheat, color: "#27AE60" },
-  { key: "healthcare" as const, icon: HeartPulse, color: "#3498DB" },
-  { key: "housing" as const, icon: HomeIcon, color: "#F39C12" },
-  { key: "employment" as const, icon: HardHat, color: "#E74C3C" },
-  { key: "pension" as const, icon: Ribbon, color: "#9B59B6" },
-  { key: "education" as const, icon: GraduationCap, color: "#2980B9" },
+  { key: "agriculture" as const, icon: Wheat, color: "var(--primary)" },
+  {
+    key: "healthcare" as const,
+    icon: HeartPulse,
+    color: "var(--sector-healthcare)",
+  },
+  { key: "housing" as const, icon: HomeIcon, color: "var(--sector-housing)" },
+  {
+    key: "employment" as const,
+    icon: HardHat,
+    color: "var(--sector-employment)",
+  },
+  { key: "pension" as const, icon: Ribbon, color: "var(--sector-pension)" },
+  {
+    key: "education" as const,
+    icon: GraduationCap,
+    color: "var(--sector-education)",
+  },
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -902,7 +914,7 @@ export default function ChatBox() {
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
       el.style.transition = "background 0.3s";
-      el.style.background = "rgba(145,10,103,0.08)";
+      el.style.background = "rgba(68, 167, 84, 0.08)";
       setTimeout(() => {
         el.style.background = "transparent";
       }, 1500);
@@ -941,7 +953,7 @@ export default function ChatBox() {
         display: "flex",
         flexDirection: "column",
         height: "calc(100dvh - 56px)",
-        background: "#fff",
+        background: "var(--background)",
       }}
     >
       {/* ─── SCROLLABLE AREA ─── */}
@@ -980,20 +992,20 @@ export default function ChatBox() {
                     width: 48,
                     height: 48,
                     borderRadius: 14,
-                    background: "rgba(145,10,103,0.08)",
+                    background: "rgba(68, 167, 84, 0.08)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     margin: "0 auto 12px",
                   }}
                 >
-                  <Landmark size={24} color="#910A67" />
+                  <Landmark size={24} color="var(--primary)" />
                 </div>
                 <h2
                   style={{
                     fontSize: 26,
                     fontWeight: 700,
-                    color: "#1a1a2e",
+                    color: "var(--text)",
                     margin: 0,
                   }}
                 >
@@ -1002,7 +1014,7 @@ export default function ChatBox() {
                 <p
                   style={{
                     fontSize: 14,
-                    color: "#888",
+                    color: "var(--text)",
                     marginTop: 6,
                     maxWidth: 320,
                   }}
@@ -1028,9 +1040,9 @@ export default function ChatBox() {
                     padding: "8px 16px",
                     fontSize: 12,
                     fontWeight: 500,
-                    color: "#910A67",
-                    background: "rgba(145,10,103,0.06)",
-                    border: "1px dashed rgba(145,10,103,0.3)",
+                    color: "var(--primary)",
+                    background: "rgba(68, 167, 84, 0.06)",
+                    border: "1px dashed rgba(68, 167, 84, 0.3)",
                     borderRadius: 99,
                     cursor: "pointer",
                     fontFamily: "inherit",
@@ -1118,9 +1130,9 @@ export default function ChatBox() {
                     padding: "8px 16px",
                     fontSize: 13,
                     fontWeight: 500,
-                    color: "#555",
-                    background: "#fff",
-                    border: "1px solid #e8e8f0",
+                    color: "var(--text)",
+                    background: "var(--background)",
+                    border: "1px solid var(--secondary)",
                     borderRadius: 99,
                     cursor: "pointer",
                     transition: "all 0.15s",
@@ -1131,8 +1143,8 @@ export default function ChatBox() {
                     e.currentTarget.style.color = s.color;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "#e8e8f0";
-                    e.currentTarget.style.color = "#555";
+                    e.currentTarget.style.borderColor = "var(--secondary)";
+                    e.currentTarget.style.color = "var(--text)";
                   }}
                 >
                   <Icon size={14} /> {sector.label}
@@ -1146,12 +1158,14 @@ export default function ChatBox() {
         <div
           style={{
             padding: "12px 16px",
-            background: "#f8f8fc",
-            border: listening ? "2px solid #910A67" : "1px solid #e8e8f0",
+            background: "var(--background)",
+            border: listening
+              ? "2px solid var(--primary)"
+              : "1px solid var(--secondary)",
             borderRadius: 20,
             transition: "all 0.3s",
             boxShadow: listening
-              ? "0 0 0 4px rgba(145,10,103,0.15)"
+              ? "0 0 0 4px rgba(68, 167, 84, 0.15)"
               : "0 1px 4px rgba(0,0,0,0.04)",
           }}
         >
@@ -1169,7 +1183,7 @@ export default function ChatBox() {
               maxHeight: 120,
               padding: 0,
               fontSize: 15,
-              color: "#1a1a2e",
+              color: "var(--text)",
               background: "transparent",
               border: "none",
               outline: "none",
@@ -1200,15 +1214,15 @@ export default function ChatBox() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#aaa",
+                color: "var(--text)",
                 transition: "all 0.2s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = "#910A67";
-                e.currentTarget.style.background = "rgba(145,10,103,0.08)";
+                e.currentTarget.style.color = "var(--primary)";
+                e.currentTarget.style.background = "rgba(68, 167, 84, 0.08)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = "#aaa";
+                e.currentTarget.style.color = "var(--text)";
                 e.currentTarget.style.background = "transparent";
               }}
             >
@@ -1233,12 +1247,12 @@ export default function ChatBox() {
                     height: 36,
                     borderRadius: 99,
                     border: "none",
-                    background: "#910A67",
+                    background: "var(--primary)",
                     cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: "#fff",
+                    color: "var(--accent)",
                     opacity: busy ? 0.5 : 1,
                   }}
                 >
@@ -1259,8 +1273,10 @@ export default function ChatBox() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    background: listening ? "#910A67" : "rgba(145,10,103,0.08)",
-                    color: listening ? "#fff" : "#910A67",
+                    background: listening
+                      ? "var(--primary)"
+                      : "rgba(68, 167, 84, 0.08)",
+                    color: listening ? "var(--accent)" : "var(--primary)",
                     transition: "all 0.2s",
                     animation: listening ? "pulseGlow 1.5s infinite" : "none",
                   }}

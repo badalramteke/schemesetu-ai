@@ -39,24 +39,24 @@ interface ApplicationStepsCardProps {
 const CHANNEL_CONFIG = {
   online: {
     icon: Globe,
-    color: "#3B82F6",
-    bg: "#EFF6FF",
-    border: "#BFDBFE",
-    gradient: "linear-gradient(135deg, #3B82F6, #2563EB)",
+    color: "var(--channel-online)",
+    bg: "var(--channel-online-soft)",
+    border: "var(--channel-online-border)",
+    gradient: "var(--channel-online-gradient)",
   },
   offline: {
     icon: Building2,
-    color: "#10B981",
-    bg: "#ECFDF5",
-    border: "#A7F3D0",
-    gradient: "linear-gradient(135deg, #10B981, #059669)",
+    color: "var(--channel-offline)",
+    bg: "var(--channel-offline-soft)",
+    border: "var(--channel-offline-border)",
+    gradient: "var(--channel-offline-gradient)",
   },
   atHospital: {
     icon: MapPin,
-    color: "#F59E0B",
-    bg: "#FFFBEB",
-    border: "#FDE68A",
-    gradient: "linear-gradient(135deg, #F59E0B, #D97706)",
+    color: "var(--channel-hospital)",
+    bg: "var(--warning-soft)",
+    border: "var(--channel-hospital-border)",
+    gradient: "var(--channel-hospital-gradient)",
   },
 };
 
@@ -114,8 +114,8 @@ export default function ApplicationStepsCard({
           alignItems: "center",
           gap: 10,
           padding: "16px",
-          background: "#FAFBFF",
-          border: "1px solid #E8E8F0",
+          background: "var(--surface)",
+          border: "1px solid var(--secondary)",
           borderRadius: 14,
           marginTop: 8,
         }}
@@ -123,10 +123,10 @@ export default function ApplicationStepsCard({
         <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
         <Loader2
           size={16}
-          color="#910A67"
+          color="var(--primary)"
           style={{ animation: "spin 1s linear infinite" }}
         />
-        <span style={{ fontSize: 13, color: "#888" }}>
+        <span style={{ fontSize: 13, color: "var(--text)" }}>
           Loading application process…
         </span>
       </div>
@@ -149,8 +149,8 @@ export default function ApplicationStepsCard({
     <div
       style={{
         marginTop: 10,
-        background: "#FAFBFF",
-        border: "1px solid #E8E8F0",
+        background: "var(--surface)",
+        border: "1px solid var(--secondary)",
         borderRadius: 14,
         overflow: "hidden",
       }}
@@ -162,15 +162,15 @@ export default function ApplicationStepsCard({
           alignItems: "center",
           gap: 8,
           padding: "12px 16px",
-          borderBottom: "1px solid #E8E8F0",
+          borderBottom: "1px solid var(--secondary)",
         }}
       >
-        <Smartphone size={15} color="#910A67" />
+        <Smartphone size={15} color="var(--primary)" />
         <span
           style={{
             fontSize: 12,
             fontWeight: 700,
-            color: "#910A67",
+            color: "var(--primary)",
             textTransform: "uppercase",
             letterSpacing: "0.05em",
           }}
@@ -192,7 +192,7 @@ export default function ApplicationStepsCard({
             <div
               key={channelKey}
               style={{
-                borderBottom: isLast ? "none" : "1px solid #E8E8F0",
+                borderBottom: isLast ? "none" : "1px solid var(--secondary)",
               }}
             >
               {/* Channel header button */}
@@ -231,13 +231,13 @@ export default function ApplicationStepsCard({
                       flexShrink: 0,
                     }}
                   >
-                    <Icon size={14} color="#fff" />
+                    <Icon size={14} color="var(--accent)" />
                   </div>
                   <span
                     style={{
                       fontSize: 13,
                       fontWeight: 600,
-                      color: isOpen ? config.color : "#555",
+                      color: isOpen ? config.color : "var(--text)",
                     }}
                   >
                     {channel.title}
@@ -245,8 +245,8 @@ export default function ApplicationStepsCard({
                   <span
                     style={{
                       fontSize: 11,
-                      color: "#aaa",
-                      background: "#f0f0f5",
+                      color: "var(--text)",
+                      background: "var(--surface-alt)",
                       padding: "2px 8px",
                       borderRadius: 99,
                     }}
@@ -256,7 +256,7 @@ export default function ApplicationStepsCard({
                 </div>
                 <ChevronDown
                   size={14}
-                  color="#aaa"
+                  color="var(--text)"
                   style={{
                     transform: isOpen ? "rotate(180deg)" : "none",
                     transition: "transform 0.2s",
@@ -314,7 +314,7 @@ export default function ApplicationStepsCard({
                               width: 28,
                               height: 28,
                               borderRadius: 99,
-                              background: "#fff",
+                              background: "var(--background)",
                               border: `2px solid ${config.color}`,
                               color: config.color,
                               fontSize: 11,
@@ -335,7 +335,7 @@ export default function ApplicationStepsCard({
                               style={{
                                 fontSize: 13,
                                 fontWeight: 600,
-                                color: "#333",
+                                color: "var(--text)",
                                 margin: "3px 0 4px",
                                 lineHeight: 1.3,
                               }}
@@ -345,7 +345,7 @@ export default function ApplicationStepsCard({
                             <p
                               style={{
                                 fontSize: 12,
-                                color: "#666",
+                                color: "var(--muted)",
                                 margin: 0,
                                 lineHeight: 1.6,
                               }}

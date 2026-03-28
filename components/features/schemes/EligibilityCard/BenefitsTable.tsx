@@ -141,27 +141,31 @@ export default function BenefitsTable({ rawBenefits }: BenefitsTableProps) {
           style={{
             borderRadius: 12,
             overflow: "hidden",
-            border: "1px solid #e0e7ff",
-            background: "#f8f9ff",
+            border: "1px solid var(--secondary-softest)",
+            background: "var(--surface)",
+            boxShadow:
+              "0 10px 24px color-mix(in srgb, var(--primary) 12%, transparent)",
+            backdropFilter: "blur(8px)",
           }}
         >
           <div
             style={{
               padding: "8px 14px",
               background:
-                "linear-gradient(90deg, rgba(79,70,229,0.08), rgba(79,70,229,0.02))",
-              borderBottom: "1px solid #e0e7ff",
+                "linear-gradient(90deg, color-mix(in srgb, var(--secondary) 10%, transparent), color-mix(in srgb, var(--secondary) 4%, transparent))",
+              borderBottom:
+                "1px solid color-mix(in srgb, var(--secondary) 10%, var(--accent) 90%)",
               display: "flex",
               alignItems: "center",
               gap: 6,
             }}
           >
-            <FileText size={13} color="#4F46E5" />
+            <FileText size={13} color="var(--secondary)" />
             <p
               style={{
                 fontSize: 11,
                 fontWeight: 700,
-                color: "#4F46E5",
+                color: "var(--secondary)",
                 margin: 0,
                 letterSpacing: "0.05em",
                 textTransform: "uppercase",
@@ -180,14 +184,14 @@ export default function BenefitsTable({ rawBenefits }: BenefitsTableProps) {
                 >
                   <CheckCircle
                     size={14}
-                    color="#4F46E5"
+                    color="var(--secondary)"
                     style={{ flexShrink: 0, marginTop: 2 }}
                   />
                   <span
                     style={{
                       fontSize: 13,
                       lineHeight: 1.5,
-                      color: "#444",
+                      color: "var(--text)",
                       fontWeight: 500,
                     }}
                   >
@@ -206,27 +210,33 @@ export default function BenefitsTable({ rawBenefits }: BenefitsTableProps) {
           style={{
             borderRadius: 12,
             overflow: "hidden",
-            border: "1px solid #d0eadb",
-            background: "#f2fbf5",
+            border:
+              "1px solid color-mix(in srgb, var(--primary) 28%, transparent)",
+            background:
+              "linear-gradient(135deg, color-mix(in srgb, var(--surface-alt) 82%, var(--primary) 18%), color-mix(in srgb, var(--surface) 92%, var(--primary) 8%))",
+            boxShadow:
+              "0 0 0 1px color-mix(in srgb, var(--primary) 18%, transparent), 0 14px 30px var(--primary-glow), inset 0 1px 0 color-mix(in srgb, var(--accent) 14%, transparent)",
+            backdropFilter: "blur(10px)",
           }}
         >
           <div
             style={{
               padding: "8px 14px",
               background:
-                "linear-gradient(90deg, rgba(39,174,96,0.12), rgba(39,174,96,0.04))",
-              borderBottom: "1px solid #d0eadb",
+                "linear-gradient(90deg, color-mix(in srgb, var(--primary) 16%, transparent), color-mix(in srgb, var(--primary) 6%, transparent))",
+              borderBottom:
+                "1px solid color-mix(in srgb, var(--primary) 16%, var(--accent) 84%)",
               display: "flex",
               alignItems: "center",
               gap: 6,
             }}
           >
-            <IndianRupee size={13} color="#27AE60" />
+            <IndianRupee size={13} color="var(--primary)" />
             <p
               style={{
                 fontSize: 11,
                 fontWeight: 700,
-                color: "#27AE60",
+                color: "var(--primary)",
                 margin: 0,
                 letterSpacing: "0.05em",
                 textTransform: "uppercase",
@@ -249,22 +259,30 @@ export default function BenefitsTable({ rawBenefits }: BenefitsTableProps) {
                     padding: "9px 14px",
                     borderBottom:
                       i < moneyBenefits.length - 1
-                        ? "1px solid rgba(208,234,219,0.6)"
+                        ? "1px solid color-mix(in srgb, var(--primary) 16%, var(--accent) 84%)"
                         : "none",
                   }}
                 >
                   <div
                     style={{ display: "flex", alignItems: "center", gap: 6 }}
                   >
-                    <IconComp size={12} color="#555" />
+                    <IconComp size={12} color="var(--text)" />
                     <span
-                      style={{ fontSize: 12, color: "#777", fontWeight: 500 }}
+                      style={{
+                        fontSize: 12,
+                        color: "var(--muted)",
+                        fontWeight: 500,
+                      }}
                     >
                       {row.label}
                     </span>
                   </div>
                   <span
-                    style={{ fontSize: 13, fontWeight: 700, color: "#27AE60" }}
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 700,
+                      color: "var(--primary)",
+                    }}
                   >
                     {row.value}
                   </span>

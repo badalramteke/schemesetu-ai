@@ -25,7 +25,7 @@ function ChatHistory({ messages }: { messages: ChatMessage[] }) {
           alignItems: "center",
           justifyContent: "center",
           padding: "40px 20px",
-          color: "#999",
+          color: "var(--muted)",
         }}
       >
         <div
@@ -33,7 +33,7 @@ function ChatHistory({ messages }: { messages: ChatMessage[] }) {
             width: 80,
             height: 80,
             borderRadius: "50%",
-            background: "rgba(145,10,103,0.06)",
+            background: "rgba(68, 167, 84, 0.06)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -45,7 +45,7 @@ function ChatHistory({ messages }: { messages: ChatMessage[] }) {
             height="36"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#910A67"
+            stroke="var(--primary)"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -55,10 +55,17 @@ function ChatHistory({ messages }: { messages: ChatMessage[] }) {
             <line x1="12" x2="12" y1="19" y2="22" />
           </svg>
         </div>
-        <p style={{ fontSize: 18, fontWeight: 600, color: "#333", margin: 0 }}>
+        <p
+          style={{
+            fontSize: 18,
+            fontWeight: 600,
+            color: "var(--text)",
+            margin: 0,
+          }}
+        >
           Tap the mic to start
         </p>
-        <p style={{ fontSize: 14, color: "#999", marginTop: 8 }}>
+        <p style={{ fontSize: 14, color: "var(--muted)", marginTop: 8 }}>
           Try: &quot;I am a farmer with 2 acres of land&quot;
         </p>
       </div>
@@ -94,11 +101,16 @@ function ChatHistory({ messages }: { messages: ChatMessage[] }) {
                 borderRadius: isUser
                   ? "18px 18px 4px 18px"
                   : "18px 18px 18px 4px",
-                background: isUser ? "#EDF2FF" : "#910A67",
-                color: isUser ? "#1a1a2e" : "#fff",
+                background: isUser
+                  ? "linear-gradient(135deg, color-mix(in srgb, var(--surface-alt) 78%, var(--primary) 22%), color-mix(in srgb, var(--surface) 90%, var(--primary) 10%))"
+                  : "linear-gradient(135deg, color-mix(in srgb, var(--surface-alt) 76%, var(--secondary) 24%), color-mix(in srgb, var(--surface) 90%, var(--secondary) 10%))",
+                color: "var(--accent)",
                 boxShadow: isUser
-                  ? "0 1px 3px rgba(0,0,0,0.06)"
-                  : "0 2px 8px rgba(145,10,103,0.25)",
+                  ? "0 0 0 1px color-mix(in srgb, var(--primary) 20%, transparent), 0 14px 30px var(--primary-glow), inset 0 1px 0 color-mix(in srgb, var(--accent) 14%, transparent)"
+                  : "0 0 0 1px color-mix(in srgb, var(--secondary) 20%, transparent), 0 14px 30px var(--secondary-glow), inset 0 1px 0 color-mix(in srgb, var(--accent) 14%, transparent)",
+                border: isUser
+                  ? "1px solid color-mix(in srgb, var(--primary) 30%, transparent)"
+                  : "1px solid color-mix(in srgb, var(--secondary) 30%, transparent)",
                 whiteSpace: "pre-wrap",
                 wordBreak: "break-word",
                 lineHeight: 1.55,
@@ -141,12 +153,12 @@ function TranscriptPreview({ transcript }: { transcript: string }) {
         maxWidth: 480,
         margin: "0 auto 12px",
         padding: "12px 20px",
-        background: "#FAFAFA",
-        border: "1px solid #E8E8F0",
+        background: "var(--surface)",
+        border: "1px solid var(--border)",
         borderRadius: 16,
         textAlign: "center",
         fontSize: 16,
-        color: "#555",
+        color: "var(--text)",
         fontStyle: "italic",
         minHeight: 48,
         display: "flex",
@@ -160,7 +172,7 @@ function TranscriptPreview({ transcript }: { transcript: string }) {
           display: "inline-block",
           width: 2,
           height: 18,
-          background: "#910A67",
+          background: "var(--primary)",
           marginLeft: 2,
           animation: "blink 1s step-end infinite",
         }}
@@ -179,29 +191,29 @@ const STATE_CONFIG: Record<
   { bg: string; shadow: string; label: string; ring?: string }
 > = {
   idle: {
-    bg: "#6B6B6B",
+    bg: "var(--surface-alt)",
     shadow: "0 4px 14px rgba(0,0,0,0.15)",
     label: "Tap to speak",
   },
   listening: {
-    bg: "#E74C3C",
+    bg: "var(--danger)",
     shadow: "0 0 0 8px rgba(231,76,60,0.2), 0 4px 20px rgba(231,76,60,0.35)",
     label: "Listening... tap to send",
     ring: "rgba(231,76,60,0.3)",
   },
   processing: {
-    bg: "#FF9F43",
+    bg: "var(--warning)",
     shadow: "0 4px 14px rgba(255,159,67,0.3)",
     label: "Processing...",
   },
   responding: {
-    bg: "#27AE60",
+    bg: "var(--primary)",
     shadow: "0 0 0 8px rgba(39,174,96,0.2), 0 4px 20px rgba(39,174,96,0.35)",
     label: "Speaking...",
     ring: "rgba(39,174,96,0.3)",
   },
   error: {
-    bg: "#C0392B",
+    bg: "var(--danger)",
     shadow: "0 4px 14px rgba(192,57,43,0.3)",
     label: "Error — tap to retry",
   },
@@ -260,7 +272,7 @@ function MicButton({
             height="32"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#fff"
+            stroke="var(--accent)"
             strokeWidth="2"
             strokeLinecap="round"
           >
@@ -273,7 +285,7 @@ function MicButton({
             height="32"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#fff"
+            stroke="var(--accent)"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -289,7 +301,7 @@ function MicButton({
             height="32"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#fff"
+            stroke="var(--accent)"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -308,12 +320,12 @@ function MicButton({
           fontWeight: 500,
           color:
             state === "listening"
-              ? "#E74C3C"
+              ? "var(--danger)"
               : state === "error"
-                ? "#C0392B"
+                ? "var(--danger)"
                 : state === "responding"
-                  ? "#27AE60"
-                  : "#888",
+                  ? "var(--primary)"
+                  : "var(--text)",
           transition: "color 0.3s",
         }}
       >
@@ -325,7 +337,7 @@ function MicButton({
           style={{
             marginTop: 4,
             fontSize: 12,
-            color: "#C0392B",
+            color: "var(--danger)",
             maxWidth: 280,
             textAlign: "center",
           }}
@@ -334,13 +346,13 @@ function MicButton({
         </span>
       )}
 
-      <span style={{ marginTop: 8, fontSize: 11, color: "#bbb" }}>
+      <span style={{ marginTop: 8, fontSize: 11, color: "var(--muted)" }}>
         Press{" "}
         <kbd
           style={{
             padding: "1px 5px",
-            background: "#f0f0f0",
-            border: "1px solid #ddd",
+            background: "var(--surface-alt)",
+            border: "1px solid var(--border)",
             borderRadius: 4,
             fontFamily: "inherit",
             fontSize: 11,
@@ -393,18 +405,19 @@ export default function VoiceChat() {
         maxWidth: 720,
         margin: "0 auto",
         width: "100%",
-        background: "#fff",
+        background: "var(--background)",
         borderRadius: 16,
         overflow: "hidden",
         boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-        border: "1px solid #f0f0f0",
+        border: "1px solid var(--border)",
       }}
     >
       {/* ── Header ── */}
       <div
         style={{
-          background: "linear-gradient(135deg, #910A67 0%, #6d0750 100%)",
-          color: "#fff",
+          background:
+            "linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)",
+          color: "var(--accent)",
           padding: "14px 20px",
           display: "flex",
           alignItems: "center",
@@ -441,12 +454,15 @@ export default function VoiceChat() {
           aria-label={isMuted ? "Unmute responses" : "Mute responses"}
           title={isMuted ? "Unmute auto-speak" : "Mute auto-speak"}
           style={{
-            background: isMuted ? "rgba(255,255,255,0.2)" : "transparent",
-            border: "1px solid rgba(255,255,255,0.3)",
+            background: isMuted
+              ? "color-mix(in srgb, var(--accent) 20%, transparent)"
+              : "transparent",
+            border:
+              "1px solid color-mix(in srgb, var(--accent) 30%, transparent)",
             borderRadius: 8,
             padding: "6px 10px",
             cursor: "pointer",
-            color: "#fff",
+            color: "var(--accent)",
             fontSize: 12,
             display: "flex",
             alignItems: "center",
@@ -493,8 +509,8 @@ export default function VoiceChat() {
       {/* ── Bottom area: transcript + mic ── */}
       <div
         style={{
-          borderTop: "1px solid #f0f0f0",
-          background: "#fafafa",
+          borderTop: "1px solid var(--border)",
+          background: "var(--surface)",
           padding: "12px 16px",
         }}
       >

@@ -11,7 +11,7 @@ export default function VoiceChatPage() {
     <div
       style={{
         minHeight: "100dvh",
-        background: "#f7f7fa",
+        background: "var(--background)",
         display: "flex",
         flexDirection: "column",
       }}
@@ -23,8 +23,8 @@ export default function VoiceChatPage() {
           display: "flex",
           alignItems: "center",
           gap: 12,
-          borderBottom: "1px solid #eee",
-          background: "#fff",
+          borderBottom: "1px solid var(--border)",
+          background: "var(--surface)",
         }}
       >
         <button
@@ -32,12 +32,12 @@ export default function VoiceChatPage() {
           aria-label="Back to home"
           style={{
             background: "none",
-            border: "1px solid #e0e0e0",
+            border: "1px solid var(--border)",
             borderRadius: 10,
             padding: "6px 12px",
             cursor: "pointer",
             fontSize: 13,
-            color: "#555",
+            color: "var(--text)",
             display: "flex",
             alignItems: "center",
             gap: 4,
@@ -58,7 +58,9 @@ export default function VoiceChatPage() {
           </svg>
           Back to Chat
         </button>
-        <span style={{ fontSize: 14, color: "#999" }}>Voice-first mode</span>
+        <span style={{ fontSize: 14, color: "var(--muted)" }}>
+          Voice-first mode
+        </span>
       </div>
 
       {/* Voice chat fills the rest */}

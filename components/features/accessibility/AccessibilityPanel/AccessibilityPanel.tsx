@@ -30,14 +30,14 @@ export default function AccessibilityPanel() {
           width: 40,
           height: 40,
           borderRadius: 12,
-          border: "1px solid #e8e8f0",
-          background: "#fff",
+          border: "1px solid var(--secondary)",
+          background: "var(--background)",
           boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
           cursor: "pointer",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: open ? "#910A67" : "#888",
+          color: open ? "var(--primary)" : "var(--text)",
           transition: "all 0.2s",
         }}
       >
@@ -55,8 +55,8 @@ export default function AccessibilityPanel() {
             right: 16,
             zIndex: 60,
             width: 240,
-            background: "#fff",
-            border: "1px solid #e8e8f0",
+            background: "var(--background)",
+            border: "1px solid var(--secondary)",
             borderRadius: 16,
             boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
             animation: "fadeInUp 0.2s ease-out",
@@ -64,38 +64,86 @@ export default function AccessibilityPanel() {
           }}
         >
           {/* Header */}
-          <div style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: "12px 16px",
-            borderBottom: "1px solid #f5f5f5",
-          }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a2e", margin: 0 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "12px 16px",
+              borderBottom: "1px solid var(--border)",
+            }}
+          >
+            <p
+              style={{
+                fontSize: 13,
+                fontWeight: 700,
+                color: "var(--text)",
+                margin: 0,
+              }}
+            >
               Accessibility
             </p>
             <button
               onClick={() => setOpen(false)}
               aria-label="Close accessibility panel"
               style={{
-                width: 24, height: 24, borderRadius: 99, border: "none",
-                background: "#f5f5f5", cursor: "pointer",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: "#888",
+                width: 24,
+                height: 24,
+                borderRadius: 99,
+                border: "none",
+                background: "var(--surface)",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "var(--text)",
               }}
             >
               <X size={12} />
             </button>
           </div>
 
-          <div style={{ padding: "12px 16px", display: "flex", flexDirection: "column", gap: 14 }}>
+          <div
+            style={{
+              padding: "12px 16px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 14,
+            }}
+          >
             {/* Text size */}
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-                <Type size={13} color="#910A67" />
-                <p style={{ fontSize: 12, fontWeight: 600, color: "#555", margin: 0 }}>Text Size</p>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  marginBottom: 8,
+                }}
+              >
+                <Type size={13} color="var(--primary)" />
+                <p
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: "var(--text)",
+                    margin: 0,
+                  }}
+                >
+                  Text Size
+                </p>
                 <button
                   onClick={resetFont}
                   aria-label="Reset text size"
-                  style={{ marginLeft: "auto", fontSize: 10, color: "#999", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}
+                  style={{
+                    marginLeft: "auto",
+                    fontSize: 10,
+                    color: "var(--muted)",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                  }}
                 >
                   Reset
                 </button>
@@ -106,10 +154,16 @@ export default function AccessibilityPanel() {
                   disabled={fontSize <= 12}
                   aria-label="Decrease text size"
                   style={{
-                    width: 32, height: 32, borderRadius: 99, border: "1px solid #e8e8f0",
-                    background: "#fff", cursor: "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    color: fontSize <= 12 ? "#ccc" : "#555",
+                    width: 32,
+                    height: 32,
+                    borderRadius: 99,
+                    border: "1px solid var(--secondary)",
+                    background: "var(--background)",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: fontSize <= 12 ? "var(--muted)" : "var(--text)",
                     opacity: fontSize <= 12 ? 0.5 : 1,
                   }}
                 >
@@ -117,13 +171,25 @@ export default function AccessibilityPanel() {
                 </button>
 
                 {/* Size preview bar */}
-                <div style={{ flex: 1, height: 6, borderRadius: 99, background: "#f0f0f0", overflow: "hidden" }}>
-                  <div style={{
-                    height: "100%",
-                    width: `${((fontSize - 12) / (22 - 12)) * 100}%`,
-                    background: "linear-gradient(90deg, #910A67, #720455)",
-                    borderRadius: 99, transition: "width 0.2s",
-                  }} />
+                <div
+                  style={{
+                    flex: 1,
+                    height: 6,
+                    borderRadius: 99,
+                    background: "var(--surface)",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      height: "100%",
+                      width: `${((fontSize - 12) / (22 - 12)) * 100}%`,
+                      background:
+                        "linear-gradient(90deg, var(--primary), var(--primary))",
+                      borderRadius: 99,
+                      transition: "width 0.2s",
+                    }}
+                  />
                 </div>
 
                 <button
@@ -131,26 +197,55 @@ export default function AccessibilityPanel() {
                   disabled={fontSize >= 22}
                   aria-label="Increase text size"
                   style={{
-                    width: 32, height: 32, borderRadius: 99, border: "1px solid #e8e8f0",
-                    background: "#fff", cursor: "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    color: fontSize >= 22 ? "#ccc" : "#555",
+                    width: 32,
+                    height: 32,
+                    borderRadius: 99,
+                    border: "1px solid var(--secondary)",
+                    background: "var(--background)",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: fontSize >= 22 ? "var(--muted)" : "var(--text)",
                     opacity: fontSize >= 22 ? 0.5 : 1,
                   }}
                 >
                   <Plus size={14} />
                 </button>
               </div>
-              <p style={{ fontSize: 10, color: "#aaa", textAlign: "center", margin: "4px 0 0", fontFamily: "inherit" }}>
+              <p
+                style={{
+                  fontSize: 10,
+                  color: "var(--text)",
+                  textAlign: "center",
+                  margin: "4px 0 0",
+                  fontFamily: "inherit",
+                }}
+              >
                 {fontSize}px
               </p>
             </div>
 
             {/* High contrast */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <Sun size={13} color="#910A67" />
-                <p style={{ fontSize: 12, fontWeight: 600, color: "#555", margin: 0 }}>High Contrast</p>
+                <Sun size={13} color="var(--primary)" />
+                <p
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: "var(--text)",
+                    margin: 0,
+                  }}
+                >
+                  High Contrast
+                </p>
               </div>
               <button
                 onClick={() => setHighContrast(!highContrast)}
@@ -158,19 +253,31 @@ export default function AccessibilityPanel() {
                 aria-checked={highContrast}
                 aria-label="Toggle high contrast mode"
                 style={{
-                  width: 42, height: 24, borderRadius: 99, border: "none",
-                  background: highContrast ? "#910A67" : "#e8e8f0",
-                  cursor: "pointer", position: "relative",
+                  width: 42,
+                  height: 24,
+                  borderRadius: 99,
+                  border: "none",
+                  background: highContrast
+                    ? "var(--primary)"
+                    : "var(--secondary)",
+                  cursor: "pointer",
+                  position: "relative",
                   transition: "background 0.3s",
                 }}
               >
-                <span style={{
-                  position: "absolute",
-                  top: 3, left: highContrast ? 21 : 3,
-                  width: 18, height: 18, borderRadius: 99, background: "#fff",
-                  transition: "left 0.3s",
-                  boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-                }} />
+                <span
+                  style={{
+                    position: "absolute",
+                    top: 3,
+                    left: highContrast ? 21 : 3,
+                    width: 18,
+                    height: 18,
+                    borderRadius: 99,
+                    background: "var(--background)",
+                    transition: "left 0.3s",
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+                  }}
+                />
               </button>
             </div>
           </div>

@@ -63,9 +63,9 @@ export default function AudioFeedback({ text, lang = "en-IN" }: AudioFeedbackPro
         padding: "4px 10px",
         fontSize: 11,
         fontWeight: 500,
-        color: speaking ? "#910A67" : hover ? "#910A67" : "#aaa",
-        background: speaking ? "rgba(145,10,103,0.06)" : hover ? "rgba(145,10,103,0.04)" : "transparent",
-        border: speaking ? "1px solid rgba(145,10,103,0.25)" : "1px solid transparent",
+        color: speaking ? "var(--primary)" : hover ? "var(--primary)" : "var(--text)",
+        background: speaking ? "rgba(68, 167, 84, 0.06)" : hover ? "rgba(68, 167, 84, 0.04)" : "transparent",
+        border: speaking ? "1px solid rgba(68, 167, 84, 0.25)" : "1px solid transparent",
         borderRadius: 99,
         cursor: "pointer",
         fontFamily: "inherit",
@@ -74,7 +74,7 @@ export default function AudioFeedback({ text, lang = "en-IN" }: AudioFeedbackPro
     >
       {speaking ? (
         <>
-          <Square size={10} fill="#910A67" />
+          <Square size={10} fill="var(--primary)" />
           Stop
           {/* Animated waveform */}
           <span style={{ display: "flex", alignItems: "center", gap: 1.5 }}>
@@ -85,7 +85,7 @@ export default function AudioFeedback({ text, lang = "en-IN" }: AudioFeedbackPro
                   display: "inline-block",
                   width: 2,
                   height: 8,
-                  background: "#910A67",
+                  background: "var(--primary)",
                   borderRadius: 2,
                   animation: `wavePulse 1s ${d}s infinite ease-in-out`,
                 }}

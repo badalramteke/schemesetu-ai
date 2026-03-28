@@ -7,7 +7,7 @@ import AccessibilityPanel from "@/components/features/accessibility/Accessibilit
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ minHeight: "100dvh", background: "#fff" }}>
+    <div style={{ minHeight: "100dvh", background: "var(--background)" }}>
       <Sidebar />
       <Header />
       <main id="main-content" role="main" style={{ paddingTop: 56 }}>

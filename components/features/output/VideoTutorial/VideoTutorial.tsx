@@ -9,7 +9,10 @@ interface VideoTutorialProps {
   videoId?: string;
 }
 
-export default function VideoTutorial({ schemeName, videoId }: VideoTutorialProps) {
+export default function VideoTutorial({
+  schemeName,
+  videoId,
+}: VideoTutorialProps) {
   const [hover, setHover] = useState(false);
 
   const url = videoId
@@ -34,8 +37,8 @@ export default function VideoTutorial({ schemeName, videoId }: VideoTutorialProp
         gap: 12,
         padding: "12px 14px",
         borderRadius: 12,
-        border: "1px solid #e8e8f0",
-        background: hover ? "#fafafa" : "#fff",
+        border: "1px solid var(--secondary)",
+        background: hover ? "var(--surface)" : "var(--accent)",
         textDecoration: "none",
         transition: "all 0.2s",
         boxShadow: hover ? "0 2px 8px rgba(0,0,0,0.06)" : "none",
@@ -43,33 +46,66 @@ export default function VideoTutorial({ schemeName, videoId }: VideoTutorialProp
       }}
     >
       {/* Thumbnail or fallback red box */}
-      <div style={{
-        width: 56, height: 40, borderRadius: 8, overflow: "hidden", flexShrink: 0,
-        background: thumbUrl ? undefined : "linear-gradient(135deg, #FF0000, #cc0000)",
-        display: "flex", alignItems: "center", justifyContent: "center", position: "relative",
-      }}>
-        {thumbUrl
-          ? <img src={thumbUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          : <Youtube size={20} color="#fff" />}
+      <div
+        style={{
+          width: 56,
+          height: 40,
+          borderRadius: 8,
+          overflow: "hidden",
+          flexShrink: 0,
+          background: thumbUrl
+            ? undefined
+            : "linear-gradient(135deg, #FF0000, #cc0000)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+        }}
+      >
+        {thumbUrl ? (
+          <img
+            src={thumbUrl}
+            alt=""
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        ) : (
+          <Youtube size={20} color="var(--accent)" />
+        )}
         {/* Play overlay */}
-        <div style={{
-          position: "absolute", inset: 0,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          background: "rgba(0,0,0,0.35)",
-          opacity: hover ? 1 : 0.7, transition: "opacity 0.2s",
-        }}>
-          <PlayCircle size={20} color="#fff" />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "rgba(0,0,0,0.35)",
+            opacity: hover ? 1 : 0.7,
+            transition: "opacity 0.2s",
+          }}
+        >
+          <PlayCircle size={20} color="var(--accent)" />
         </div>
       </div>
 
       <div style={{ flex: 1, minWidth: 0 }}>
-        <p style={{ fontSize: 12, fontWeight: 600, color: "#1a1a2e", margin: "0 0 2px", lineHeight: 1.4 }}>
+        <p
+          style={{
+            fontSize: 12,
+            fontWeight: 600,
+            color: "var(--text)",
+            margin: "0 0 2px",
+            lineHeight: 1.4,
+          }}
+        >
           How to apply for {schemeName}
         </p>
-        <p style={{ fontSize: 11, color: "#999", margin: 0 }}>Watch step-by-step tutorial</p>
+        <p style={{ fontSize: 11, color: "var(--muted)", margin: 0 }}>
+          Watch step-by-step tutorial
+        </p>
       </div>
 
-      <ExternalLink size={14} color="#bbb" style={{ flexShrink: 0 }} />
+      <ExternalLink size={14} color="var(--muted)" style={{ flexShrink: 0 }} />
     </a>
   );
 }

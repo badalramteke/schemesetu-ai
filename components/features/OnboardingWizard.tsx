@@ -38,24 +38,24 @@ const SelectWithChevron = ({
       disabled={disabled}
       style={{
         width: "100%", padding: "14px 18px", fontSize: 15,
-        color: "#1a1a2e", background: "#f8f8fc",
-        border: "1.5px solid #e8e8f0", borderRadius: 14,
+        color: "var(--text)", background: "var(--background)",
+        border: "1.5px solid var(--secondary)", borderRadius: 14,
         outline: "none", fontFamily: "inherit",
         transition: "border-color 0.2s",
         appearance: "none" as const,
         cursor: disabled ? "not-allowed" : "pointer",
         paddingRight: 44,
         opacity: disabled ? 0.45 : 1,
-        borderColor: value ? "#910A67" : "#e8e8f0",
+        borderColor: value ? "var(--primary)" : "var(--secondary)",
       }}
-      onFocus={(e) => { e.currentTarget.style.borderColor = "#910A67"; }}
-      onBlur={(e)  => { e.currentTarget.style.borderColor = value ? "#910A67" : "#e8e8f0"; }}
+      onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
+      onBlur={(e)  => { e.currentTarget.style.borderColor = value ? "var(--primary)" : "var(--secondary)"; }}
     >
       <option value="">{placeholder}</option>
       {options.map((o) => <option key={o} value={o}>{o}</option>)}
     </select>
     <ChevronDown
-      size={18} color={value ? "#910A67" : "#aaa"}
+      size={18} color={value ? "var(--primary)" : "var(--text)"}
       style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", pointerEvents: "none", transition: "color 0.2s" }}
     />
   </div>
@@ -109,8 +109,8 @@ export default function OnboardingWizard() {
   // ── Styles ──
   const inputBase: React.CSSProperties = {
     width: "100%", padding: "14px 18px", fontSize: 16,
-    color: "#1a1a2e", background: "#f8f8fc",
-    border: "1.5px solid #e8e8f0", borderRadius: 14,
+    color: "var(--text)", background: "var(--background)",
+    border: "1.5px solid var(--secondary)", borderRadius: 14,
     outline: "none", fontFamily: "inherit",
     transition: "all 0.2s",
   };
@@ -119,16 +119,16 @@ export default function OnboardingWizard() {
     width: "100%", padding: "14px 18px", fontSize: 15, fontWeight: 500,
     textAlign: "left", borderRadius: 14, cursor: "pointer",
     transition: "all 0.2s", fontFamily: "inherit",
-    border: active ? "1.5px solid #910A67" : "1.5px solid #e8e8f0",
-    background: active ? "rgba(145,10,103,0.04)" : "#fff",
-    color: active ? "#910A67" : "#555",
+    border: active ? "1.5px solid var(--primary)" : "1.5px solid var(--secondary)",
+    background: active ? "rgba(68, 167, 84, 0.04)" : "var(--accent)",
+    color: active ? "var(--primary)" : "var(--text)",
   });
 
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
     <div style={{
-      background: "#fff", minHeight: "100dvh",
+      background: "var(--background)", minHeight: "100dvh",
       display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center", padding: 24,
     }}>
@@ -139,7 +139,7 @@ export default function OnboardingWizard() {
           <div key={idx} style={{
             height: 6, borderRadius: 99, transition: "all 0.35s",
             width:      idx <= step ? 32 : 8,
-            background: idx <= step ? "#910A67" : "#e8e8f0",
+            background: idx <= step ? "var(--primary)" : "var(--secondary)",
           }} />
         ))}
       </div>
@@ -150,15 +150,15 @@ export default function OnboardingWizard() {
         {/* Icon */}
         <div style={{
           width: 56, height: 56, borderRadius: 16,
-          background: "rgba(145,10,103,0.08)",
+          background: "rgba(68, 167, 84, 0.08)",
           display: "flex", alignItems: "center", justifyContent: "center",
           margin: "0 auto 16px",
         }}>
-          <Icon size={28} color="#910A67" />
+          <Icon size={28} color="var(--primary)" />
         </div>
 
-        <h2 style={{ fontSize: 22, fontWeight: 700, color: "#1a1a2e", margin: "0 0 4px" }}>{label}</h2>
-        <p style={{ fontSize: 13, color: "#888", margin: "0 0 24px" }}>{i.stepOf(step + 1, TOTAL_STEPS)}</p>
+        <h2 style={{ fontSize: 22, fontWeight: 700, color: "var(--text)", margin: "0 0 4px" }}>{label}</h2>
+        <p style={{ fontSize: 13, color: "var(--text)", margin: "0 0 24px" }}>{i.stepOf(step + 1, TOTAL_STEPS)}</p>
 
         {/* ── Step 0: Age ── */}
         {step === 0 && (
@@ -168,8 +168,8 @@ export default function OnboardingWizard() {
             onKeyDown={(e) => e.key === "Enter" && next()}
             autoFocus min={1} max={120}
             style={inputBase}
-            onFocus={(e) => { e.currentTarget.style.borderColor = "#910A67"; }}
-            onBlur={(e)  => { e.currentTarget.style.borderColor = "#e8e8f0"; }}
+            onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
+            onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--secondary)"; }}
           />
         )}
 
@@ -213,8 +213,8 @@ export default function OnboardingWizard() {
               {stateName && districts.length > 0 && !district && (
                 <span style={{
                   position: "absolute", right: 44, top: "50%", transform: "translateY(-50%)",
-                  fontSize: 10, fontWeight: 600, color: "#910A67",
-                  background: "rgba(145,10,103,0.08)", padding: "2px 6px", borderRadius: 99,
+                  fontSize: 10, fontWeight: 600, color: "var(--primary)",
+                  background: "rgba(68, 167, 84, 0.08)", padding: "2px 6px", borderRadius: 99,
                   pointerEvents: "none",
                 }}>
                   {districts.length}
@@ -230,14 +230,14 @@ export default function OnboardingWizard() {
               onChange={(e) => setVillage(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && next()}
               style={inputBase}
-              onFocus={(e) => { e.currentTarget.style.borderColor = "#910A67"; }}
-              onBlur={(e)  => { e.currentTarget.style.borderColor = "#e8e8f0"; }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = "var(--primary)"; }}
+              onBlur={(e)  => { e.currentTarget.style.borderColor = "var(--secondary)"; }}
             />
 
             {/* Contextual hint */}
             {stateName && district && (
               <p style={{
-                fontSize: 12, color: "#27AE60", margin: "0 0 4px",
+                fontSize: 12, color: "var(--primary)", margin: "0 0 4px",
                 display: "flex", alignItems: "center", gap: 4,
                 animation: "fadeInUp 0.2s ease-out",
               }}>
@@ -264,8 +264,8 @@ export default function OnboardingWizard() {
             onClick={skip}
             style={{
               flex: 1, padding: "14px 0", fontSize: 14, fontWeight: 500,
-              color: "#888", background: "#fff",
-              border: "1.5px solid #e8e8f0", borderRadius: 16,
+              color: "var(--text)", background: "var(--background)",
+              border: "1.5px solid var(--secondary)", borderRadius: 16,
               cursor: "pointer", display: "flex", alignItems: "center",
               justifyContent: "center", gap: 6, fontFamily: "inherit",
             }}
@@ -276,21 +276,21 @@ export default function OnboardingWizard() {
             onClick={next}
             style={{
               flex: 1, padding: "14px 0", fontSize: 14, fontWeight: 700,
-              color: "#fff", background: "linear-gradient(135deg, #910A67, #720455)",
+              color: "var(--accent)", background: "linear-gradient(135deg, var(--primary), var(--primary))",
               border: "none", borderRadius: 16, cursor: "pointer",
               display: "flex", alignItems: "center", justifyContent: "center",
               gap: 6, fontFamily: "inherit",
-              boxShadow: "0 4px 14px rgba(145,10,103,0.3)",
+              boxShadow: "0 4px 14px rgba(68, 167, 84, 0.3)",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 18px rgba(145,10,103,0.4)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 14px rgba(145,10,103,0.3)"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 18px rgba(68, 167, 84, 0.4)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 14px rgba(68, 167, 84, 0.3)"; }}
           >
             {step < TOTAL_STEPS - 1 ? <><span>{i.next}</span><ArrowRight size={16} /></> : i.letsGo}
           </button>
         </div>
       </div>
 
-      <p style={{ fontSize: 12, color: "#aaa", marginTop: 32 }}>{i.skipHint}</p>
+      <p style={{ fontSize: 12, color: "var(--text)", marginTop: 32 }}>{i.skipHint}</p>
     </div>
   );
 }
