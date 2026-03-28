@@ -5,7 +5,8 @@ import { findNearestLocation } from "@/lib/utils/haversine";
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilioWhatsAppNumber = process.env.TWILIO_WHATSAPP_NUMBER || "whatsapp:+14155238886";
+const rawWhatsAppNumber = process.env.TWILIO_WHATSAPP_NUMBER || "+14155238886";
+const twilioWhatsAppNumber = rawWhatsAppNumber.startsWith("whatsapp:") ? rawWhatsAppNumber : `whatsapp:${rawWhatsAppNumber}`;
 
 // Hardcoded confirmation number
 const CONFIRMATION_WHATSAPP = "+918767708514";
