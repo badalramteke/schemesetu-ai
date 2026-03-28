@@ -32,6 +32,62 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
   const mapsQuery = encodeURIComponent(`Common Service Centre ${locationStr}`);
   const mapsUrl = `https://www.google.com/maps/search/${mapsQuery}`;
 
+  const [locating, setLocating] = useState(false);
+  const [nearestCSC, setNearestCSC] = useState<{name: string, address: string} | null>(null);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [googleMapsLink, setGoogleMapsLink] = useState("");
+
+  const handleLocateAndBook = async () => {
+    setLocating(true);
+    setErrorMsg("");
+    setNearestCSC(null);
+    setGoogleMapsLink("");
+
+    if (!navigator.geolocation) {
+      setErrorMsg("Geolocation is not supported by your browser");
+      setLocating(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const res = await fetch("/api/csc/book", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            }),
+          });
+
+          if (!res.ok) {
+            throw new Error("Failed to find nearest CSC");
+          }
+
+          const data = await res.json();
+          setNearestCSC(data.csc);
+          setGoogleMapsLink(data.googleMapsLink);
+          setExpanded(false); // Collapse sample list if success
+        } catch (err: unknown) {
+          if (err instanceof Error) {
+            setErrorMsg(err.message);
+          } else {
+            setErrorMsg("An error occurred");
+          }
+        } finally {
+          setLocating(false);
+        }
+      },
+      () => {
+        setErrorMsg("Unable to retrieve your location");
+        setLocating(false);
+      }
+    );
+  };
+
   return (
     <div
       style={{
@@ -104,6 +160,60 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
         </a>
       </div>
 
+      {/* Auto Booking Section */}
+      <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--border)" }}>
+        <button
+          onClick={handleLocateAndBook}
+          disabled={locating}
+          style={{
+            width: "100%",
+            padding: "10px 12px",
+            backgroundColor: "var(--primary)",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            fontWeight: 600,
+            cursor: locating ? "not-allowed" : "pointer",
+            opacity: locating ? 0.7 : 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "8px"
+          }}
+        >
+          {locating ? "Locating..." : "Find Nearest CSC & Book"}
+        </button>
+
+        {errorMsg && (
+            <p style={{ color: "var(--danger)", fontSize: 12, marginTop: 8 }}>{errorMsg}</p>
+        )}
+
+        {nearestCSC && googleMapsLink && (
+           <div style={{ marginTop: 12, padding: 12, borderRadius: 8, backgroundColor: "var(--success-soft)", border: "1px solid var(--success)" }}>
+              <p style={{ fontSize: 13, fontWeight: 700, margin: "0 0 4px", color: "var(--success-strong)" }}>Nearest CSC Found!</p>
+              <p style={{ fontSize: 13, margin: "0 0 2px" }}>{nearestCSC.name}</p>
+              <p style={{ fontSize: 11, color: "var(--muted)", margin: "0 0 8px" }}>{nearestCSC.address}</p>
+              <a
+                href={googleMapsLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-block",
+                  padding: "6px 12px",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  backgroundColor: "var(--success)",
+                  color: "white",
+                  borderRadius: 6,
+                  textDecoration: "none"
+                }}
+              >
+                  Open in Google Maps
+              </a>
+           </div>
+        )}
+      </div>
+
       {/* CSC Card list */}
       <div
         style={{
@@ -113,7 +223,7 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
           gap: 10,
         }}
       >
-        {(expanded ? SAMPLE_CSCS : SAMPLE_CSCS.slice(0, 1)).map((csc, i) => (
+        {(expanded ? SAMPLE_CSCS : (nearestCSC ? [] : SAMPLE_CSCS.slice(0, 1))).map((csc, i) => (
           <div
             key={i}
             style={{
@@ -178,23 +288,25 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
 
         {/* Toggle / Helpline */}
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <button
-            onClick={() => setExpanded((p) => !p)}
-            style={{
-              flex: 1,
-              padding: "8px 12px",
-              fontSize: 12,
-              fontWeight: 500,
-              color: "var(--primary)",
-              background: "rgba(68, 167, 84, 0.05)",
-              border: "1px solid rgba(68, 167, 84, 0.2)",
-              borderRadius: 99,
-              cursor: "pointer",
-              fontFamily: "inherit",
-            }}
-          >
-            {expanded ? "Show Less" : "Show More Centres"}
-          </button>
+          {!nearestCSC && (
+            <button
+              onClick={() => setExpanded((p) => !p)}
+              style={{
+                flex: 1,
+                padding: "8px 12px",
+                fontSize: 12,
+                fontWeight: 500,
+                color: "var(--primary)",
+                background: "rgba(68, 167, 84, 0.05)",
+                border: "1px solid rgba(68, 167, 84, 0.2)",
+                borderRadius: 99,
+                cursor: "pointer",
+                fontFamily: "inherit",
+              }}
+            >
+              {expanded ? "Show Less" : "Show More Centres"}
+            </button>
+          )}
           <a
             href="https://locator.csccloud.in/"
             target="_blank"
