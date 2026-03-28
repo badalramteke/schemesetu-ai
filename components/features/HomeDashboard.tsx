@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useApp } from "@/components/providers/AppProvider";
+import { t } from "@/lib/i18n";
 import {
   Search,
   Wheat,
@@ -14,47 +15,19 @@ import {
 } from "lucide-react";
 import DocumentHistory from "@/components/features/documents/DocumentHistory";
 
-const SECTORS = [
-  {
-    icon: Wheat,
-    label: "Agriculture",
-    query: "agriculture and farming",
-    color: "var(--primary)",
-  },
-  {
-    icon: HeartPulse,
-    label: "Healthcare",
-    query: "health and medical",
-    color: "var(--sector-healthcare)",
-  },
-  {
-    icon: HomeIcon,
-    label: "Housing",
-    query: "housing and shelter",
-    color: "var(--sector-housing)",
-  },
-  {
-    icon: HardHat,
-    label: "Employment",
-    query: "employment and work",
-    color: "var(--sector-employment)",
-  },
-  {
-    icon: Ribbon,
-    label: "Pension",
-    query: "pension and retirement",
-    color: "var(--sector-pension)",
-  },
-  {
-    icon: GraduationCap,
-    label: "Education",
-    query: "education and skills",
-    color: "var(--sector-education)",
-  },
-];
+const SECTOR_META: Record<string, { icon: typeof Wheat; color: string }> = {
+  agriculture: { icon: Wheat, color: "var(--primary)" },
+  healthcare: { icon: HeartPulse, color: "var(--sector-healthcare)" },
+  housing: { icon: HomeIcon, color: "var(--sector-housing)" },
+  employment: { icon: HardHat, color: "var(--sector-employment)" },
+  pension: { icon: Ribbon, color: "var(--sector-pension)" },
+  education: { icon: GraduationCap, color: "var(--sector-education)" },
+};
 
 export default function HomeDashboard() {
-  const { setCurrentView, setChatPrefilledQuery, userProfile } = useApp();
+  const { setCurrentView, setChatPrefilledQuery, userProfile, language } =
+    useApp();
+  const i = t(language);
 
   const go = (query: string) => {
     setChatPrefilledQuery(
@@ -80,12 +53,10 @@ export default function HomeDashboard() {
             margin: 0,
           }}
         >
-          {userProfile.name
-            ? `Namaste, ${userProfile.name}! 🙏`
-            : "Namaste! 🙏"}
+          {i.homeDashboard.greeting(userProfile.name)}
         </h2>
         <p style={{ fontSize: 14, color: "var(--text)", marginTop: 4 }}>
-          Which scheme are you looking for?
+          {i.homeDashboard.subtitle}
         </p>
       </div>
 
@@ -108,7 +79,7 @@ export default function HomeDashboard() {
           />
           <input
             type="text"
-            placeholder="Search schemes..."
+            placeholder={i.homeDashboard.searchPlaceholder}
             onFocus={() => {
               setChatPrefilledQuery("");
               setCurrentView("chat");
@@ -135,12 +106,15 @@ export default function HomeDashboard() {
           animation: "fadeInUp 0.3s ease-out 0.2s both",
         }}
       >
-        {SECTORS.map((s) => {
-          const Icon = s.icon;
+        {Object.entries(i.chat.sectors).map(([key, sector]) => {
+          const meta = SECTOR_META[key];
+          if (!meta) return null;
+          const Icon = meta.icon;
+          const color = meta.color;
           return (
             <button
-              key={s.label}
-              onClick={() => go(s.query)}
+              key={key}
+              onClick={() => go(sector.query)}
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -155,7 +129,7 @@ export default function HomeDashboard() {
                 transition: "all 0.15s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = s.color;
+                e.currentTarget.style.borderColor = color;
                 e.currentTarget.style.transform = "scale(1.03)";
               }}
               onMouseLeave={(e) => {
@@ -168,18 +142,18 @@ export default function HomeDashboard() {
                   width: 52,
                   height: 52,
                   borderRadius: 14,
-                  background: `${s.color}18`,
+                  background: `${color}18`,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <Icon size={26} color={s.color} />
+                <Icon size={26} color={color} />
               </div>
               <span
                 style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}
               >
-                {s.label}
+                {sector.label}
               </span>
             </button>
           );
@@ -214,7 +188,7 @@ export default function HomeDashboard() {
           animation: "pulseGlow 2s infinite",
         }}
       >
-        <MessageCircle size={20} /> Buddy Ask ME!!
+        <MessageCircle size={20} /> {i.homeDashboard.askMe}
       </button>
     </div>
   );

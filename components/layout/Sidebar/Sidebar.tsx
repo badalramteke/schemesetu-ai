@@ -183,7 +183,14 @@ export default function Sidebar() {
               margin: "12px 0",
             }}
           />
-          <NavItem icon={<Settings size={18} />} label={i.settings} />
+          <NavItem
+            icon={<Settings size={18} />}
+            label={i.settings}
+            onClick={() => {
+              setCurrentView("settings");
+              setSidebarOpen(false);
+            }}
+          />
           <NavItem icon={<Info size={18} />} label={i.about} />
           <NavItem icon={<Lock size={18} />} label={i.privacy} />
         </nav>

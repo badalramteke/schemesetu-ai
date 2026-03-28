@@ -8,6 +8,8 @@ import {
   CheckCircle,
   FileText,
 } from "lucide-react";
+import { useApp } from "@/components/providers/AppProvider";
+import { t } from "@/lib/i18n";
 
 interface MoneyBenefit {
   label: string;
@@ -129,9 +131,18 @@ const MONEY_ICONS = {
 };
 
 export default function BenefitsTable({ rawBenefits }: BenefitsTableProps) {
+  const { language } = useApp();
+  const i = t(language);
+
   if (!rawBenefits) return null;
 
   const { textBenefits, moneyBenefits } = parseBenefits(rawBenefits);
+
+  const labelMap: Record<string, string> = {
+    "Benefit Amount": i.schemeCard.benefitAmount,
+    Frequency: i.schemeCard.frequency,
+    "Payment Mode": i.schemeCard.paymentMode,
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -171,7 +182,7 @@ export default function BenefitsTable({ rawBenefits }: BenefitsTableProps) {
                 textTransform: "uppercase",
               }}
             >
-              What&apos;s Covered
+              {i.schemeCard.whatsCovered}
             </p>
           </div>
 
@@ -242,7 +253,7 @@ export default function BenefitsTable({ rawBenefits }: BenefitsTableProps) {
                 textTransform: "uppercase",
               }}
             >
-              Financial Benefits
+              {i.schemeCard.financialBenefits}
             </p>
           </div>
 
@@ -274,7 +285,7 @@ export default function BenefitsTable({ rawBenefits }: BenefitsTableProps) {
                         fontWeight: 500,
                       }}
                     >
-                      {row.label}
+                      {labelMap[row.label] || row.label}
                     </span>
                   </div>
                   <span

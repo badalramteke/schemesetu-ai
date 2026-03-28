@@ -74,6 +74,11 @@ const LANG_NAMES: Record<string, string> = {
   en: "English",
   hi: "Hindi (हिन्दी)",
   mr: "Marathi (मराठी)",
+  bn: "Bengali (বাংলা)",
+  gu: "Gujarati (ગુજરાતી)",
+  kn: "Kannada (ಕನ್ನಡ)",
+  te: "Telugu (తెలుగు)",
+  ur: "Urdu (اردو)",
 };
 
 /**

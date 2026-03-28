@@ -1,0 +1,235 @@
+import type { Translations } from "../types";
+
+const mr: Translations = {
+  onboarding: {
+    ageLabel: "तुमचे वय किती आहे?",
+    agePlaceholder: "उदा. 35",
+    genderLabel: "तुमचे लिंग काय आहे?",
+    genderOptions: [
+      { value: "male", label: "पुरुष" },
+      { value: "female", label: "स्त्री" },
+      { value: "other", label: "इतर" },
+    ],
+    locationLabel: "तुम्ही कुठे राहतात?",
+    statePlaceholder: "राज्य (उदा. महाराष्ट्र)",
+    districtPlaceholder: "जिल्हा (उदा. नागपूर)",
+    villagePlaceholder: "गाव/शहर (उदा. रामटेक)",
+    employmentLabel: "तुम्ही काय करता?",
+    employmentOptions: [
+      { value: "farmer", label: "🌾 शेतकरी" },
+      { value: "govt", label: "🏛️ सरकारी नोकरी" },
+      { value: "private", label: "💼 खाजगी नोकरी" },
+      { value: "self-employed", label: "🛒 स्वयंरोजगार" },
+      { value: "unemployed", label: "🔍 बेरोजगार" },
+      { value: "student", label: "🎓 विद्यार्थी" },
+      { value: "other", label: "📋 इतर" },
+    ],
+    next: "पुढे",
+    skip: "वगळा",
+    letsGo: "चला सुरू करूया! 🚀",
+    stepOf: (step, total) => `पायरी ${step} / ${total}`,
+    skipHint: "तुम्ही वगळू शकता — AI स्वतः विचारेल 🤖",
+  },
+  langSelect: {
+    title: "SchemeSetu",
+    subtitle: "सरकारी योजनांसाठी AI मार्गदर्शक",
+    footer: "ग्रामीण भारतासाठी बनवले 🇮🇳",
+  },
+  chat: {
+    greeting: (name, tod) => (name ? `${tod}, ${name}` : `${tod}`),
+    morning: "सुप्रभात",
+    afternoon: "नमस्कार",
+    evening: "शुभ संध्याकाळ",
+    placeholder: "आज मी तुम्हाला कशी मदत करू शकतो?",
+    voiceNotSupported: "या ब्राउझरमध्ये आवाज समर्थित नाही",
+    noSchemes:
+      "कोणतीही योजना सापडली नाही। वय, व्यवसाय, उत्पन्न, ठिकाण सांगा. 🙏",
+    foundSchemes: (count) =>
+      `मला ${count} योजना सापडल्या ज्या तुमच्यासाठी उपयुक्त असू शकतात:`,
+    busy: "सर्व्हरवर खूप ट्रॅफिक आहे. कृपया नंतर प्रयत्न करा. 🙏",
+    loadTest: "20 टेस्ट प्रश्न लोड करा",
+    scrubHint: "प्रश्न ब्राउझ करण्यासाठी स्वाइप करा",
+    sectorPrompt: (query) =>
+      `मला ${query} बद्दल सांगा ज्यासाठी मी पात्र असू शकतो`,
+    goalQuestion: "तुम्ही सध्या काय शोधत आहात?",
+    goalChips: [
+      { value: "financial", label: "💰 आर्थिक मदत / रोख हस्तांतरण" },
+      { value: "subsidy", label: "🌾 अनुदान (खत / ऊर्जा)" },
+      { value: "training", label: "📚 प्रशिक्षण / कौशल्य विकास" },
+      { value: "loan", label: "🏦 कर्ज / क्रेडिट मदत" },
+      { value: "health", label: "🏥 आरोग्य विमा" },
+      { value: "housing", label: "🏠 गृहनिर्माण मदत" },
+      { value: "pension", label: "👴 पेन्शन / सामाजिक कल्याण" },
+      { value: "everything", label: "❓ सर्व काही दाखवा" },
+    ],
+    wizardIntro:
+      "कृपया काही प्रश्नांची उत्तरे द्या जेणेकरून मी तुमची पात्रता तपासू शकेन:",
+    sectors: {
+      agriculture: { label: "शेती", query: "शेती आणि कृषी योजना" },
+      healthcare: { label: "आरोग्य", query: "आरोग्य आणि वैद्यकीय योजना" },
+      housing: { label: "गृहनिर्माण", query: "घरकुल आणि निवारा योजना" },
+      employment: { label: "रोजगार", query: "रोजगार आणि नोकरी योजना" },
+      pension: { label: "निवृत्ती", query: "पेन्शन आणि सेवानिवृत्ती योजना" },
+      education: { label: "शिक्षण", query: "शिक्षण आणि कौशल्य योजना" },
+    },
+  },
+  header: { newChat: "नवीन चॅट" },
+  sidebar: {
+    home: "होम",
+    newChat: "नवीन चॅट",
+    settings: "सेटिंग्ज",
+    faq: "प्रश्न-उत्तर / मदत",
+    contact: "संपर्क करा",
+    about: "माहिती",
+    privacy: "गोपनीयता धोरण",
+    tagline: "AI योजना सल्लागार",
+    footer: "ग्रामीण भारतासाठी बनवले 🇮🇳",
+  },
+  homeDashboard: {
+    greeting: (name) => (name ? `नमस्कार, ${name}! 🙏` : "नमस्कार! 🙏"),
+    subtitle: "तुम्ही कोणती योजना शोधत आहात?",
+    searchPlaceholder: "योजना शोधा...",
+    askMe: "विचारा मला!!",
+  },
+  conversational: {
+    questionsPrefix: "योग्य योजना शोधण्यासाठी एक प्रश्न:",
+    readyMessage:
+      "छान! आता मी तुमच्यासाठी सर्व योजना तपासतो. 30–40 सेकंद लागतील… ⏳",
+    preferNotToAnswer: "🔒 सांगायचे नाही",
+    borderline:
+      "तुम्ही दिलेल्या माहितीनुसार तुम्ही पात्र असण्याची शक्यता आहे — एक अधिक तपशील खात्री करेल.",
+    didYouMean: (label: string) => `मी ऐकले: "${label}" — हे बरोबर आहे का?`,
+    confirmChips: [
+      { value: "confirm_yes", label: "✅ हो, बरोबर आहे" },
+      { value: "confirm_no", label: "पुन्हा निवडा" },
+    ],
+    bridging: "ठीक आहे. एक अजून माहिती द्या...",
+    questions: {
+      owns_land: {
+        text: "तुमच्याकडे शेतजमीन आहे का, किंवा तुम्ही दुसऱ्याच्या जमिनीवर शेती करता?",
+        chips: [
+          { value: "yes_own", label: "✅ हो, माझी स्वतःची जमीन आहे" },
+          { value: "yes_cultivate", label: "🌾 दुसऱ्याच्या जमिनीवर शेती" },
+          { value: "no", label: "❌ नाही" },
+        ],
+      },
+      land_size: {
+        text: "तुमच्याकडे किती एकर जमीन आहे?",
+        chips: [
+          { value: "lt1", label: "1 एकरपेक्षा कमी" },
+          { value: "1to2", label: "1 – 2 एकर" },
+          { value: "2to5", label: "2 – 5 एकर" },
+          { value: "gt5", label: "5 एकरपेक्षा जास्त" },
+        ],
+      },
+      is_taxpayer: {
+        text: "तुम्ही किंवा कुटुंबातील कोणी आयकर भरते का?",
+        chips: [
+          { value: "no", label: "नाही" },
+          { value: "yes", label: "हो" },
+          { value: "not_sure", label: "माहीत नाही" },
+        ],
+      },
+      bank_aadhaar: {
+        text: "तुमचे बँक खाते आधारशी जोडले आहे का?",
+        chips: [
+          { value: "yes", label: "✅ हो, जोडले आहे" },
+          { value: "no", label: "अद्याप जोडलेले नाही" },
+          { value: "not_sure", label: "माहीत नाही" },
+        ],
+      },
+      family_income: {
+        text: "तुमच्या कुटुंबाचे वार्षिक उत्पन्न अंदाजे किती आहे?",
+        chips: [
+          { value: "lt1L", label: "₹1 लाखापेक्षा कमी" },
+          { value: "1to2L", label: "₹1 – ₹2 लाख" },
+          { value: "2to5L", label: "₹2 – ₹5 लाख" },
+          { value: "gt5L", label: "₹5 लाखापेक्षा जास्त" },
+        ],
+        sensitive: true,
+        sensitiveNote: "पर्यायी — उत्पन्न-आधारित योजना शोधण्यात मदत होते",
+      },
+      has_ration: {
+        text: "तुमच्याकडे रेशन कार्ड आहे का?",
+        chips: [
+          { value: "bpl", label: "✅ हो — BPL कार्ड" },
+          { value: "apl", label: "APL कार्ड" },
+          { value: "no", label: "रेशन कार्ड नाही" },
+        ],
+      },
+      owns_pucca: {
+        text: "तुमच्याकडे आत्ता पक्के घर आहे का?",
+        chips: [
+          { value: "yes", label: "हो, पक्के घर आहे" },
+          { value: "partial", label: "कच्चे / खराब घर" },
+          { value: "no", label: "घर नाही" },
+        ],
+      },
+      has_job_card: {
+        text: "तुमच्याकडे MGNREGA जॉब कार्ड आहे का?",
+        chips: [
+          { value: "yes", label: "हो" },
+          { value: "no", label: "नाही, पण हवे आहे" },
+          { value: "not_sure", label: "काय असते माहीत नाही" },
+        ],
+      },
+      has_bank_acct: {
+        text: "तुमचे बँकेत बचत खाते आहे का?",
+        chips: [
+          { value: "yes", label: "✅ हो" },
+          { value: "post_office", label: "पोस्ट ऑफिस खाते" },
+          { value: "no", label: "खाते नाही" },
+        ],
+      },
+    },
+  },
+  csc: {
+    nearestCentre: "जवळचे CSC केंद्र",
+    commonServiceCentresIn: (loc) => `${loc} मधील सामायिक सेवा केंद्रे`,
+    find: "शोधा",
+    findNearest: "जवळचे CSC शोधा",
+    locating: "शोधत आहे...",
+    nearestFound: "जवळचे CSC सापडले!",
+    openInMaps: "नकाशात उघडा",
+    bookAppointment: "भेट बुक करा",
+    bookingConfirmed: "बुकिंग पक्की!",
+    bookingConfirmedDesc:
+      "WhatsApp वर पुष्टी पाठवली आहे. CSC लवकरच संपर्क करेल.",
+    yourDetails: "बुकिंगसाठी तुमचा तपशील",
+    fullName: "पूर्ण नाव",
+    phoneNumber: "फोन नंबर",
+    schemeInterest: "योजना स्वारस्य (पर्यायी)",
+    confirmBooking: "बुकिंग पुष्टी करा",
+    sending: "पाठवत आहे...",
+    cancel: "रद्द करा",
+    showMore: "अधिक केंद्रे दाखवा",
+    showLess: "कमी दाखवा",
+    officialLocator: "CSC अधिकृत लोकेटर",
+    helpline: "CSC हेल्पलाइन (टोल-फ्री)",
+    findCscCentre: "जवळचे CSC केंद्र शोधा",
+    hide: "लपवा",
+  },
+  schemeCard: {
+    nextSteps: "पुढील पावले",
+    documentsNeeded: "आवश्यक कागदपत्रे",
+    ready: (done, total) => `${done}/${total} तयार`,
+    confidence: "विश्वासार्हता",
+    verified: (date) => `${date} रोजी सत्यापित`,
+    officialSite: "अधिकृत साइट",
+    downloadPack: "अर्ज पॅक डाउनलोड करा",
+    preparing: "तयार होत आहे…",
+    opened: "उघडले!",
+    whatsCovered: "काय समाविष्ट आहे",
+    financialBenefits: "आर्थिक लाभ",
+    benefitAmount: "लाभ रक्कम",
+    frequency: "वारंवारता",
+    paymentMode: "पेमेंट मोड",
+    needOfflineHelp: "ऑफलाइन मदत हवी?",
+    offlineHelpDesc: (loc) =>
+      `${loc} मधील जवळच्या CSC केंद्रावर भेट द्या. ते नाममात्र शुल्कात (अंदाजे ₹30-50) तुमचा अर्ज भरू शकतात.`,
+    eligibleMatch: "पात्र जुळणी",
+    docHelper: "हे CSC केंद्र किंवा स्थानिक ग्रामपंचायतीकडून मिळवा",
+  },
+};
+
+export default mr;

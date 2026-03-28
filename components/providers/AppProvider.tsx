@@ -1,10 +1,16 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Language = "en" | "hi" | "mr";
+type Language = "en" | "hi" | "mr" | "bn" | "gu" | "kn" | "te" | "ur";
 
 interface UserProfile {
   name?: string;
@@ -32,14 +38,18 @@ interface AppState {
   setFontSize: (size: number) => void;
   highContrast: boolean;
   setHighContrast: (on: boolean) => void;
-  currentView: "language" | "onboarding" | "home" | "chat";
-  setCurrentView: (view: "language" | "onboarding" | "home" | "chat") => void;
+  currentView: "language" | "onboarding" | "home" | "chat" | "settings";
+  setCurrentView: (
+    view: "language" | "onboarding" | "home" | "chat" | "settings",
+  ) => void;
   chatPrefilledQuery: string;
   setChatPrefilledQuery: (query: string) => void;
   chatId: string;
   setChatId: (id: string) => void;
   chatHistory: { id: string; title: string; timestamp: number }[];
-  setChatHistory: (val: { id: string; title: string; timestamp: number }[]) => void;
+  setChatHistory: (
+    val: { id: string; title: string; timestamp: number }[],
+  ) => void;
   startNewChat: () => void;
 }
 
@@ -50,14 +60,18 @@ const AppContext = createContext<AppState | undefined>(undefined);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>("en");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [hasCompletedOnboarding, setHasCompletedOnboardingState] = useState(false);
+  const [hasCompletedOnboarding, setHasCompletedOnboardingState] =
+    useState(false);
   const [userProfile, setUserProfileState] = useState<UserProfile>({});
   const [fontSize, setFontSizeState] = useState(16);
   const [highContrast, setHighContrastState] = useState(false);
-  const [currentView, setCurrentView] = useState<AppState["currentView"]>("language");
+  const [currentView, setCurrentView] =
+    useState<AppState["currentView"]>("language");
   const [chatPrefilledQuery, setChatPrefilledQuery] = useState("");
   const [chatId, setChatId] = useState<string>(() => Date.now().toString());
-  const [chatHistory, setChatHistoryState] = useState<{ id: string; title: string; timestamp: number }[]>([]);
+  const [chatHistory, setChatHistoryState] = useState<
+    { id: string; title: string; timestamp: number }[]
+  >([]);
 
   // Load persisted state from localStorage
   useEffect(() => {
@@ -84,14 +98,35 @@ export function AppProvider({ children }: { children: ReactNode }) {
     try {
       localStorage.setItem(
         "schemesetu-state",
-        JSON.stringify({ language, hasCompletedOnboarding, userProfile, fontSize, highContrast, chatHistory, chatId })
+        JSON.stringify({
+          language,
+          hasCompletedOnboarding,
+          userProfile,
+          fontSize,
+          highContrast,
+          chatHistory,
+          chatId,
+        }),
       );
     } catch {}
-  }, [language, hasCompletedOnboarding, userProfile, fontSize, highContrast, chatHistory, chatId]);
+  }, [
+    language,
+    hasCompletedOnboarding,
+    userProfile,
+    fontSize,
+    highContrast,
+    chatHistory,
+    chatId,
+  ]);
 
   useEffect(() => {
     document.documentElement.style.fontSize = `${fontSize}px`;
   }, [fontSize]);
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === "ur" ? "rtl" : "ltr";
+  }, [language]);
 
   const setLanguage = (lang: Language) => setLanguageState(lang);
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
@@ -116,16 +151,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
   return (
     <AppContext.Provider
       value={{
-        language, setLanguage,
-        sidebarOpen, setSidebarOpen, toggleSidebar,
-        hasCompletedOnboarding, setHasCompletedOnboarding,
-        userProfile, setUserProfile,
-        fontSize, setFontSize,
-        highContrast, setHighContrast,
-        currentView, setCurrentView,
-        chatPrefilledQuery, setChatPrefilledQuery,
-        chatId, setChatId,
-        chatHistory, setChatHistory,
+        language,
+        setLanguage,
+        sidebarOpen,
+        setSidebarOpen,
+        toggleSidebar,
+        hasCompletedOnboarding,
+        setHasCompletedOnboarding,
+        userProfile,
+        setUserProfile,
+        fontSize,
+        setFontSize,
+        highContrast,
+        setHighContrast,
+        currentView,
+        setCurrentView,
+        chatPrefilledQuery,
+        setChatPrefilledQuery,
+        chatId,
+        setChatId,
+        chatHistory,
+        setChatHistory,
         startNewChat,
       }}
     >

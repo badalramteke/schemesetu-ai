@@ -249,6 +249,19 @@ export default function ChatBox() {
 
   const makeId = (prefix: string) => `${prefix}${Date.now()}`;
 
+  /** Fetch with timeout — prevents hanging on flaky mobile networks */
+  const fetchWithTimeout = (
+    url: string,
+    opts: RequestInit,
+    timeoutMs = 30000,
+  ): Promise<Response> => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    return fetch(url, { ...opts, signal: controller.signal }).finally(() =>
+      clearTimeout(timer),
+    );
+  };
+
   // ── Follow-up detection: answers from already-shown results ────────────
 
   /**
@@ -437,20 +450,24 @@ export default function ChatBox() {
         currentUserId = getOrCreateUserId();
       } catch {}
 
-      const res = await fetch("/api/query", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userQuery: query,
-          language,
-          profile: userProfile,
-          answers: curAnswers,
-          askedQuestions: askedQuestionsRef.current,
-          candidateSchemes:
-            candidateSchemes.length > 0 ? candidateSchemes : undefined,
-          userId: currentUserId,
-        }),
-      });
+      const res = await fetchWithTimeout(
+        "/api/query",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userQuery: query,
+            language,
+            profile: userProfile,
+            answers: curAnswers,
+            askedQuestions: askedQuestionsRef.current,
+            candidateSchemes:
+              candidateSchemes.length > 0 ? candidateSchemes : undefined,
+            userId: currentUserId,
+          }),
+        },
+        45000,
+      );
 
       const data = await res.json();
       if (data.error) throw new Error(data.message);
@@ -528,18 +545,22 @@ export default function ChatBox() {
         currentUserId = getOrCreateUserId();
       } catch {}
 
-      const res = await fetch("/api/wizard-questions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userQuery: query,
-          language,
-          profile: userProfile,
-          candidateSchemes:
-            candidateSchemes.length > 0 ? candidateSchemes : undefined,
-          userId: currentUserId,
-        }),
-      });
+      const res = await fetchWithTimeout(
+        "/api/wizard-questions",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userQuery: query,
+            language,
+            profile: userProfile,
+            candidateSchemes:
+              candidateSchemes.length > 0 ? candidateSchemes : undefined,
+            userId: currentUserId,
+          }),
+        },
+        30000,
+      );
 
       const data = await res.json();
       if (data.error) throw new Error(data.message);
@@ -607,67 +628,81 @@ export default function ChatBox() {
     setConvAnswers(mappedAnswers);
     convAnswersRef.current = mappedAnswers;
 
-    // Persist wizard answers to user profile memory (localStorage + Firestore)
-    try {
-      const { getOrCreateUserId, getProfileMemory, saveProfileMemory } =
-        await import("@/lib/services/document-service");
-      const userId = getOrCreateUserId();
-      const existingMemory = await getProfileMemory(userId);
+    // Fire-and-forget: persist wizard answers to memory (don't block AI response)
+    (async () => {
+      try {
+        const { getOrCreateUserId, getProfileMemory, saveProfileMemory } =
+          await import("@/lib/services/document-service");
+        const userId = getOrCreateUserId();
+        const existingMemory = await getProfileMemory(userId);
 
-      // Map wizard answers to profile-compatible field names
-      const fieldMapping: Record<string, string> = {
-        age: "age",
-        income: "income",
-        "annual income": "income",
-        "house type": "houseType",
-        "land ownership": "landOwnership",
-        "bpl card": "rationCardType",
-        "ration card": "rationCardType",
-        state: "state",
-        district: "district",
-        occupation: "occupation",
-        gender: "gender",
-        "family size": "familySize",
-      };
+        const fieldMapping: Record<string, string> = {
+          age: "age",
+          income: "income",
+          "annual income": "income",
+          "house type": "houseType",
+          "land ownership": "landOwnership",
+          "bpl card": "rationCardType",
+          "ration card": "rationCardType",
+          state: "state",
+          district: "district",
+          occupation: "occupation",
+          gender: "gender",
+          "family size": "familySize",
+        };
 
-      const mergedFacts: Record<string, string> =
-        existingMemory?.mergedFacts || {};
-      for (const [question, answer] of Object.entries(mappedAnswers)) {
-        if (answer && question !== "goal") {
-          // Try to map to known field name
-          const lowerQ = question.toLowerCase();
-          let fieldKey = question;
-          for (const [keyword, field] of Object.entries(fieldMapping)) {
-            if (lowerQ.includes(keyword)) {
-              fieldKey = field;
-              break;
+        const mergedFacts: Record<string, string> =
+          existingMemory?.mergedFacts || {};
+        for (const [question, answer] of Object.entries(mappedAnswers)) {
+          if (answer && question !== "goal") {
+            const lowerQ = question.toLowerCase();
+            let fieldKey = question;
+            for (const [keyword, field] of Object.entries(fieldMapping)) {
+              if (lowerQ.includes(keyword)) {
+                fieldKey = field;
+                break;
+              }
             }
+            mergedFacts[fieldKey] = answer;
           }
-          mergedFacts[fieldKey] = answer;
         }
-      }
 
-      await saveProfileMemory({
-        userId,
-        mergedFacts,
-        fieldSources: existingMemory?.fieldSources || {},
-        missingFields: existingMemory?.missingFields || [],
-        documentRefs: existingMemory?.documentRefs || [],
-        lastUpdated: Date.now(),
-      });
-    } catch (e) {
-      console.warn("Failed to persist wizard answers to memory:", e);
-    }
+        await saveProfileMemory({
+          userId,
+          mergedFacts,
+          fieldSources: existingMemory?.fieldSources || {},
+          missingFields: existingMemory?.missingFields || [],
+          documentRefs: existingMemory?.documentRefs || [],
+          lastUpdated: Date.now(),
+        });
+      } catch (e) {
+        console.warn("Failed to persist wizard answers to memory:", e);
+      }
+    })();
 
     // Set asked questions
     const asked = wizardQuestions.map((q) => q.question);
     setAskedQuestions(asked);
     askedQuestionsRef.current = asked;
 
-    // Fetch final results with all answers
+    // Fetch final results with all answers (never blocked by memory save)
     setConvPhase("questions");
     convPhaseRef.current = "questions";
-    await fetchNextDynamicTurn(pendingQueryRef.current, mappedAnswers);
+    try {
+      await fetchNextDynamicTurn(pendingQueryRef.current, mappedAnswers);
+    } catch (err) {
+      console.error("Wizard submit → fetchNextDynamicTurn error:", err);
+      setMessages((p) =>
+        p
+          .filter((m) => !m.isLoading)
+          .concat({
+            id: makeId("e"),
+            role: "ai",
+            content: i.chat.busy,
+          }),
+      );
+      setBusy(false);
+    }
   };
 
   // ── File Upload + OCR Processing ──────────────────────────────────────────
@@ -944,10 +979,19 @@ export default function ChatBox() {
     }
     try {
       const r = new SR();
-      r.continuous = true;
+      r.continuous = false;
       r.interimResults = true;
-      r.lang =
-        language === "hi" ? "hi-IN" : language === "mr" ? "mr-IN" : "en-IN";
+      const SPEECH_LANG: Record<string, string> = {
+        en: "en-IN",
+        hi: "hi-IN",
+        mr: "mr-IN",
+        bn: "bn-IN",
+        gu: "gu-IN",
+        kn: "kn-IN",
+        te: "te-IN",
+        ur: "ur-PK",
+      };
+      r.lang = SPEECH_LANG[language] || "en-IN";
 
       // We maintain a local string of what this specific session has finalized
       let currentSessionFinal = "";
@@ -988,20 +1032,11 @@ export default function ChatBox() {
 
       r.onend = () => {
         if (!manualStopRef.current) {
-          // Save what we successfully transcribed before the drop
+          // Session ended naturally (browser stopped after utterance).
+          // Save finalized text and stop — the silence timer handles auto-send.
           finalTranscriptRef.current += currentSessionFinal;
           currentSessionFinal = "";
-
-          // Browser needs a tiny breather before hot-restarting the microphone hardware
-          setTimeout(() => {
-            if (!manualStopRef.current) {
-              try {
-                r.start();
-              } catch {
-                setListening(false);
-              }
-            }
-          }, 250);
+          setListening(false);
         } else {
           setListening(false);
         }

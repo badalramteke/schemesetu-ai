@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { ChevronDown, ExternalLink, Globe, ShieldCheck } from "lucide-react";
 import type { EligibilityResult } from "@/lib/rag-pipeline";
+import { useApp } from "@/components/providers/AppProvider";
+import { t } from "@/lib/i18n";
 import EligibilityBadge from "./EligibilityBadge";
 import DocumentsList from "./DocumentsList";
 import BenefitsTable from "./BenefitsTable";
@@ -26,6 +28,8 @@ function EligibilityCard({
 }: EligibilityCardProps) {
   const [open, setOpen] = useState(true);
   const [showCSC, setShowCSC] = useState(false);
+  const { language } = useApp();
+  const i = t(language);
 
   // If no documents are required, they are implicitly acknowledged.
   const hasDocs = result.documents && result.documents.length > 0;
@@ -142,7 +146,7 @@ function EligibilityCard({
                       letterSpacing: "0.05em",
                     }}
                   >
-                    📋 Next Steps
+                    📋 {i.schemeCard.nextSteps}
                   </p>
                   <div
                     style={{ display: "flex", flexDirection: "column", gap: 8 }}
@@ -210,7 +214,7 @@ function EligibilityCard({
                   fontFamily: "inherit",
                 }}
               >
-                📍 {showCSC ? "Hide" : "Find nearest CSC centre"}
+                📍 {showCSC ? i.csc.hide : i.csc.findCscCentre}
               </button>
               {showCSC && <CSCLocator district={district} state={state} />}
 
@@ -250,7 +254,7 @@ function EligibilityCard({
                       color: "var(--text)",
                     }}
                   >
-                    {result.confidence} Confidence
+                    {result.confidence} {i.schemeCard.confidence}
                   </span>
                 </div>
                 <div
@@ -269,7 +273,7 @@ function EligibilityCard({
                     rel="noopener noreferrer"
                     style={{ color: "var(--primary)", textDecoration: "none" }}
                   >
-                    Verified {result.lastVerified}
+                    {i.schemeCard.verified(result.lastVerified)}
                   </a>
                 </div>
               </div>
@@ -317,7 +321,7 @@ function EligibilityCard({
                     e.currentTarget.style.color = "var(--muted)";
                   }}
                 >
-                  <ExternalLink size={14} /> Official Site
+                  <ExternalLink size={14} /> {i.schemeCard.officialSite}
                 </a>
               </div>
             </>

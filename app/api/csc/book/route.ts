@@ -38,7 +38,7 @@ export async function POST(request: Request) {
         );
       }
 
-      const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${nearestCSC.lat},${nearestCSC.lng}`;
+      const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nearestCSC.name + ", " + nearestCSC.address)}`;
 
       return NextResponse.json({
         success: true,

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { CheckSquare, Square, FileText } from "lucide-react";
 import { useApp } from "@/components/providers/AppProvider";
+import { t } from "@/lib/i18n";
 
 interface DocumentsListProps {
   documents: string[];
@@ -13,7 +14,8 @@ export default function DocumentsList({
   documents,
   onAcknowledged,
 }: DocumentsListProps) {
-  const { userProfile } = useApp();
+  const { userProfile, language } = useApp();
+  const i = t(language);
 
   // Pre-tick logic based on user profile or context
   const getInitialChecked = () => {
@@ -79,7 +81,7 @@ export default function DocumentsList({
               margin: 0,
             }}
           >
-            Documents Needed
+            {i.schemeCard.documentsNeeded}
           </p>
         </div>
         <span
@@ -99,7 +101,7 @@ export default function DocumentsList({
             transition: "all 0.3s",
           }}
         >
-          {doneCount}/{total} ready
+          {i.schemeCard.ready(doneCount, total)}
         </span>
       </div>
 

@@ -9,6 +9,11 @@ const LANGUAGES = [
   { code: "en" as const, label: "English", native: "English" },
   { code: "hi" as const, label: "हिन्दी", native: "Hindi" },
   { code: "mr" as const, label: "मराठी", native: "Marathi" },
+  { code: "bn" as const, label: "বাংলা", native: "Bengali" },
+  { code: "gu" as const, label: "ગુજરાતી", native: "Gujarati" },
+  { code: "kn" as const, label: "ಕನ್ನಡ", native: "Kannada" },
+  { code: "te" as const, label: "తెలుగు", native: "Telugu" },
+  { code: "ur" as const, label: "اردو", native: "Urdu" },
 ];
 
 export default function LanguageSelect() {
@@ -68,10 +73,10 @@ export default function LanguageSelect() {
       <div
         style={{
           width: "100%",
-          maxWidth: 380,
-          display: "flex",
-          flexDirection: "column",
-          gap: 14,
+          maxWidth: 500,
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 12,
         }}
       >
         {LANGUAGES.map((lang, idx) => (
@@ -84,17 +89,18 @@ export default function LanguageSelect() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 16,
+              gap: 12,
               width: "100%",
-              padding: "18px 24px",
+              padding: "14px 16px",
               background: "var(--background)",
               border: "1px solid var(--secondary)",
-              borderRadius: 16,
+              borderRadius: 14,
               cursor: "pointer",
               textAlign: "left",
               transition: "all 0.15s",
-              animation: `fadeInUp 0.4s ease-out ${idx * 0.1}s both`,
+              animation: `fadeInUp 0.4s ease-out ${idx * 0.06}s both`,
               fontFamily: "inherit",
+              direction: lang.code === "ur" ? "rtl" : "ltr",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "var(--primary-soft)";
@@ -105,7 +111,7 @@ export default function LanguageSelect() {
               e.currentTarget.style.borderColor = "var(--secondary)";
             }}
           >
-            <Languages size={26} color="var(--primary)" />
+            <Languages size={22} color="var(--primary)" />
             <div>
               <p
                 style={{

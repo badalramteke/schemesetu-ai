@@ -1,7 +1,18 @@
 "use client";
 
 import React, { useState } from "react";
-import { MapPin, Phone, Clock, ExternalLink, Navigation, CalendarCheck, User, Send } from "lucide-react";
+import {
+  MapPin,
+  Phone,
+  Clock,
+  ExternalLink,
+  Navigation,
+  CalendarCheck,
+  User,
+  Send,
+} from "lucide-react";
+import { useApp } from "@/components/providers/AppProvider";
+import { t } from "@/lib/i18n";
 
 interface CSCLocatorProps {
   /** User's district/state from profile, used to prefill search */
@@ -32,6 +43,8 @@ const SAMPLE_CSCS = [
 
 export default function CSCLocator({ district, state }: CSCLocatorProps) {
   const [expanded, setExpanded] = useState(false);
+  const { language } = useApp();
+  const i = t(language);
 
   const locationStr =
     [district, state].filter(Boolean).join(", ") || "your area";
@@ -100,7 +113,7 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
       () => {
         setErrorMsg("Unable to retrieve your location");
         setLocating(false);
-      }
+      },
     );
   };
 
@@ -199,10 +212,10 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
               margin: 0,
             }}
           >
-            Nearest CSC Centre
+            {i.csc.nearestCentre}
           </p>
           <p style={{ fontSize: 11, color: "var(--text)", margin: 0 }}>
-            Common Service Centres in {locationStr}
+            {i.csc.commonServiceCentresIn(locationStr)}
           </p>
         </div>
         <a
@@ -224,12 +237,17 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
             textDecoration: "none",
           }}
         >
-          <Navigation size={10} /> Find
+          <Navigation size={10} /> {i.csc.find}
         </a>
       </div>
 
       {/* Locate Section */}
-      <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--border)" }}>
+      <div
+        style={{
+          padding: "12px 16px",
+          borderBottom: "1px solid var(--border)",
+        }}
+      >
         <button
           onClick={handleLocate}
           disabled={locating}
@@ -251,19 +269,48 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
           }}
         >
           <Navigation size={14} />
-          {locating ? "Locating..." : "Find Nearest CSC"}
+          {locating ? i.csc.locating : i.csc.findNearest}
         </button>
 
         {errorMsg && (
-          <p style={{ color: "var(--danger)", fontSize: 12, marginTop: 8 }}>{errorMsg}</p>
+          <p style={{ color: "var(--danger)", fontSize: 12, marginTop: 8 }}>
+            {errorMsg}
+          </p>
         )}
 
         {/* Located CSC Result */}
         {nearestCSC && googleMapsLink && (
-          <div style={{ marginTop: 12, padding: 12, borderRadius: 8, backgroundColor: "rgba(68, 167, 84, 0.04)", border: "1px solid rgba(68, 167, 84, 0.15)" }}>
-            <p style={{ fontSize: 13, fontWeight: 700, margin: "0 0 4px", color: "var(--primary)" }}>📍 Nearest CSC Found!</p>
-            <p style={{ fontSize: 13, margin: "0 0 2px", fontWeight: 600 }}>{nearestCSC.name}</p>
-            <p style={{ fontSize: 11, color: "var(--muted)", margin: "0 0 10px" }}>{nearestCSC.address}</p>
+          <div
+            style={{
+              marginTop: 12,
+              padding: 12,
+              borderRadius: 8,
+              backgroundColor: "rgba(68, 167, 84, 0.04)",
+              border: "1px solid rgba(68, 167, 84, 0.15)",
+            }}
+          >
+            <p
+              style={{
+                fontSize: 13,
+                fontWeight: 700,
+                margin: "0 0 4px",
+                color: "var(--primary)",
+              }}
+            >
+              📍 {i.csc.nearestFound}
+            </p>
+            <p style={{ fontSize: 13, margin: "0 0 2px", fontWeight: 600 }}>
+              {nearestCSC.name}
+            </p>
+            <p
+              style={{
+                fontSize: 11,
+                color: "var(--muted)",
+                margin: "0 0 10px",
+              }}
+            >
+              {nearestCSC.address}
+            </p>
 
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               <a
@@ -283,12 +330,15 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
                   textDecoration: "none",
                 }}
               >
-                <MapPin size={12} /> Open in Maps
+                <MapPin size={12} /> {i.csc.openInMaps}
               </a>
 
               {!bookingSuccess && (
                 <button
-                  onClick={() => { setShowBookingForm(true); setBookingError(""); }}
+                  onClick={() => {
+                    setShowBookingForm(true);
+                    setBookingError("");
+                  }}
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
@@ -304,30 +354,79 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
                     fontFamily: "inherit",
                   }}
                 >
-                  <CalendarCheck size={12} /> Book Appointment
+                  <CalendarCheck size={12} /> {i.csc.bookAppointment}
                 </button>
               )}
             </div>
 
             {/* Booking Success */}
             {bookingSuccess && (
-              <div style={{ marginTop: 10, padding: 10, borderRadius: 6, backgroundColor: "rgba(34, 197, 94, 0.08)", border: "1px solid rgba(34, 197, 94, 0.25)" }}>
-                <p style={{ fontSize: 12, fontWeight: 700, color: "#16a34a", margin: "0 0 2px" }}>✅ Booking Confirmed!</p>
-                <p style={{ fontSize: 11, color: "var(--muted)", margin: 0 }}>A WhatsApp confirmation has been sent. The CSC will contact you shortly.</p>
+              <div
+                style={{
+                  marginTop: 10,
+                  padding: 10,
+                  borderRadius: 6,
+                  backgroundColor: "rgba(34, 197, 94, 0.08)",
+                  border: "1px solid rgba(34, 197, 94, 0.25)",
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: "#16a34a",
+                    margin: "0 0 2px",
+                  }}
+                >
+                  ✅ {i.csc.bookingConfirmed}
+                </p>
+                <p style={{ fontSize: 11, color: "var(--muted)", margin: 0 }}>
+                  {i.csc.bookingConfirmedDesc}
+                </p>
               </div>
             )}
 
             {/* Booking Form */}
             {showBookingForm && !bookingSuccess && (
-              <div style={{ marginTop: 12, padding: 12, borderRadius: 8, border: "1px solid var(--border)", background: "var(--surface)" }}>
-                <p style={{ fontSize: 12, fontWeight: 700, margin: "0 0 10px", color: "var(--text)" }}>
-                  <User size={12} style={{ marginRight: 4, verticalAlign: "middle" }} />
-                  Your Details for Booking
+              <div
+                style={{
+                  marginTop: 12,
+                  padding: 12,
+                  borderRadius: 8,
+                  border: "1px solid var(--border)",
+                  background: "var(--surface)",
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 700,
+                    margin: "0 0 10px",
+                    color: "var(--text)",
+                  }}
+                >
+                  <User
+                    size={12}
+                    style={{ marginRight: 4, verticalAlign: "middle" }}
+                  />
+                  {i.csc.yourDetails}
                 </p>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <div
+                  style={{ display: "flex", flexDirection: "column", gap: 8 }}
+                >
                   <div>
-                    <label style={{ fontSize: 11, fontWeight: 600, color: "var(--muted)", marginBottom: 2, display: "block" }}>Full Name *</label>
+                    <label
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 600,
+                        color: "var(--muted)",
+                        marginBottom: 2,
+                        display: "block",
+                      }}
+                    >
+                      {i.csc.fullName} *
+                    </label>
                     <input
                       type="text"
                       placeholder="Enter your full name"
@@ -337,7 +436,17 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
                     />
                   </div>
                   <div>
-                    <label style={{ fontSize: 11, fontWeight: 600, color: "var(--muted)", marginBottom: 2, display: "block" }}>Phone Number *</label>
+                    <label
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 600,
+                        color: "var(--muted)",
+                        marginBottom: 2,
+                        display: "block",
+                      }}
+                    >
+                      {i.csc.phoneNumber} *
+                    </label>
                     <input
                       type="tel"
                       placeholder="Enter your phone number"
@@ -347,7 +456,17 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
                     />
                   </div>
                   <div>
-                    <label style={{ fontSize: 11, fontWeight: 600, color: "var(--muted)", marginBottom: 2, display: "block" }}>Scheme Interest (optional)</label>
+                    <label
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 600,
+                        color: "var(--muted)",
+                        marginBottom: 2,
+                        display: "block",
+                      }}
+                    >
+                      {i.csc.schemeInterest}
+                    </label>
                     <input
                       type="text"
                       placeholder="e.g. PM-KISAN, Ayushman Bharat"
@@ -358,7 +477,15 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
                   </div>
 
                   {bookingError && (
-                    <p style={{ color: "var(--danger)", fontSize: 11, margin: 0 }}>{bookingError}</p>
+                    <p
+                      style={{
+                        color: "var(--danger)",
+                        fontSize: 11,
+                        margin: 0,
+                      }}
+                    >
+                      {bookingError}
+                    </p>
                   )}
 
                   <div style={{ display: "flex", gap: 8 }}>
@@ -384,7 +511,7 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
                       }}
                     >
                       <Send size={12} />
-                      {booking ? "Sending..." : "Confirm Booking"}
+                      {booking ? i.csc.sending : i.csc.confirmBooking}
                     </button>
                     <button
                       onClick={() => setShowBookingForm(false)}
@@ -400,7 +527,7 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
                         fontFamily: "inherit",
                       }}
                     >
-                      Cancel
+                      {i.csc.cancel}
                     </button>
                   </div>
                 </div>
@@ -419,7 +546,12 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
           gap: 10,
         }}
       >
-        {(expanded ? SAMPLE_CSCS : (nearestCSC ? [] : SAMPLE_CSCS.slice(0, 1))).map((csc, i) => (
+        {(expanded
+          ? SAMPLE_CSCS
+          : nearestCSC
+            ? []
+            : SAMPLE_CSCS.slice(0, 1)
+        ).map((csc, i) => (
           <div
             key={i}
             style={{
@@ -500,7 +632,7 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
                 fontFamily: "inherit",
               }}
             >
-              {expanded ? "Show Less" : "Show More Centres"}
+              {expanded ? i.csc.showLess : i.csc.showMore}
             </button>
           )}
           <a
@@ -523,7 +655,7 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
               textDecoration: "none",
             }}
           >
-            <ExternalLink size={11} /> CSC Official Locator
+            <ExternalLink size={11} /> {i.csc.officialLocator}
           </a>
         </div>
 
@@ -537,7 +669,7 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
           }}
         >
           <p style={{ fontSize: 11, color: "var(--text)", margin: "0 0 2px" }}>
-            📞 CSC Helpline (Toll-Free)
+            📞 {i.csc.helpline}
           </p>
           <a
             href="tel:18003000468"
