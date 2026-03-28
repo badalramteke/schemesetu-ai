@@ -1,12 +1,18 @@
 "use client";
 
 import React, { useState } from "react";
-import { MapPin, Phone, Clock, ExternalLink, Navigation } from "lucide-react";
+import { MapPin, Phone, Clock, ExternalLink, Navigation, CalendarCheck, User, Send } from "lucide-react";
 
 interface CSCLocatorProps {
   /** User's district/state from profile, used to prefill search */
   district?: string;
   state?: string;
+}
+
+interface NearestCSCData {
+  name: string;
+  address: string;
+  whatsapp?: string;
 }
 
 const SAMPLE_CSCS = [
@@ -32,16 +38,29 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
   const mapsQuery = encodeURIComponent(`Common Service Centre ${locationStr}`);
   const mapsUrl = `https://www.google.com/maps/search/${mapsQuery}`;
 
+  // --- Locate state ---
   const [locating, setLocating] = useState(false);
-  const [nearestCSC, setNearestCSC] = useState<{name: string, address: string} | null>(null);
+  const [nearestCSC, setNearestCSC] = useState<NearestCSCData | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [googleMapsLink, setGoogleMapsLink] = useState("");
 
-  const handleLocateAndBook = async () => {
+  // --- Booking state ---
+  const [showBookingForm, setShowBookingForm] = useState(false);
+  const [bookingName, setBookingName] = useState("");
+  const [bookingPhone, setBookingPhone] = useState("");
+  const [bookingScheme, setBookingScheme] = useState("");
+  const [booking, setBooking] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [bookingError, setBookingError] = useState("");
+
+  // Step 1: Locate nearest CSC
+  const handleLocate = async () => {
     setLocating(true);
     setErrorMsg("");
     setNearestCSC(null);
     setGoogleMapsLink("");
+    setShowBookingForm(false);
+    setBookingSuccess(false);
 
     if (!navigator.geolocation) {
       setErrorMsg("Geolocation is not supported by your browser");
@@ -54,23 +73,20 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
         try {
           const res = await fetch("/api/csc/book", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               lat: position.coords.latitude,
               lng: position.coords.longitude,
+              action: "locate", // Only locate, don't book
             }),
           });
 
-          if (!res.ok) {
-            throw new Error("Failed to find nearest CSC");
-          }
+          if (!res.ok) throw new Error("Failed to find nearest CSC");
 
           const data = await res.json();
           setNearestCSC(data.csc);
           setGoogleMapsLink(data.googleMapsLink);
-          setExpanded(false); // Collapse sample list if success
+          setExpanded(false);
         } catch (err: unknown) {
           if (err instanceof Error) {
             setErrorMsg(err.message);
@@ -86,6 +102,58 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
         setLocating(false);
       }
     );
+  };
+
+  // Step 2: Book appointment (send user details via WhatsApp)
+  const handleBook = async () => {
+    if (!bookingName.trim() || !bookingPhone.trim()) {
+      setBookingError("Please enter your name and phone number");
+      return;
+    }
+
+    setBooking(true);
+    setBookingError("");
+
+    try {
+      const res = await fetch("/api/csc/book", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "book",
+          userName: bookingName.trim(),
+          userPhone: bookingPhone.trim(),
+          schemeInterest: bookingScheme.trim() || "General Enquiry",
+          cscName: nearestCSC?.name || "Nearest CSC",
+          cscAddress: nearestCSC?.address || "",
+        }),
+      });
+
+      if (!res.ok) throw new Error("Booking request failed");
+
+      setBookingSuccess(true);
+      setShowBookingForm(false);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setBookingError(err.message);
+      } else {
+        setBookingError("An error occurred while booking");
+      }
+    } finally {
+      setBooking(false);
+    }
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "8px 10px",
+    fontSize: 12,
+    border: "1px solid var(--border)",
+    borderRadius: 6,
+    background: "var(--background)",
+    color: "var(--text)",
+    fontFamily: "inherit",
+    outline: "none",
+    boxSizing: "border-box",
   };
 
   return (
@@ -160,10 +228,10 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
         </a>
       </div>
 
-      {/* Auto Booking Section */}
+      {/* Locate Section */}
       <div style={{ padding: "12px 16px", borderBottom: "1px solid var(--border)" }}>
         <button
-          onClick={handleLocateAndBook}
+          onClick={handleLocate}
           disabled={locating}
           style={{
             width: "100%",
@@ -178,39 +246,167 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: "8px"
+            gap: "8px",
+            fontFamily: "inherit",
           }}
         >
-          {locating ? "Locating..." : "Find Nearest CSC & Book"}
+          <Navigation size={14} />
+          {locating ? "Locating..." : "Find Nearest CSC"}
         </button>
 
         {errorMsg && (
-            <p style={{ color: "var(--danger)", fontSize: 12, marginTop: 8 }}>{errorMsg}</p>
+          <p style={{ color: "var(--danger)", fontSize: 12, marginTop: 8 }}>{errorMsg}</p>
         )}
 
+        {/* Located CSC Result */}
         {nearestCSC && googleMapsLink && (
-           <div style={{ marginTop: 12, padding: 12, borderRadius: 8, backgroundColor: "var(--success-soft)", border: "1px solid var(--success)" }}>
-              <p style={{ fontSize: 13, fontWeight: 700, margin: "0 0 4px", color: "var(--success-strong)" }}>Nearest CSC Found!</p>
-              <p style={{ fontSize: 13, margin: "0 0 2px" }}>{nearestCSC.name}</p>
-              <p style={{ fontSize: 11, color: "var(--muted)", margin: "0 0 8px" }}>{nearestCSC.address}</p>
+          <div style={{ marginTop: 12, padding: 12, borderRadius: 8, backgroundColor: "rgba(68, 167, 84, 0.04)", border: "1px solid rgba(68, 167, 84, 0.15)" }}>
+            <p style={{ fontSize: 13, fontWeight: 700, margin: "0 0 4px", color: "var(--primary)" }}>📍 Nearest CSC Found!</p>
+            <p style={{ fontSize: 13, margin: "0 0 2px", fontWeight: 600 }}>{nearestCSC.name}</p>
+            <p style={{ fontSize: 11, color: "var(--muted)", margin: "0 0 10px" }}>{nearestCSC.address}</p>
+
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               <a
                 href={googleMapsLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  display: "inline-block",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 4,
                   padding: "6px 12px",
                   fontSize: 12,
                   fontWeight: 600,
-                  backgroundColor: "var(--success)",
+                  backgroundColor: "var(--primary)",
                   color: "white",
                   borderRadius: 6,
-                  textDecoration: "none"
+                  textDecoration: "none",
                 }}
               >
-                  Open in Google Maps
+                <MapPin size={12} /> Open in Maps
               </a>
-           </div>
+
+              {!bookingSuccess && (
+                <button
+                  onClick={() => { setShowBookingForm(true); setBookingError(""); }}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 4,
+                    padding: "6px 12px",
+                    fontSize: 12,
+                    fontWeight: 600,
+                    backgroundColor: "#2563eb",
+                    color: "white",
+                    border: "none",
+                    borderRadius: 6,
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                  }}
+                >
+                  <CalendarCheck size={12} /> Book Appointment
+                </button>
+              )}
+            </div>
+
+            {/* Booking Success */}
+            {bookingSuccess && (
+              <div style={{ marginTop: 10, padding: 10, borderRadius: 6, backgroundColor: "rgba(34, 197, 94, 0.08)", border: "1px solid rgba(34, 197, 94, 0.25)" }}>
+                <p style={{ fontSize: 12, fontWeight: 700, color: "#16a34a", margin: "0 0 2px" }}>✅ Booking Confirmed!</p>
+                <p style={{ fontSize: 11, color: "var(--muted)", margin: 0 }}>A WhatsApp confirmation has been sent. The CSC will contact you shortly.</p>
+              </div>
+            )}
+
+            {/* Booking Form */}
+            {showBookingForm && !bookingSuccess && (
+              <div style={{ marginTop: 12, padding: 12, borderRadius: 8, border: "1px solid var(--border)", background: "var(--surface)" }}>
+                <p style={{ fontSize: 12, fontWeight: 700, margin: "0 0 10px", color: "var(--text)" }}>
+                  <User size={12} style={{ marginRight: 4, verticalAlign: "middle" }} />
+                  Your Details for Booking
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div>
+                    <label style={{ fontSize: 11, fontWeight: 600, color: "var(--muted)", marginBottom: 2, display: "block" }}>Full Name *</label>
+                    <input
+                      type="text"
+                      placeholder="Enter your full name"
+                      value={bookingName}
+                      onChange={(e) => setBookingName(e.target.value)}
+                      style={inputStyle}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 11, fontWeight: 600, color: "var(--muted)", marginBottom: 2, display: "block" }}>Phone Number *</label>
+                    <input
+                      type="tel"
+                      placeholder="Enter your phone number"
+                      value={bookingPhone}
+                      onChange={(e) => setBookingPhone(e.target.value)}
+                      style={inputStyle}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 11, fontWeight: 600, color: "var(--muted)", marginBottom: 2, display: "block" }}>Scheme Interest (optional)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. PM-KISAN, Ayushman Bharat"
+                      value={bookingScheme}
+                      onChange={(e) => setBookingScheme(e.target.value)}
+                      style={inputStyle}
+                    />
+                  </div>
+
+                  {bookingError && (
+                    <p style={{ color: "var(--danger)", fontSize: 11, margin: 0 }}>{bookingError}</p>
+                  )}
+
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button
+                      onClick={handleBook}
+                      disabled={booking}
+                      style={{
+                        flex: 1,
+                        padding: "8px 12px",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        backgroundColor: "#2563eb",
+                        color: "white",
+                        border: "none",
+                        borderRadius: 6,
+                        cursor: booking ? "not-allowed" : "pointer",
+                        opacity: booking ? 0.7 : 1,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 4,
+                        fontFamily: "inherit",
+                      }}
+                    >
+                      <Send size={12} />
+                      {booking ? "Sending..." : "Confirm Booking"}
+                    </button>
+                    <button
+                      onClick={() => setShowBookingForm(false)}
+                      style={{
+                        padding: "8px 12px",
+                        fontSize: 12,
+                        fontWeight: 500,
+                        color: "var(--muted)",
+                        background: "var(--background)",
+                        border: "1px solid var(--border)",
+                        borderRadius: 6,
+                        cursor: "pointer",
+                        fontFamily: "inherit",
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         )}
       </div>
 
