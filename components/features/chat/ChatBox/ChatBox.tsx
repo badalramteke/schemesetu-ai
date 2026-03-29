@@ -21,12 +21,16 @@ import WizardForm from "@/components/features/chat/WizardForm/WizardForm";
 import type { ChatQuestion } from "@/components/features/chat/QuestionJumper/QuestionJumper";
 import { MOCK_MESSAGES } from "@/lib/mock-messages";
 import { t } from "@/lib/i18n";
-import type { EligibilityResult, WizardQuestion } from "@/lib/rag-pipeline";
+import type { EligibilityResult, WizardQuestion } from "@/lib/rag-pipeline-client";
+import { detectUserIntent } from "@/lib/rag-pipeline-client";
 import {
   inferSchemesFromQuery,
   getCandidateSchemes,
   type ConvPhase,
 } from "@/lib/conversational-engine";
+import EligibilityInterview from "@/components/features/chat/EligibilityInterview";
+import { hasInterviewTree, INTERVIEW_ENABLED_SCHEMES } from "@/lib/eligibility";
+import type { EligibilityResult as InterviewResult } from "@/lib/eligibility";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -121,6 +125,12 @@ export default function ChatBox() {
   // ── Wizard state ──
   const [wizardQuestions, setWizardQuestions] = useState<WizardQuestion[]>([]);
   const [showWizard, setShowWizard] = useState(false);
+
+  // ── Structured Interview state ──
+  const [activeInterview, setActiveInterview] = useState<{
+    schemeId: string;
+    schemeName: string;
+  } | null>(null);
 
   // Auto-save state to localStorage whenever it changes
   useEffect(() => {
@@ -1107,6 +1117,28 @@ export default function ChatBox() {
       setPendingQuery(trimmed);
       pendingQueryRef.current = trimmed;
 
+      // Check if query matches a scheme with a structured interview tree
+      const detectedScheme = detectUserIntent(trimmed);
+      if (detectedScheme && hasInterviewTree(detectedScheme)) {
+        const SCHEME_DISPLAY: Record<string, string> = {
+          "pm-kisan": "PM-KISAN",
+          ayushman: "Ayushman Bharat",
+          mgnrega: "MGNREGA",
+        };
+        setActiveInterview({
+          schemeId: detectedScheme,
+          schemeName: SCHEME_DISPLAY[detectedScheme] || detectedScheme,
+        });
+        setConvPhase("questions");
+        convPhaseRef.current = "questions";
+        addMsg({
+          id: makeId("a"),
+          role: "ai",
+          content: `Let me check your eligibility for **${SCHEME_DISPLAY[detectedScheme] || detectedScheme}**. I'll ask you a few quick questions.`,
+        });
+        return;
+      }
+
       // Go directly to wizard/RAG — no goal selection step
       await fetchWizardQuestions(trimmed, {});
       return;
@@ -1147,8 +1179,31 @@ export default function ChatBox() {
       askedQuestionsRef.current = [];
       setShowWizard(false);
       setWizardQuestions([]);
+      setActiveInterview(null);
       setPendingQuery(trimmed);
       pendingQueryRef.current = trimmed;
+
+      // Check if new query matches a structured interview scheme
+      const detectedScheme2 = detectUserIntent(trimmed);
+      if (detectedScheme2 && hasInterviewTree(detectedScheme2)) {
+        const SCHEME_DISPLAY2: Record<string, string> = {
+          "pm-kisan": "PM-KISAN",
+          ayushman: "Ayushman Bharat",
+          mgnrega: "MGNREGA",
+        };
+        setActiveInterview({
+          schemeId: detectedScheme2,
+          schemeName: SCHEME_DISPLAY2[detectedScheme2] || detectedScheme2,
+        });
+        setConvPhase("questions");
+        convPhaseRef.current = "questions";
+        addMsg({
+          id: makeId("a"),
+          role: "ai",
+          content: `Let me check your eligibility for **${SCHEME_DISPLAY2[detectedScheme2] || detectedScheme2}**. I'll ask you a few quick questions.`,
+        });
+        return;
+      }
 
       // Go directly to wizard/RAG — no goal selection step
       await fetchWizardQuestions(trimmed, {});
@@ -1218,7 +1273,7 @@ export default function ChatBox() {
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
       el.style.transition = "background 0.3s";
-      el.style.background = "rgba(68, 167, 84, 0.08)";
+      el.style.background = "rgba(124, 92, 252, 0.08)";
       setTimeout(() => {
         el.style.background = "transparent";
       }, 1500);
@@ -1296,7 +1351,7 @@ export default function ChatBox() {
                     width: 48,
                     height: 48,
                     borderRadius: 14,
-                    background: "rgba(68, 167, 84, 0.08)",
+                    background: "rgba(124, 92, 252, 0.08)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -1345,8 +1400,8 @@ export default function ChatBox() {
                     fontSize: 12,
                     fontWeight: 500,
                     color: "var(--primary)",
-                    background: "rgba(68, 167, 84, 0.06)",
-                    border: "1px dashed rgba(68, 167, 84, 0.3)",
+                    background: "rgba(124, 92, 252, 0.06)",
+                    border: "1px dashed rgba(124, 92, 252, 0.3)",
                     borderRadius: 99,
                     cursor: "pointer",
                     fontFamily: "inherit",
@@ -1382,8 +1437,71 @@ export default function ChatBox() {
                 </div>
               ))}
 
+              {/* Structured Eligibility Interview (shown for supported schemes) */}
+              {activeInterview && (
+                <div style={{ padding: "12px 16px" }}>
+                  <EligibilityInterview
+                    schemeId={activeInterview.schemeId}
+                    schemeName={activeInterview.schemeName}
+                    onComplete={(result, answers) => {
+                      // Convert interview result to RAG-style eligibility result
+                      const ragResult: EligibilityResult = {
+                        schemeId: activeInterview.schemeId,
+                        schemeName: activeInterview.schemeName,
+                        eligible:
+                          result.status === "eligible"
+                            ? true
+                            : result.status === "ineligible"
+                              ? false
+                              : null,
+                        reason: [...result.reasons, ...result.ineligibleReasons].join(" "),
+                        documents: result.documentsNeeded,
+                        nextSteps: result.nextSteps,
+                        benefits: result.recommendation,
+                        confidence:
+                          result.confidence >= 70
+                            ? "High"
+                            : result.confidence >= 40
+                              ? "Medium"
+                              : "Low",
+                        sourceUrl: "https://www.india.gov.in",
+                        lastVerified: new Date().toISOString().split("T")[0],
+                      };
+
+                      const msg =
+                        result.status === "eligible"
+                          ? `Great news! You appear **eligible** for ${activeInterview.schemeName}.`
+                          : result.status === "ineligible"
+                            ? `Based on your answers, you are **not eligible** for ${activeInterview.schemeName}.`
+                            : `Your eligibility for ${activeInterview.schemeName} **needs verification**.`;
+
+                      addMsg({
+                        id: makeId("a"),
+                        role: "ai",
+                        content: msg,
+                        eligibilityResults: [ragResult],
+                      });
+
+                      setActiveInterview(null);
+                      setConvPhase("rag");
+                      convPhaseRef.current = "rag";
+                    }}
+                    onSkip={() => {
+                      setActiveInterview(null);
+                      // Fall back to wizard/RAG flow
+                      fetchWizardQuestions(pendingQueryRef.current, {});
+                    }}
+                    profileAnswers={{
+                      state: (userProfile.state || "") as string,
+                      age: userProfile.age ? String(userProfile.age) : "",
+                      employment: (userProfile.employment || "") as string,
+                    }}
+                  />
+                </div>
+              )}
+
               {/* Wizard Form (shown during questions phase) */}
-              {showWizard && wizardQuestions.length > 0 && (
+              {showWizard && wizardQuestions.length > 0 && !activeInterview && (
                 <div style={{ padding: "12px 16px" }}>
                   <WizardForm
                     questions={wizardQuestions}
@@ -1481,7 +1599,7 @@ export default function ChatBox() {
             borderRadius: 20,
             transition: "all 0.3s",
             boxShadow: listening
-              ? "0 0 0 4px rgba(68, 167, 84, 0.15)"
+              ? "0 0 0 4px rgba(124, 92, 252, 0.15)"
               : "0 1px 4px rgba(0,0,0,0.04)",
           }}
         >
@@ -1535,7 +1653,7 @@ export default function ChatBox() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = "var(--primary)";
-                e.currentTarget.style.background = "rgba(68, 167, 84, 0.08)";
+                e.currentTarget.style.background = "rgba(124, 92, 252, 0.08)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = "var(--text)";
@@ -1591,7 +1709,7 @@ export default function ChatBox() {
                     justifyContent: "center",
                     background: listening
                       ? "var(--primary)"
-                      : "rgba(68, 167, 84, 0.08)",
+                      : "rgba(124, 92, 252, 0.08)",
                     color: listening ? "var(--accent)" : "var(--primary)",
                     transition: "all 0.2s",
                     animation: listening ? "pulseGlow 1.5s infinite" : "none",

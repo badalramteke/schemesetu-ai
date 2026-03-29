@@ -175,7 +175,7 @@ export default function PDFDownload({
         cursor: status === "loading" ? "wait" : "pointer",
         transition: "all 0.3s",
         fontFamily: "inherit",
-        boxShadow: "0 2px 8px rgba(68, 167, 84, 0.25)",
+        boxShadow: "0 2px 8px rgba(124, 92, 252, 0.25)",
         flex: 1,
         opacity: status === "loading" ? 0.8 : 1,
       }}

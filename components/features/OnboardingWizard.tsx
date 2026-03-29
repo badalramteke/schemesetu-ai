@@ -231,7 +231,7 @@ export default function OnboardingWizard() {
     border: active
       ? "1.5px solid var(--primary)"
       : "1.5px solid var(--secondary)",
-    background: active ? "rgba(68, 167, 84, 0.04)" : "var(--surface)",
+    background: active ? "rgba(124, 92, 252, 0.04)" : "var(--surface)",
     color: active ? "var(--primary)" : "var(--text)",
   });
 
@@ -281,7 +281,7 @@ export default function OnboardingWizard() {
             width: 56,
             height: 56,
             borderRadius: 16,
-            background: "rgba(68, 167, 84, 0.08)",
+            background: "rgba(124, 92, 252, 0.08)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -397,7 +397,7 @@ export default function OnboardingWizard() {
                     fontSize: 10,
                     fontWeight: 600,
                     color: "var(--primary)",
-                    background: "rgba(68, 167, 84, 0.08)",
+                    background: "rgba(124, 92, 252, 0.08)",
                     padding: "2px 6px",
                     borderRadius: 99,
                     pointerEvents: "none",
@@ -506,17 +506,17 @@ export default function OnboardingWizard() {
               justifyContent: "center",
               gap: 6,
               fontFamily: "inherit",
-              boxShadow: "0 4px 14px rgba(68, 167, 84, 0.3)",
+              boxShadow: "0 4px 14px rgba(124, 92, 252, 0.3)",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-1px)";
               e.currentTarget.style.boxShadow =
-                "0 6px 18px rgba(68, 167, 84, 0.4)";
+                "0 6px 18px rgba(124, 92, 252, 0.4)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "none";
               e.currentTarget.style.boxShadow =
-                "0 4px 14px rgba(68, 167, 84, 0.3)";
+                "0 4px 14px rgba(124, 92, 252, 0.3)";
             }}
           >
             {step < TOTAL_STEPS - 1 ? (

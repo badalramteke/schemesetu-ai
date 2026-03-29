@@ -33,7 +33,7 @@ function ChatHistory({ messages }: { messages: ChatMessage[] }) {
             width: 80,
             height: 80,
             borderRadius: "50%",
-            background: "rgba(68, 167, 84, 0.06)",
+            background: "rgba(124, 92, 252, 0.06)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

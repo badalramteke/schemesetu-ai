@@ -183,7 +183,7 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
         style={{
           padding: "12px 16px",
           background:
-            "linear-gradient(135deg, rgba(68, 167, 84, 0.06), rgba(114,4,85,0.03))",
+            "linear-gradient(135deg, rgba(124, 92, 252, 0.06), rgba(114,4,85,0.03))",
           borderBottom: "1px solid var(--border)",
           display: "flex",
           alignItems: "center",
@@ -195,7 +195,7 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
             width: 32,
             height: 32,
             borderRadius: 10,
-            background: "rgba(68, 167, 84, 0.1)",
+            background: "rgba(124, 92, 252, 0.1)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -231,8 +231,8 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
             fontSize: 11,
             fontWeight: 600,
             color: "var(--primary)",
-            background: "rgba(68, 167, 84, 0.06)",
-            border: "1px solid rgba(68, 167, 84, 0.2)",
+            background: "rgba(124, 92, 252, 0.06)",
+            border: "1px solid rgba(124, 92, 252, 0.2)",
             borderRadius: 99,
             textDecoration: "none",
           }}
@@ -285,8 +285,8 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
               marginTop: 12,
               padding: 12,
               borderRadius: 8,
-              backgroundColor: "rgba(68, 167, 84, 0.04)",
-              border: "1px solid rgba(68, 167, 84, 0.15)",
+              backgroundColor: "rgba(124, 92, 252, 0.04)",
+              border: "1px solid rgba(124, 92, 252, 0.15)",
             }}
           >
             <p
@@ -625,8 +625,8 @@ export default function CSCLocator({ district, state }: CSCLocatorProps) {
                 fontSize: 12,
                 fontWeight: 500,
                 color: "var(--primary)",
-                background: "rgba(68, 167, 84, 0.05)",
-                border: "1px solid rgba(68, 167, 84, 0.2)",
+                background: "rgba(124, 92, 252, 0.05)",
+                border: "1px solid rgba(124, 92, 252, 0.2)",
                 borderRadius: 99,
                 cursor: "pointer",
                 fontFamily: "inherit",

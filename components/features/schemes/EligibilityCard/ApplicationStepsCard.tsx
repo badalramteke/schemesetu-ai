@@ -74,7 +74,7 @@ export default function ApplicationStepsCard({
   useEffect(() => {
     let cancelled = false;
 
-    async function fetchSteps() {
+    async function fetchSteps(isRetry = false) {
       try {
         const res = await fetch("/api/schemes/steps", {
           method: "POST",
@@ -86,15 +86,22 @@ export default function ApplicationStepsCard({
         const data = await res.json();
         if (!cancelled) {
           setSteps(data);
+          setLoading(false);
           // Auto-expand the first available channel
           if (data.online) setExpandedChannel("online");
           else if (data.offline) setExpandedChannel("offline");
           else if (data.atHospital) setExpandedChannel("atHospital");
         }
       } catch {
-        if (!cancelled) setError(true);
-      } finally {
-        if (!cancelled) setLoading(false);
+        if (cancelled) return;
+        if (!isRetry) {
+          // First failure — retry once after 2s, stay in loading state
+          setTimeout(() => fetchSteps(true), 2000);
+        } else {
+          // Second failure — show error
+          setError(true);
+          setLoading(false);
+        }
       }
     }
 
@@ -104,7 +111,62 @@ export default function ApplicationStepsCard({
     };
   }, [schemeId, schemeName]);
 
-  if (error) return null; // Silently hide if fetch fails
+  if (error) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "12px 16px",
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
+          borderRadius: 14,
+          marginTop: 8,
+        }}
+      >
+        <span style={{ fontSize: 13, color: "var(--muted)" }}>
+          Could not load application steps
+        </span>
+        <button
+          onClick={() => {
+            setError(false);
+            setLoading(true);
+            fetch("/api/schemes/steps", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ schemeId, schemeName }),
+            })
+              .then((r) => {
+                if (!r.ok) throw new Error("Failed");
+                return r.json();
+              })
+              .then((data) => {
+                setSteps(data);
+                if (data.online) setExpandedChannel("online");
+                else if (data.offline) setExpandedChannel("offline");
+                else if (data.atHospital) setExpandedChannel("atHospital");
+              })
+              .catch(() => setError(true))
+              .finally(() => setLoading(false));
+          }}
+          style={{
+            fontSize: 12,
+            fontWeight: 600,
+            color: "var(--primary)",
+            background: "var(--primary-soft)",
+            border: "1px solid var(--primary)",
+            borderRadius: 8,
+            padding: "4px 12px",
+            cursor: "pointer",
+            fontFamily: "inherit",
+          }}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

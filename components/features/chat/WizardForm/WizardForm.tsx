@@ -8,7 +8,7 @@ import {
   ChevronDown,
   Loader2,
 } from "lucide-react";
-import type { WizardQuestion } from "@/lib/rag-pipeline";
+import type { WizardQuestion } from "@/lib/rag-pipeline-client";
 
 interface WizardFormProps {
   questions: WizardQuestion[];
@@ -225,7 +225,7 @@ function WizardForm({ questions, onSubmit, onBack, loading }: WizardFormProps) {
                         ? "1.5px solid var(--primary)"
                         : "1.5px solid color-mix(in srgb, var(--secondary) 30%, transparent)",
                       background: active
-                        ? "rgba(68, 167, 84, 0.1)"
+                        ? "rgba(124, 92, 252, 0.1)"
                         : "rgba(255,255,255,0.03)",
                       color: active ? "var(--primary)" : "var(--text)",
                       display: "flex",
@@ -301,7 +301,7 @@ function WizardForm({ questions, onSubmit, onBack, loading }: WizardFormProps) {
                         ? "1.5px solid var(--primary)"
                         : "1.5px solid color-mix(in srgb, var(--secondary) 30%, transparent)",
                       background: active
-                        ? "rgba(68, 167, 84, 0.12)"
+                        ? "rgba(124, 92, 252, 0.12)"
                         : "rgba(255,255,255,0.03)",
                       color: active ? "var(--primary)" : "var(--text)",
                       display: "flex",
@@ -508,7 +508,7 @@ function WizardForm({ questions, onSubmit, onBack, loading }: WizardFormProps) {
               boxShadow:
                 current.required && !isAnswered
                   ? "none"
-                  : "0 4px 14px rgba(68, 167, 84, 0.3)",
+                  : "0 4px 14px rgba(124, 92, 252, 0.3)",
               opacity: loading && isLast ? 0.7 : 1,
             }}
           >

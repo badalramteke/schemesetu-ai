@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Bot } from "lucide-react";
-import type { EligibilityResult } from "@/lib/rag-pipeline";
+import type { EligibilityResult } from "@/lib/rag-pipeline-client";
 import EligibilityCard from "@/components/features/schemes/EligibilityCard/EligibilityCard";
 import AudioFeedback from "@/components/features/voice/AudioFeedback/AudioFeedback";
 import { useApp } from "@/components/providers/AppProvider";
@@ -242,7 +242,7 @@ function ChatMessage({
                     e.currentTarget.style.borderColor = "var(--primary)";
                     e.currentTarget.style.color = "var(--primary)";
                     e.currentTarget.style.background =
-                      "rgba(68, 167, 84, 0.04)";
+                      "rgba(124, 92, 252, 0.04)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.borderColor =

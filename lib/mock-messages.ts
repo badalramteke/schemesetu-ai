@@ -1,4 +1,4 @@
-import type { EligibilityResult } from "@/lib/rag-pipeline";
+import type { EligibilityResult } from "@/lib/rag-pipeline-client";
 
 interface MockMessage {
   id: string;

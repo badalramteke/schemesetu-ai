@@ -200,8 +200,8 @@ export default function QuestionJumper({
             width: 3,
             borderRadius: 99,
             background: scrubbing
-              ? "rgba(68, 167, 84, 0.3)"
-              : "rgba(68, 167, 84, 0.08)",
+              ? "rgba(124, 92, 252, 0.3)"
+              : "rgba(124, 92, 252, 0.08)",
           }}
         />
 
@@ -223,7 +223,7 @@ export default function QuestionJumper({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "0 2px 6px rgba(68, 167, 84, 0.25)",
+              boxShadow: "0 2px 6px rgba(124, 92, 252, 0.25)",
             }}
           >
             <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -287,7 +287,7 @@ export default function QuestionJumper({
                   padding: "5px 10px",
                   background: "var(--surface-alt)",
                   borderRadius: 10,
-                  border: "1px solid rgba(68, 167, 84, 0.25)",
+                  border: "1px solid rgba(124, 92, 252, 0.25)",
                   opacity: 0.55,
                   zIndex: 5,
                   pointerEvents: "none",
@@ -330,7 +330,7 @@ export default function QuestionJumper({
                   borderRadius: 12,
                   border:
                     "1px solid color-mix(in srgb, var(--accent) 15%, transparent)",
-                  boxShadow: `0 4px 20px rgba(68, 167, 84, 0.5)`,
+                  boxShadow: `0 4px 20px rgba(124, 92, 252, 0.5)`,
                   zIndex: 6,
                   pointerEvents: "none",
                 }}
@@ -373,7 +373,7 @@ export default function QuestionJumper({
                   padding: "5px 10px",
                   background: "var(--surface-alt)",
                   borderRadius: 10,
-                  border: "1px solid rgba(68, 167, 84, 0.25)",
+                  border: "1px solid rgba(124, 92, 252, 0.25)",
                   opacity: 0.55,
                   zIndex: 5,
                   pointerEvents: "none",

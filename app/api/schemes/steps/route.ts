@@ -30,17 +30,28 @@ async function embedQuery(query: string): Promise<number[]> {
 }
 
 const SCHEME_ID_MAP: Record<string, string> = {
+  // Display names → namespace
   "PM-KISAN": "pm-kisan",
   "Ayushman Bharat (PMJAY)": "ayushman",
   "PMAY-G (Awas Yojana)": "pmay-g",
   MGNREGA: "mgnrega",
   "Atal Pension Yojana (APY)": "apy",
+  "Janani Suraksha Yojana (JSY)": "jsy",
+  "National Means-cum-Merit Scholarship (NMMSS)": "nmmss",
+  "Pradhan Mantri Fasal Bima Yojana (PMFBY)": "pmfby",
+  "Pradhan Mantri Kaushal Vikas Yojana (PMKVY)": "pmkvy",
+  "Pradhan Mantri Ujjwala Yojana (PMUY)": "pmuy",
   // Direct IDs
   "pm-kisan": "pm-kisan",
   ayushman: "ayushman",
   "pmay-g": "pmay-g",
   mgnrega: "mgnrega",
   apy: "apy",
+  jsy: "jsy",
+  nmmss: "nmmss",
+  pmfby: "pmfby",
+  pmkvy: "pmkvy",
+  pmuy: "pmuy",
 };
 
 // ── Route ────────────────────────────────────────────────────────────────────
@@ -51,22 +62,27 @@ export async function POST(request: Request) {
     const namespace =
       SCHEME_ID_MAP[schemeId] || SCHEME_ID_MAP[schemeName] || schemeId;
 
-    if (!namespace) {
+    if (!namespace || !schemeId) {
       return NextResponse.json({ error: "Invalid scheme" }, { status: 400 });
     }
 
     // Embed a query specifically for application process steps
     const stepQuery = `How to apply for this scheme step by step process online and offline application procedure registration`;
+    console.log(`[Steps API] Embedding for namespace: ${namespace}`);
     const embedding = await embedQuery(stepQuery);
 
     // Query Pinecone for this scheme's namespace
     const pc = new Pinecone({ apiKey: process.env.PINECONE_API_KEY! });
     const index = pc.index(process.env.PINECONE_INDEX_NAME!);
+    console.log(`[Steps API] Querying Pinecone namespace: ${namespace}`);
     const results = await index.namespace(namespace).query({
       vector: embedding,
       topK: 10,
       includeMetadata: true,
     });
+    console.log(
+      `[Steps API] Got ${results.matches?.length ?? 0} matches from Pinecone`,
+    );
 
     // Extract text chunks and filter for application-related content
     const allChunks = (results.matches || [])
@@ -101,7 +117,12 @@ export async function POST(request: Request) {
 
     // Ask Gemini to structure the steps
     const keys = getGeminiKeys();
-    const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
+    const MODELS = [
+      "gemini-2.5-flash",
+      "gemini-2.0-flash",
+      "gemini-2.5-flash-lite",
+      "gemini-1.5-flash",
+    ];
 
     const prompt = `You are an expert on Indian government scheme application processes.
 
@@ -145,8 +166,24 @@ RULES:
           const result = await model.generateContent(prompt);
           responseText = result.response.text();
           break;
-        } catch {
-          continue;
+        } catch (err: unknown) {
+          const msg = (err instanceof Error ? err.message : String(err)) || "";
+          const isRetryable =
+            msg.includes("429") ||
+            msg.includes("RESOURCE_EXHAUSTED") ||
+            msg.includes("404") ||
+            msg.includes("not found") ||
+            msg.includes("not supported");
+          if (!isRetryable) {
+            console.error(
+              `[Steps API] Model ${modelName} non-retryable error:`,
+              msg,
+            );
+            throw err;
+          }
+          console.warn(
+            `[Steps API] Model ${modelName} failed (${msg.substring(0, 80)}), trying next...`,
+          );
         }
       }
       if (responseText) break;
@@ -165,9 +202,10 @@ RULES:
     const parsed = JSON.parse(cleaned);
     return NextResponse.json(parsed, { status: 200 });
   } catch (error) {
-    console.error("Steps API error:", error);
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("Steps API error:", msg);
     return NextResponse.json(
-      { error: "Failed to fetch application steps" },
+      { error: "Failed to fetch application steps", detail: msg },
       { status: 500 },
     );
   }

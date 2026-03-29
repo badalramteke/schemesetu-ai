@@ -184,7 +184,7 @@ export default function HomeDashboard() {
           border: "none",
           borderRadius: 99,
           cursor: "pointer",
-          boxShadow: "0 8px 32px rgba(68, 167, 84, 0.3)",
+          boxShadow: "0 8px 32px rgba(124, 92, 252, 0.3)",
           animation: "pulseGlow 2s infinite",
         }}
       >

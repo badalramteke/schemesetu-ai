@@ -50,7 +50,7 @@ export default function LanguageSelect() {
             alignItems: "center",
             justifyContent: "center",
             margin: "0 auto 16px",
-            boxShadow: "0 8px 32px rgba(68, 167, 84, 0.25)",
+            boxShadow: "0 8px 32px rgba(124, 92, 252, 0.25)",
           }}
         >
           <Globe size={40} color="var(--accent)" />

@@ -258,8 +258,8 @@ export default function DocumentHistory() {
             fontSize: 12,
             fontWeight: 600,
             color: "var(--primary)",
-            background: "rgba(68, 167, 84, 0.08)",
-            border: "1px solid rgba(68, 167, 84, 0.2)",
+            background: "rgba(124, 92, 252, 0.08)",
+            border: "1px solid rgba(124, 92, 252, 0.2)",
             borderRadius: 10,
             cursor: "pointer",
           }}
@@ -468,7 +468,7 @@ export default function DocumentHistory() {
                               fontSize: 10,
                               fontWeight: 600,
                               color: "var(--primary)",
-                              background: "rgba(68, 167, 84, 0.1)",
+                              background: "rgba(124, 92, 252, 0.1)",
                               padding: "2px 8px",
                               borderRadius: 99,
                             }}

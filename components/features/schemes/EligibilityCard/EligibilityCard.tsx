@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { ChevronDown, ExternalLink, Globe, ShieldCheck } from "lucide-react";
-import type { EligibilityResult } from "@/lib/rag-pipeline";
+import type { EligibilityResult } from "@/lib/rag-pipeline-client";
 import { useApp } from "@/components/providers/AppProvider";
 import { t } from "@/lib/i18n";
 import EligibilityBadge from "./EligibilityBadge";

@@ -35,7 +35,7 @@ body {
 }
 
 *:focus-visible {
-  outline: 3px solid rgba(68, 167, 84, 0.5);
+  outline: 3px solid rgba(124, 92, 252, 0.45);
   outline-offset: 2px;
 }
 
@@ -44,7 +44,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(124, 92, 252, 0.06);
 }
 
 ::-webkit-scrollbar-thumb {

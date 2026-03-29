@@ -1,50 +1,51 @@
 :root {
-    --text: #f5f5f3;
-    --background: #131313;
-    --primary: #44a754;
-    --primary-dark: #2f7f3f;
-    --secondary: #1fc7e0;
-    --accent: #ffffff;
-    --surface: #0b120f;
-    --surface-alt: #111a16;
-    --muted: #9cb0a5;
-    --border: rgba(31, 199, 224, 0.35);
-    --border-strong: rgba(31, 199, 224, 0.55);
-    --secondary-soft: color-mix(in srgb, var(--secondary) 28%, var(--accent) 72%);
-    --secondary-softest: color-mix(in srgb, var(--secondary) 16%, var(--accent) 84%);
-    --secondary-glow: color-mix(in srgb, var(--secondary) 24%, transparent);
-    --primary-glow: color-mix(in srgb, var(--primary) 30%, transparent);
-    --primary-soft: rgba(68, 167, 84, 0.12);
-    --danger: #d9584b;
-    --warning: #f0aa49;
-    --warning-strong: #d58f33;
-    --success: #44a754;
-    --success-soft: rgba(68, 167, 84, 0.14);
-    --danger-soft: rgba(217, 88, 75, 0.16);
-    --warning-soft: rgba(240, 170, 73, 0.16);
-    --focus-ring: rgba(68, 167, 84, 0.5);
+    /* ── Light lavender-purple theme ── */
+    --text: #1e1a2e;
+    --background: #f5f3ff;
+    --primary: #7c5cfc;
+    --primary-dark: #5b3fd4;
+    --secondary: #a78bfa;
+    --accent: #1e1a2e;
+    --surface: #ffffff;
+    --surface-alt: #ede9fe;
+    --muted: #7c6fa8;
+    --border: rgba(124, 92, 252, 0.18);
+    --border-strong: rgba(124, 92, 252, 0.36);
+    --secondary-soft: rgba(167, 139, 250, 0.14);
+    --secondary-softest: rgba(167, 139, 250, 0.07);
+    --secondary-glow: rgba(167, 139, 250, 0.22);
+    --primary-glow: rgba(124, 92, 252, 0.22);
+    --primary-soft: rgba(124, 92, 252, 0.10);
+    --danger: #dc2626;
+    --warning: #d97706;
+    --warning-strong: #b45309;
+    --success: #16a34a;
+    --success-soft: rgba(22, 163, 74, 0.10);
+    --danger-soft: rgba(220, 38, 38, 0.10);
+    --warning-soft: rgba(217, 119, 6, 0.10);
+    --focus-ring: rgba(124, 92, 252, 0.40);
 
-    /* Domain colors */
-    --sector-healthcare: #3498db;
-    --sector-housing: #f39c12;
-    --sector-employment: #e74c3c;
-    --sector-pension: #9b59b6;
-    --sector-education: #2980b9;
+    /* Domain colors — muted to stay subordinate to primary */
+    --sector-healthcare: #0ea5e9;
+    --sector-housing: #f59e0b;
+    --sector-employment: #ef4444;
+    --sector-pension: #8b5cf6;
+    --sector-education: #3b82f6;
 
     /* Application channel palettes */
     --channel-online: #3b82f6;
     --channel-online-soft: rgba(59, 130, 246, 0.08);
-    --channel-online-border: rgba(59, 130, 246, 0.25);
+    --channel-online-border: rgba(59, 130, 246, 0.22);
     --channel-online-gradient: linear-gradient(135deg, #3b82f6, #2563eb);
     --channel-offline: #10b981;
     --channel-offline-soft: rgba(16, 185, 129, 0.08);
-    --channel-offline-border: rgba(16, 185, 129, 0.25);
+    --channel-offline-border: rgba(16, 185, 129, 0.22);
     --channel-offline-gradient: linear-gradient(135deg, #10b981, #059669);
     --channel-hospital: #f59e0b;
-    --channel-hospital-border: rgba(245, 158, 11, 0.25);
+    --channel-hospital-border: rgba(245, 158, 11, 0.22);
     --channel-hospital-gradient: linear-gradient(135deg, #f59e0b, #d97706);
 
-    /* Semantic aliases for easier future refactors */
+    /* Semantic aliases */
     --color-text: var(--text);
     --color-background: var(--background);
     --color-primary: var(--primary);
